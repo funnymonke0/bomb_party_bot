@@ -1,0 +1,171 @@
+loading dicts from urls
+loading dicts from plaintext
+loaded 540981 words from dictionaries.txt
+Exception 'NoneType' object has no attribute 'lower' in Bot Guest5235; retrying with proxy p.webshare.io:80:scisyepv-1:pu16xqszcr1k
+
+loaded 10 proxies from proxies.config
+loading dicts from urls
+loading dicts from plaintext
+loaded 540981 words from dictionaries.txt
+Exception 'NoneType' object has no attribute 'lower' in Bot Guest5788; retrying with proxy p.webshare.io:80:scisyepv-1:pu16xqszcr1k
+
+loaded 10 proxies from proxies.config
+loading dicts from urls
+loading dicts from plaintext
+cystectomy
+loaded 540981 words from dictionaries.txt
+loading dicts from urls
+loading dicts from plaintext
+loading dicts from urls
+loading dicts from plaintext
+loading dicts from urls
+AA
+loaded 540980 words from dictionaries.txt
+loaded 10 proxies from proxies.config
+loading dicts from urls
+Cannot get url <re.Match object; span=(0, 93), match='https://raw.githubusercontent.com/YoungsterGlenn/>
+Cannot get url <re.Match object; span=(0, 37), match='https://norvig.com/ngrams/sowpods.txt'>
+Cannot get url <re.Match object; span=(0, 37), match='https://norvig.com/ngrams/enable1.txt'>
+Cannot get url <re.Match object; span=(0, 33), match='https://pastebin.com/raw/UegdKLq8'>
+Cannot get url <re.Match object; span=(0, 33), match='https://pastebin.com/raw/M6TZ8Uxy'>
+loading dicts from plaintext
+loaded 1 words from dictionaries.txt
+loaded 10 proxies from proxies.config
+loading dicts from urls
+Cannot get url True
+Cannot get url True
+Cannot get url True
+Cannot get url True
+Cannot get url True
+loading dicts from plaintext
+loaded 1 words from dictionaries.txt
+loaded 10 proxies from proxies.config
+loading dicts from urls
+loaded 540980 words from dictionaries.txt
+loaded 10 proxies from proxies.config
+loading dicts from urls
+loaded 273229 words from dictionaries.txt
+Exception Message: element not interactable
+  (Session info: chrome=135.0.7049.86)
+Stacktrace:
+	GetHandleVerifier [0x00007FF698805355+78597]
+	GetHandleVerifier [0x00007FF6988053B0+78688]
+	(No symbol) [0x00007FF6985B8FDC]
+	(No symbol) [0x00007FF698608934]
+	(No symbol) [0x00007FF698606753]
+	(No symbol) [0x00007FF6986370EA]
+	(No symbol) [0x00007FF698601AB6]
+	(No symbol) [0x00007FF698637300]
+	(No symbol) [0x00007FF69865F2BB]
+	(No symbol) [0x00007FF698636EC3]
+	(No symbol) [0x00007FF6986003F8]
+	(No symbol) [0x00007FF698601163]
+	GetHandleVerifier [0x00007FF698AAEF0D+2870973]
+	GetHandleVerifier [0x00007FF698AA96B8+2848360]
+	GetHandleVerifier [0x00007FF698AC6993+2967875]
+	GetHandleVerifier [0x00007FF69882019A+188746]
+	GetHandleVerifier [0x00007FF69882847F+222255]
+	GetHandleVerifier [0x00007FF69880D2D4+111236]
+	GetHandleVerifier [0x00007FF69880D482+111666]
+	GetHandleVerifier [0x00007FF6987F35A9+5465]
+	BaseThreadInitThunk [0x00007FFF2BED7374+20]
+	RtlUserThreadStart [0x00007FFF2D0DCC91+33]
+ in Bot Guest3248; retrying with proxy p.webshare.io:80:scisyepv-1:pu16xqszcr1k
+
+Exception Message: element not interactable
+  (Session info: chrome=135.0.7049.86)
+Stacktrace:
+	GetHandleVerifier [0x00007FF698805355+78597]
+	GetHandleVerifier [0x00007FF6988053B0+78688]
+	(No symbol) [0x00007FF6985B8FDC]
+	(No symbol) [0x00007FF698608934]
+	(No symbol) [0x00007FF698606753]
+	(No symbol) [0x00007FF6986370EA]
+	(No symbol) [0x00007FF698601AB6]
+	(No symbol) [0x00007FF698637300]
+	(No symbol) [0x00007FF69865F2BB]
+	(No symbol) [0x00007FF698636EC3]
+	(No symbol) [0x00007FF6986003F8]
+	(No symbol) [0x00007FF698601163]
+	GetHandleVerifier [0x00007FF698AAEF0D+2870973]
+	GetHandleVerifier [0x00007FF698AA96B8+2848360]
+	GetHandleVerifier [0x00007FF698AC6993+2967875]
+	GetHandleVerifier [0x00007FF69882019A+188746]
+	GetHandleVerifier [0x00007FF69882847F+222255]
+	GetHandleVerifier [0x00007FF69880D2D4+111236]
+	GetHandleVerifier [0x00007FF69880D482+111666]
+	GetHandleVerifier [0x00007FF6987F35A9+5465]
+	BaseThreadInitThunk [0x00007FFF2BED7374+20]
+	RtlUserThreadStart [0x00007FFF2D0DCC91+33]
+ in Bot Guest5263; retrying with proxy p.webshare.io:80:scisyepv-1:pu16xqszcr1k
+
+Bot Guest1189 disconnected successfully
+Bot Guest3846 disconnected successfully
+loaded 10 proxies from proxies.config
+loading dicts from urls
+Cannot get url https://norvig.com/ngrams/sowpods.txt
+
+Cannot get url https://norvig.com/ngrams/enable1.txt
+
+Cannot get url https://pastebin.com/raw/UegdKLq8
+
+Cannot get url https://pastebin.com/raw/M6TZ8Uxy
+loaded 273211 words from dictionaries.txt
+loaded 10 proxies from proxies.config
+loading dicts from urls
+loaded 273229 words from dictionaries.txt
+Bot Guest9572 disconnected successfully
+Exception Message: element not interactable
+  (Session info: chrome=135.0.7049.86)
+Stacktrace:
+	GetHandleVerifier [0x00007FF698805355+78597]
+	GetHandleVerifier [0x00007FF6988053B0+78688]
+	(No symbol) [0x00007FF6985B8FDC]
+	(No symbol) [0x00007FF698608934]
+	(No symbol) [0x00007FF698606753]
+	(No symbol) [0x00007FF6986370EA]
+	(No symbol) [0x00007FF698601AB6]
+	(No symbol) [0x00007FF698637300]
+	(No symbol) [0x00007FF69865F2BB]
+	(No symbol) [0x00007FF698636EC3]
+	(No symbol) [0x00007FF6986003F8]
+	(No symbol) [0x00007FF698601163]
+	GetHandleVerifier [0x00007FF698AAEF0D+2870973]
+	GetHandleVerifier [0x00007FF698AA96B8+2848360]
+	GetHandleVerifier [0x00007FF698AC6993+2967875]
+	GetHandleVerifier [0x00007FF69882019A+188746]
+	GetHandleVerifier [0x00007FF69882847F+222255]
+	GetHandleVerifier [0x00007FF69880D2D4+111236]
+	GetHandleVerifier [0x00007FF69880D482+111666]
+	GetHandleVerifier [0x00007FF6987F35A9+5465]
+	BaseThreadInitThunk [0x00007FFF2BED7374+20]
+	RtlUserThreadStart [0x00007FFF2D0DCC91+33]
+ in Bot Guest4409; retrying with proxy p.webshare.io:80:scisyepv-2:pu16xqszcr1k
+
+Exception Message: element not interactable
+  (Session info: chrome=135.0.7049.86)
+Stacktrace:
+	GetHandleVerifier [0x00007FF698805355+78597]
+	GetHandleVerifier [0x00007FF6988053B0+78688]
+	(No symbol) [0x00007FF6985B8FDC]
+	(No symbol) [0x00007FF698608934]
+	(No symbol) [0x00007FF698606753]
+	(No symbol) [0x00007FF6986370EA]
+	(No symbol) [0x00007FF698601AB6]
+	(No symbol) [0x00007FF698637300]
+	(No symbol) [0x00007FF69865F2BB]
+	(No symbol) [0x00007FF698636EC3]
+	(No symbol) [0x00007FF6986003F8]
+	(No symbol) [0x00007FF698601163]
+	GetHandleVerifier [0x00007FF698AAEF0D+2870973]
+	GetHandleVerifier [0x00007FF698AA96B8+2848360]
+	GetHandleVerifier [0x00007FF698AC6993+2967875]
+	GetHandleVerifier [0x00007FF69882019A+188746]
+	GetHandleVerifier [0x00007FF69882847F+222255]
+	GetHandleVerifier [0x00007FF69880D2D4+111236]
+	GetHandleVerifier [0x00007FF69880D482+111666]
+	GetHandleVerifier [0x00007FF6987F35A9+5465]
+	BaseThreadInitThunk [0x00007FFF2BED7374+20]
+	RtlUserThreadStart [0x00007FFF2D0DCC91+33]
+ in Bot Guest5409; retrying with proxy p.webshare.io:80:scisyepv-2:pu16xqszcr1k
+

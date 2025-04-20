@@ -1,0 +1,5 @@
+https://raw.githubusercontent.com/YoungsterGlenn/bpDictionaryStatistics/master/dictionary.txt
+https://norvig.com/ngrams/sowpods.txt
+https://norvig.com/ngrams/enable1.txt
+https://pastebin.com/raw/UegdKLq8
+https://pastebin.com/raw/M6TZ8Uxy
