@@ -169,3 +169,611 @@ Stacktrace:
 	RtlUserThreadStart [0x00007FFF2D0DCC91+33]
  in Bot Guest5409; retrying with proxy p.webshare.io:80:scisyepv-2:pu16xqszcr1k
 
+loaded 10 proxies from proxies.config
+loading dicts from urls
+loaded 273229 words from dictionaries.txt
+Bot Guest2797 disconnected successfully
+Exception Message: no such frame
+  (Session info: chrome=135.0.7049.86)
+Stacktrace:
+	GetHandleVerifier [0x00007FF698805355+78597]
+	GetHandleVerifier [0x00007FF6988053B0+78688]
+	(No symbol) [0x00007FF6985B8FDC]
+	(No symbol) [0x00007FF6985C5477]
+	(No symbol) [0x00007FF69866148F]
+	(No symbol) [0x00007FF6986370EA]
+	(No symbol) [0x00007FF69865F2BB]
+	(No symbol) [0x00007FF698636EC3]
+	(No symbol) [0x00007FF6986003F8]
+	(No symbol) [0x00007FF698601163]
+	GetHandleVerifier [0x00007FF698AAEF0D+2870973]
+	GetHandleVerifier [0x00007FF698AA96B8+2848360]
+	GetHandleVerifier [0x00007FF698AC6993+2967875]
+	GetHandleVerifier [0x00007FF69882019A+188746]
+	GetHandleVerifier [0x00007FF69882847F+222255]
+	GetHandleVerifier [0x00007FF69880D2D4+111236]
+	GetHandleVerifier [0x00007FF69880D482+111666]
+	GetHandleVerifier [0x00007FF6987F35A9+5465]
+	BaseThreadInitThunk [0x00007FFF2BED7374+20]
+	RtlUserThreadStart [0x00007FFF2D0DCC91+33]
+ in Bot Guest1622; retrying with proxy p.webshare.io:80:scisyepv-2:pu16xqszcr1k
+
+Bot Guest6814 disconnected successfully
+loaded 1 proxies from proxies.config
+loading 5 dictionaries from urls
+loaded 273229 words from dictionaries.txt
+Bot Guest5499 disconnected successfully
+goodbye!
+loaded 10 proxies from proxies.config
+loading 5 dictionaries from urls
+loaded 273229 words from dictionaries.txt
+Bot Guest9058 disconnected successfully
+loaded 10 proxies from proxies.config
+loading 5 dictionaries from urls
+loaded 273229 words from dictionaries.txt
+Bot Guest1345 disconnected successfully
+Exception Message: element not interactable
+  (Session info: chrome=135.0.7049.86)
+Stacktrace:
+	GetHandleVerifier [0x00007FF698805355+78597]
+	GetHandleVerifier [0x00007FF6988053B0+78688]
+	(No symbol) [0x00007FF6985B8FDC]
+	(No symbol) [0x00007FF698608934]
+	(No symbol) [0x00007FF698606753]
+	(No symbol) [0x00007FF6986370EA]
+	(No symbol) [0x00007FF698601AB6]
+	(No symbol) [0x00007FF698637300]
+	(No symbol) [0x00007FF69865F2BB]
+	(No symbol) [0x00007FF698636EC3]
+	(No symbol) [0x00007FF6986003F8]
+	(No symbol) [0x00007FF698601163]
+	GetHandleVerifier [0x00007FF698AAEF0D+2870973]
+	GetHandleVerifier [0x00007FF698AA96B8+2848360]
+	GetHandleVerifier [0x00007FF698AC6993+2967875]
+	GetHandleVerifier [0x00007FF69882019A+188746]
+	GetHandleVerifier [0x00007FF69882847F+222255]
+	GetHandleVerifier [0x00007FF69880D2D4+111236]
+	GetHandleVerifier [0x00007FF69880D482+111666]
+	GetHandleVerifier [0x00007FF6987F35A9+5465]
+	BaseThreadInitThunk [0x00007FFF2BED7374+20]
+	RtlUserThreadStart [0x00007FFF2D0DCC91+33]
+ in Bot Guest7188; retrying with proxy p.webshare.io:80:scisyepv-2:pu16xqszcr1k
+
+Bot Guest4204 disconnected successfully
+Bot Guest4964 disconnected successfully
+Bot Guest7914 disconnected successfully
+Bot Guest8819 disconnected successfully
+loaded 10 proxies from proxies.config
+loading 5 dictionaries from urls
+loaded 273229 words from dictionaries.txt
+loaded 10 proxies from proxies.config
+loading 5 dictionaries from urls
+loaded 273229 words from dictionaries.txt
+Bot Guest3699 disconnected successfully
+loaded 10 proxies from proxies.config
+loading 5 dictionaries from urls
+loaded 273229 words from dictionaries.txt
+Bot Guest3456 disconnected successfully
+Bot Guest334 disconnected successfully
+Exception Message: element not interactable
+  (Session info: chrome=135.0.7049.86)
+Stacktrace:
+	GetHandleVerifier [0x00007FF698805355+78597]
+	GetHandleVerifier [0x00007FF6988053B0+78688]
+	(No symbol) [0x00007FF6985B8FDC]
+	(No symbol) [0x00007FF698608934]
+	(No symbol) [0x00007FF698606753]
+	(No symbol) [0x00007FF6986370EA]
+	(No symbol) [0x00007FF698601AB6]
+	(No symbol) [0x00007FF698637300]
+	(No symbol) [0x00007FF69865F2BB]
+	(No symbol) [0x00007FF698636EC3]
+	(No symbol) [0x00007FF6986003F8]
+	(No symbol) [0x00007FF698601163]
+	GetHandleVerifier [0x00007FF698AAEF0D+2870973]
+	GetHandleVerifier [0x00007FF698AA96B8+2848360]
+	GetHandleVerifier [0x00007FF698AC6993+2967875]
+	GetHandleVerifier [0x00007FF69882019A+188746]
+	GetHandleVerifier [0x00007FF69882847F+222255]
+	GetHandleVerifier [0x00007FF69880D2D4+111236]
+	GetHandleVerifier [0x00007FF69880D482+111666]
+	GetHandleVerifier [0x00007FF6987F35A9+5465]
+	BaseThreadInitThunk [0x00007FFF2BED7374+20]
+	RtlUserThreadStart [0x00007FFF2D0DCC91+33]
+ in Bot Guest7316; retrying with proxy p.webshare.io:80:scisyepv-3:pu16xqszcr1k
+
+Exception Message: element not interactable
+  (Session info: chrome=135.0.7049.86)
+Stacktrace:
+	GetHandleVerifier [0x00007FF698805355+78597]
+	GetHandleVerifier [0x00007FF6988053B0+78688]
+	(No symbol) [0x00007FF6985B8FDC]
+	(No symbol) [0x00007FF698608934]
+	(No symbol) [0x00007FF698606753]
+	(No symbol) [0x00007FF6986370EA]
+	(No symbol) [0x00007FF698601AB6]
+	(No symbol) [0x00007FF698637300]
+	(No symbol) [0x00007FF69865F2BB]
+	(No symbol) [0x00007FF698636EC3]
+	(No symbol) [0x00007FF6986003F8]
+	(No symbol) [0x00007FF698601163]
+	GetHandleVerifier [0x00007FF698AAEF0D+2870973]
+	GetHandleVerifier [0x00007FF698AA96B8+2848360]
+	GetHandleVerifier [0x00007FF698AC6993+2967875]
+	GetHandleVerifier [0x00007FF69882019A+188746]
+	GetHandleVerifier [0x00007FF69882847F+222255]
+	GetHandleVerifier [0x00007FF69880D2D4+111236]
+	GetHandleVerifier [0x00007FF69880D482+111666]
+	GetHandleVerifier [0x00007FF6987F35A9+5465]
+	BaseThreadInitThunk [0x00007FFF2BED7374+20]
+	RtlUserThreadStart [0x00007FFF2D0DCC91+33]
+ in Bot Guest7815; retrying with proxy p.webshare.io:80:scisyepv-3:pu16xqszcr1k
+
+Exception Message: element not interactable
+  (Session info: chrome=135.0.7049.86)
+Stacktrace:
+	GetHandleVerifier [0x00007FF698805355+78597]
+	GetHandleVerifier [0x00007FF6988053B0+78688]
+	(No symbol) [0x00007FF6985B8FDC]
+	(No symbol) [0x00007FF698608934]
+	(No symbol) [0x00007FF698606753]
+	(No symbol) [0x00007FF6986370EA]
+	(No symbol) [0x00007FF698601AB6]
+	(No symbol) [0x00007FF698637300]
+	(No symbol) [0x00007FF69865F2BB]
+	(No symbol) [0x00007FF698636EC3]
+	(No symbol) [0x00007FF6986003F8]
+	(No symbol) [0x00007FF698601163]
+	GetHandleVerifier [0x00007FF698AAEF0D+2870973]
+	GetHandleVerifier [0x00007FF698AA96B8+2848360]
+	GetHandleVerifier [0x00007FF698AC6993+2967875]
+	GetHandleVerifier [0x00007FF69882019A+188746]
+	GetHandleVerifier [0x00007FF69882847F+222255]
+	GetHandleVerifier [0x00007FF69880D2D4+111236]
+	GetHandleVerifier [0x00007FF69880D482+111666]
+	GetHandleVerifier [0x00007FF6987F35A9+5465]
+	BaseThreadInitThunk [0x00007FFF2BED7374+20]
+	RtlUserThreadStart [0x00007FFF2D0DCC91+33]
+ in Bot Guest7289; retrying with proxy p.webshare.io:80:scisyepv-3:pu16xqszcr1k
+
+reached maximum retry limit for proxy p.webshare.io:80:scisyepv-3:pu16xqszcr1k
+
+Exception Message: element not interactable
+  (Session info: chrome=135.0.7049.86)
+Stacktrace:
+	GetHandleVerifier [0x00007FF698805355+78597]
+	GetHandleVerifier [0x00007FF6988053B0+78688]
+	(No symbol) [0x00007FF6985B8FDC]
+	(No symbol) [0x00007FF698608934]
+	(No symbol) [0x00007FF698606753]
+	(No symbol) [0x00007FF6986370EA]
+	(No symbol) [0x00007FF698601AB6]
+	(No symbol) [0x00007FF698637300]
+	(No symbol) [0x00007FF69865F2BB]
+	(No symbol) [0x00007FF698636EC3]
+	(No symbol) [0x00007FF6986003F8]
+	(No symbol) [0x00007FF698601163]
+	GetHandleVerifier [0x00007FF698AAEF0D+2870973]
+	GetHandleVerifier [0x00007FF698AA96B8+2848360]
+	GetHandleVerifier [0x00007FF698AC6993+2967875]
+	GetHandleVerifier [0x00007FF69882019A+188746]
+	GetHandleVerifier [0x00007FF69882847F+222255]
+	GetHandleVerifier [0x00007FF69880D2D4+111236]
+	GetHandleVerifier [0x00007FF69880D482+111666]
+	GetHandleVerifier [0x00007FF6987F35A9+5465]
+	BaseThreadInitThunk [0x00007FFF2BED7374+20]
+	RtlUserThreadStart [0x00007FFF2D0DCC91+33]
+ in Bot Guest9519; retrying with proxy p.webshare.io:80:scisyepv-4:pu16xqszcr1k
+
+Exception Message: element not interactable
+  (Session info: chrome=135.0.7049.86)
+Stacktrace:
+	GetHandleVerifier [0x00007FF698805355+78597]
+	GetHandleVerifier [0x00007FF6988053B0+78688]
+	(No symbol) [0x00007FF6985B8FDC]
+	(No symbol) [0x00007FF698608934]
+	(No symbol) [0x00007FF698606753]
+	(No symbol) [0x00007FF6986370EA]
+	(No symbol) [0x00007FF698601AB6]
+	(No symbol) [0x00007FF698637300]
+	(No symbol) [0x00007FF69865F2BB]
+	(No symbol) [0x00007FF698636EC3]
+	(No symbol) [0x00007FF6986003F8]
+	(No symbol) [0x00007FF698601163]
+	GetHandleVerifier [0x00007FF698AAEF0D+2870973]
+	GetHandleVerifier [0x00007FF698AA96B8+2848360]
+	GetHandleVerifier [0x00007FF698AC6993+2967875]
+	GetHandleVerifier [0x00007FF69882019A+188746]
+	GetHandleVerifier [0x00007FF69882847F+222255]
+	GetHandleVerifier [0x00007FF69880D2D4+111236]
+	GetHandleVerifier [0x00007FF69880D482+111666]
+	GetHandleVerifier [0x00007FF6987F35A9+5465]
+	BaseThreadInitThunk [0x00007FFF2BED7374+20]
+	RtlUserThreadStart [0x00007FFF2D0DCC91+33]
+ in Bot Guest845; retrying with proxy p.webshare.io:80:scisyepv-4:pu16xqszcr1k
+
+Exception Message: element not interactable
+  (Session info: chrome=135.0.7049.86)
+Stacktrace:
+	GetHandleVerifier [0x00007FF698805355+78597]
+	GetHandleVerifier [0x00007FF6988053B0+78688]
+	(No symbol) [0x00007FF6985B8FDC]
+	(No symbol) [0x00007FF698608934]
+	(No symbol) [0x00007FF698606753]
+	(No symbol) [0x00007FF6986370EA]
+	(No symbol) [0x00007FF698601AB6]
+	(No symbol) [0x00007FF698637300]
+	(No symbol) [0x00007FF69865F2BB]
+	(No symbol) [0x00007FF698636EC3]
+	(No symbol) [0x00007FF6986003F8]
+	(No symbol) [0x00007FF698601163]
+	GetHandleVerifier [0x00007FF698AAEF0D+2870973]
+	GetHandleVerifier [0x00007FF698AA96B8+2848360]
+	GetHandleVerifier [0x00007FF698AC6993+2967875]
+	GetHandleVerifier [0x00007FF69882019A+188746]
+	GetHandleVerifier [0x00007FF69882847F+222255]
+	GetHandleVerifier [0x00007FF69880D2D4+111236]
+	GetHandleVerifier [0x00007FF69880D482+111666]
+	GetHandleVerifier [0x00007FF6987F35A9+5465]
+	BaseThreadInitThunk [0x00007FFF2BED7374+20]
+	RtlUserThreadStart [0x00007FFF2D0DCC91+33]
+ in Bot Guest5163; retrying with proxy p.webshare.io:80:scisyepv-4:pu16xqszcr1k
+
+reached maximum retry limit for proxy p.webshare.io:80:scisyepv-4:pu16xqszcr1k
+
+loaded 10 proxies from proxies.config
+loading 5 dictionaries from urls
+loaded 273229 words from dictionaries.txt
+loaded 10 proxies from proxies.config
+loading 5 dictionaries from urls
+loaded 273229 words from dictionaries.txt
+loaded 10 proxies from proxies.config
+loading 5 dictionaries from urls
+loaded 273229 words from dictionaries.txt
+Exception 'NoneType' object has no attribute 'text' in Bot Guest6716; retrying with proxy p.webshare.io:80:adzzhfmh-1:v4xvjox8zqxk
+
+loaded 10 proxies from proxies.config
+loading 5 dictionaries from urls
+loaded 273229 words from dictionaries.txt
+Exception Message: element not interactable
+  (Session info: chrome=135.0.7049.86)
+Stacktrace:
+	GetHandleVerifier [0x00007FF698805355+78597]
+	GetHandleVerifier [0x00007FF6988053B0+78688]
+	(No symbol) [0x00007FF6985B8FDC]
+	(No symbol) [0x00007FF698608934]
+	(No symbol) [0x00007FF698606753]
+	(No symbol) [0x00007FF6986370EA]
+	(No symbol) [0x00007FF698601AB6]
+	(No symbol) [0x00007FF698637300]
+	(No symbol) [0x00007FF69865F2BB]
+	(No symbol) [0x00007FF698636EC3]
+	(No symbol) [0x00007FF6986003F8]
+	(No symbol) [0x00007FF698601163]
+	GetHandleVerifier [0x00007FF698AAEF0D+2870973]
+	GetHandleVerifier [0x00007FF698AA96B8+2848360]
+	GetHandleVerifier [0x00007FF698AC6993+2967875]
+	GetHandleVerifier [0x00007FF69882019A+188746]
+	GetHandleVerifier [0x00007FF69882847F+222255]
+	GetHandleVerifier [0x00007FF69880D2D4+111236]
+	GetHandleVerifier [0x00007FF69880D482+111666]
+	GetHandleVerifier [0x00007FF6987F35A9+5465]
+	BaseThreadInitThunk [0x00007FFF2BED7374+20]
+	RtlUserThreadStart [0x00007FFF2D0DCC91+33]
+ in Bot Guest381; retrying with proxy p.webshare.io:80:adzzhfmh-1:v4xvjox8zqxk
+
+loaded 10 proxies from proxies.config
+loading 5 dictionaries from urls
+Cannot get url https://pastebin.com/raw/M6TZ8Uxy
+loaded 273211 words from dictionaries.txt
+loaded 10 proxies from proxies.config
+loading 5 dictionaries from urls
+loaded 273229 words from dictionaries.txt
+loaded 10 proxies from proxies.config
+loading 5 dictionaries from urls
+loaded 273229 words from dictionaries.txt
+loaded 10 proxies from proxies.config
+loading 5 dictionaries from urls
+loaded 273229 words from dictionaries.txt
+Exception Message: element not interactable: element has zero size
+  (Session info: chrome=135.0.7049.86)
+Stacktrace:
+	GetHandleVerifier [0x00007FF698805355+78597]
+	GetHandleVerifier [0x00007FF6988053B0+78688]
+	(No symbol) [0x00007FF6985B91AA]
+	(No symbol) [0x00007FF6986109AA]
+	(No symbol) [0x00007FF698602204]
+	(No symbol) [0x00007FF6986370EA]
+	(No symbol) [0x00007FF698601AB6]
+	(No symbol) [0x00007FF698637300]
+	(No symbol) [0x00007FF69865F2BB]
+	(No symbol) [0x00007FF698636EC3]
+	(No symbol) [0x00007FF6986003F8]
+	(No symbol) [0x00007FF698601163]
+	GetHandleVerifier [0x00007FF698AAEF0D+2870973]
+	GetHandleVerifier [0x00007FF698AA96B8+2848360]
+	GetHandleVerifier [0x00007FF698AC6993+2967875]
+	GetHandleVerifier [0x00007FF69882019A+188746]
+	GetHandleVerifier [0x00007FF69882847F+222255]
+	GetHandleVerifier [0x00007FF69880D2D4+111236]
+	GetHandleVerifier [0x00007FF69880D482+111666]
+	GetHandleVerifier [0x00007FF6987F35A9+5465]
+	BaseThreadInitThunk [0x00007FFF2BED7374+20]
+	RtlUserThreadStart [0x00007FFF2D0DCC91+33]
+ in Bot None; retrying with proxy p.webshare.io:80:adzzhfmh-1:v4xvjox8zqxk
+
+loaded 10 proxies from proxies.config
+loading 5 dictionaries from urls
+loaded 273229 words from dictionaries.txt
+loaded 10 proxies from proxies.config
+loading 5 dictionaries from urls
+loaded 273229 words from dictionaries.txt
+loaded 10 proxies from proxies.config
+loading 5 dictionaries from urls
+loaded 273229 words from dictionaries.txt
+Bot disconnected successfully
+Bot disconnected successfully
+Bot disconnected successfully
+Bot disconnected successfully
+Bot disconnected successfully
+Bot disconnected successfully
+Bot disconnected successfully
+Bot disconnected successfully
+Bot disconnected successfully
+Bot disconnected successfully
+goodbye!
+loaded 10 proxies from proxies.config
+loading 5 dictionaries from urls
+loaded 273229 words from dictionaries.txt
+Bot disconnected successfully
+loaded 10 proxies from proxies.config
+loading 5 dictionaries from urls
+loaded 273229 words from dictionaries.txt
+Exception Message: element not interactable
+  (Session info: chrome=135.0.7049.86)
+Stacktrace:
+	GetHandleVerifier [0x00007FF698805355+78597]
+	GetHandleVerifier [0x00007FF6988053B0+78688]
+	(No symbol) [0x00007FF6985B8FDC]
+	(No symbol) [0x00007FF698608934]
+	(No symbol) [0x00007FF698606753]
+	(No symbol) [0x00007FF6986370EA]
+	(No symbol) [0x00007FF698601AB6]
+	(No symbol) [0x00007FF698637300]
+	(No symbol) [0x00007FF69865F2BB]
+	(No symbol) [0x00007FF698636EC3]
+	(No symbol) [0x00007FF6986003F8]
+	(No symbol) [0x00007FF698601163]
+	GetHandleVerifier [0x00007FF698AAEF0D+2870973]
+	GetHandleVerifier [0x00007FF698AA96B8+2848360]
+	GetHandleVerifier [0x00007FF698AC6993+2967875]
+	GetHandleVerifier [0x00007FF69882019A+188746]
+	GetHandleVerifier [0x00007FF69882847F+222255]
+	GetHandleVerifier [0x00007FF69880D2D4+111236]
+	GetHandleVerifier [0x00007FF69880D482+111666]
+	GetHandleVerifier [0x00007FF6987F35A9+5465]
+	BaseThreadInitThunk [0x00007FFF2BED7374+20]
+	RtlUserThreadStart [0x00007FFF2D0DCC91+33]
+ in Bot; retrying with proxy p.webshare.io:80:adzzhfmh-1:v4xvjox8zqxk
+
+Exception Message: element click intercepted: Element <button class="styled joinRound" data-text="joinGame">...</button> is not clickable at point (51, 17). Other element would receive the click: <div class="seating">...</div>
+  (Session info: chrome=135.0.7049.86)
+Stacktrace:
+	GetHandleVerifier [0x00007FF698805355+78597]
+	GetHandleVerifier [0x00007FF6988053B0+78688]
+	(No symbol) [0x00007FF6985B91AA]
+	(No symbol) [0x00007FF698617089]
+	(No symbol) [0x00007FF698614A42]
+	(No symbol) [0x00007FF698611AE1]
+	(No symbol) [0x00007FF698610A42]
+	(No symbol) [0x00007FF69860259C]
+	(No symbol) [0x00007FF6986370EA]
+	(No symbol) [0x00007FF698601AB6]
+	(No symbol) [0x00007FF698637300]
+	(No symbol) [0x00007FF69865F2BB]
+	(No symbol) [0x00007FF698636EC3]
+	(No symbol) [0x00007FF6986003F8]
+	(No symbol) [0x00007FF698601163]
+	GetHandleVerifier [0x00007FF698AAEF0D+2870973]
+	GetHandleVerifier [0x00007FF698AA96B8+2848360]
+	GetHandleVerifier [0x00007FF698AC6993+2967875]
+	GetHandleVerifier [0x00007FF69882019A+188746]
+	GetHandleVerifier [0x00007FF69882847F+222255]
+	GetHandleVerifier [0x00007FF69880D2D4+111236]
+	GetHandleVerifier [0x00007FF69880D482+111666]
+	GetHandleVerifier [0x00007FF6987F35A9+5465]
+	BaseThreadInitThunk [0x00007FFF2BED7374+20]
+	RtlUserThreadStart [0x00007FFF2D0DCC91+33]
+ in Bot; retrying with proxy p.webshare.io:80:adzzhfmh-1:v4xvjox8zqxk
+
+loaded 10 proxies from proxies.config
+loading 5 dictionaries from urls
+loaded 273229 words from dictionaries.txt
+Bot disconnected successfully
+Exception Message: element not interactable
+  (Session info: chrome=135.0.7049.86)
+Stacktrace:
+	GetHandleVerifier [0x00007FF698805355+78597]
+	GetHandleVerifier [0x00007FF6988053B0+78688]
+	(No symbol) [0x00007FF6985B8FDC]
+	(No symbol) [0x00007FF698608934]
+	(No symbol) [0x00007FF698606753]
+	(No symbol) [0x00007FF6986370EA]
+	(No symbol) [0x00007FF698601AB6]
+	(No symbol) [0x00007FF698637300]
+	(No symbol) [0x00007FF69865F2BB]
+	(No symbol) [0x00007FF698636EC3]
+	(No symbol) [0x00007FF6986003F8]
+	(No symbol) [0x00007FF698601163]
+	GetHandleVerifier [0x00007FF698AAEF0D+2870973]
+	GetHandleVerifier [0x00007FF698AA96B8+2848360]
+	GetHandleVerifier [0x00007FF698AC6993+2967875]
+	GetHandleVerifier [0x00007FF69882019A+188746]
+	GetHandleVerifier [0x00007FF69882847F+222255]
+	GetHandleVerifier [0x00007FF69880D2D4+111236]
+	GetHandleVerifier [0x00007FF69880D482+111666]
+	GetHandleVerifier [0x00007FF6987F35A9+5465]
+	BaseThreadInitThunk [0x00007FFF2BED7374+20]
+	RtlUserThreadStart [0x00007FFF2D0DCC91+33]
+ in Bot; retrying with proxy p.webshare.io:80:adzzhfmh-2:v4xvjox8zqxk
+
+loaded 10 proxies from proxies.config
+loading 5 dictionaries from urls
+loaded 273229 words from dictionaries.txt
+Exception Message: element not interactable
+  (Session info: chrome=135.0.7049.86)
+Stacktrace:
+	GetHandleVerifier [0x00007FF698805355+78597]
+	GetHandleVerifier [0x00007FF6988053B0+78688]
+	(No symbol) [0x00007FF6985B8FDC]
+	(No symbol) [0x00007FF69861061D]
+	(No symbol) [0x00007FF69860259C]
+	(No symbol) [0x00007FF6986370EA]
+	(No symbol) [0x00007FF698601AB6]
+	(No symbol) [0x00007FF698637300]
+	(No symbol) [0x00007FF69865F2BB]
+	(No symbol) [0x00007FF698636EC3]
+	(No symbol) [0x00007FF6986003F8]
+	(No symbol) [0x00007FF698601163]
+	GetHandleVerifier [0x00007FF698AAEF0D+2870973]
+	GetHandleVerifier [0x00007FF698AA96B8+2848360]
+	GetHandleVerifier [0x00007FF698AC6993+2967875]
+	GetHandleVerifier [0x00007FF69882019A+188746]
+	GetHandleVerifier [0x00007FF69882847F+222255]
+	GetHandleVerifier [0x00007FF69880D2D4+111236]
+	GetHandleVerifier [0x00007FF69880D482+111666]
+	GetHandleVerifier [0x00007FF6987F35A9+5465]
+	BaseThreadInitThunk [0x00007FFF2BED7374+20]
+	RtlUserThreadStart [0x00007FFF2D0DCC91+33]
+ in Bot; retrying with proxy p.webshare.io:80:adzzhfmh-1:v4xvjox8zqxk
+
+loaded 10 proxies from proxies.config
+loading 5 dictionaries from urls
+loaded 273229 words from dictionaries.txt
+Exception Message: element not interactable
+  (Session info: chrome=135.0.7049.86)
+Stacktrace:
+	GetHandleVerifier [0x00007FF698805355+78597]
+	GetHandleVerifier [0x00007FF6988053B0+78688]
+	(No symbol) [0x00007FF6985B8FDC]
+	(No symbol) [0x00007FF698608934]
+	(No symbol) [0x00007FF698606753]
+	(No symbol) [0x00007FF6986370EA]
+	(No symbol) [0x00007FF698601AB6]
+	(No symbol) [0x00007FF698637300]
+	(No symbol) [0x00007FF69865F2BB]
+	(No symbol) [0x00007FF698636EC3]
+	(No symbol) [0x00007FF6986003F8]
+	(No symbol) [0x00007FF698601163]
+	GetHandleVerifier [0x00007FF698AAEF0D+2870973]
+	GetHandleVerifier [0x00007FF698AA96B8+2848360]
+	GetHandleVerifier [0x00007FF698AC6993+2967875]
+	GetHandleVerifier [0x00007FF69882019A+188746]
+	GetHandleVerifier [0x00007FF69882847F+222255]
+	GetHandleVerifier [0x00007FF69880D2D4+111236]
+	GetHandleVerifier [0x00007FF69880D482+111666]
+	GetHandleVerifier [0x00007FF6987F35A9+5465]
+	BaseThreadInitThunk [0x00007FFF2BED7374+20]
+	RtlUserThreadStart [0x00007FFF2D0DCC91+33]
+ in Bot; retrying with proxy p.webshare.io:80:adzzhfmh-1:v4xvjox8zqxk
+
+loading 5 dictionaries from urls
+loaded 273229 words from dictionaries.txt
+loading 5 dictionaries from urls
+loaded 273229 words from dictionaries.txt
+loading 5 dictionaries from urls
+loaded 273229 words from dictionaries.txt
+loaded 10 proxies from proxies.config
+loading 5 dictionaries from urls
+loaded 273229 words from dictionaries.txt
+Bot disconnected successfully
+Exception 'NoneType' object has no attribute 'send_keys' in Bot; retrying with proxy p.webshare.io:80:adzzhfmh-2:v4xvjox8zqxk
+
+loaded 10 proxies from proxies.config
+loading 5 dictionaries from urls
+loaded 273229 words from dictionaries.txt
+Bot disconnected successfully
+Bot disconnected successfully
+Bot disconnected successfully
+loaded 10 proxies from proxies.config
+loading 5 dictionaries from urls
+loaded 273229 words from dictionaries.txt
+Exception 'NoneType' object has no attribute 'send_keys' in Bot; retrying with proxy p.webshare.io:80:adzzhfmh-1:v4xvjox8zqxk
+
+loaded 10 proxies from proxies.config
+loading 6 dictionaries from urls
+loaded 273417 words from dictionaries.txt
+loaded 10 proxies from proxies.config
+loading 6 dictionaries from urls
+loaded 273417 words from dictionaries.txt
+loaded 10 proxies from proxies.config
+loading 6 dictionaries from urls
+loaded 273417 words from dictionaries.txt
+Bot disconnected successfully
+Exception ('Connection aborted.', ConnectionResetError(10054, 'An existing connection was forcibly closed by the remote host', None, 10054, None)) in Bot; retrying with proxy p.webshare.io:80:adzzhfmh-2:v4xvjox8zqxk
+
+loaded 10 proxies from proxies.config
+loading 6 dictionaries from urls
+loaded 273417 words from dictionaries.txt
+Bot disconnected successfully
+loaded 10 proxies from proxies.config
+loading 6 dictionaries from urls
+loaded 273417 words from dictionaries.txt
+Bot disconnected successfully
+Exception ('Connection aborted.', ConnectionResetError(10054, 'An existing connection was forcibly closed by the remote host', None, 10054, None)) in Bot; retrying with proxy p.webshare.io:80:adzzhfmh-2:v4xvjox8zqxk
+
+loaded 10 proxies from proxies.config
+loading 6 dictionaries from urls
+loaded 273417 words from dictionaries.txt
+Bot disconnected successfully
+loaded 10 proxies from proxies.config
+loading 6 dictionaries from urls
+loaded 273417 words from dictionaries.txt
+Bot disconnected successfully
+Exception ('Connection aborted.', ConnectionResetError(10054, 'An existing connection was forcibly closed by the remote host', None, 10054, None)) in Bot; retrying with proxy p.webshare.io:80:adzzhfmh-2:v4xvjox8zqxk
+
+loaded 10 proxies from proxies.config
+loading 6 dictionaries from urls
+loaded 273417 words from dictionaries.txt
+Bot disconnected successfully
+Exception ('Connection aborted.', ConnectionResetError(10054, 'An existing connection was forcibly closed by the remote host', None, 10054, None)) in Bot; retrying with proxy p.webshare.io:80:adzzhfmh-2:v4xvjox8zqxk
+
+loaded 10 proxies from proxies.config
+loading 6 dictionaries from urls
+loaded 273417 words from dictionaries.txt
+Bot disconnected successfully
+Exception ('Connection aborted.', ConnectionResetError(10054, 'An existing connection was forcibly closed by the remote host', None, 10054, None)) in Bot; retrying with proxy p.webshare.io:80:adzzhfmh-2:v4xvjox8zqxk
+
+loaded 10 proxies from proxies.config
+loading 6 dictionaries from urls
+loaded 273417 words from dictionaries.txt
+Bot disconnected successfully
+loaded 10 proxies from proxies.config
+loading 6 dictionaries from urls
+loaded 273417 words from dictionaries.txt
+Bot disconnected successfully
+Exception ('Connection aborted.', ConnectionResetError(10054, 'An existing connection was forcibly closed by the remote host', None, 10054, None)) in Bot; retrying with proxy p.webshare.io:80:adzzhfmh-2:v4xvjox8zqxk
+
+loaded 10 proxies from proxies.config
+loading 6 dictionaries from urls
+loaded 273417 words from dictionaries.txt
+Exception 'NoneType' object has no attribute 'text' in Bot; retrying with proxy p.webshare.io:80:adzzhfmh-1:v4xvjox8zqxk
+
+loaded 10 proxies from proxies.config
+loading 6 dictionaries from urls
+loaded 273417 words from dictionaries.txt
+Bot disconnected successfully
+loaded 10 proxies from proxies.config
+loading 6 dictionaries from urls
+loaded 273417 words from dictionaries.txt
+Bot disconnected successfully
+Exception ('Connection aborted.', ConnectionResetError(10054, 'An existing connection was forcibly closed by the remote host', None, 10054, None)) in Bot; retrying with proxy p.webshare.io:80:adzzhfmh-2:v4xvjox8zqxk
+
+loaded 10 proxies from proxies.config
+loading 6 dictionaries from urls
+loaded 273417 words from dictionaries.txt
+Bot disconnected successfully
+loaded 10 proxies from proxies.config
+loading 6 dictionaries from urls
+loaded 273417 words from dictionaries.txt
+Bot disconnected successfully

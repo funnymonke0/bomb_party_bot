@@ -1,5 +1,3 @@
-import requests
-from bs4 import BeautifulSoup
 from seleniumwire import webdriver
 from selenium.webdriver.chrome.service import Service as ChromeService
 from selenium.webdriver.chrome.options import Options as ChromeOptions
@@ -21,13 +19,15 @@ class BPB():
         self.visibleCondition = lambda x: EC.visibility_of_element_located(x)
         self.clickableCondition = lambda x: EC.element_to_be_clickable(x)
         self.presenceCondition = lambda x: EC.presence_of_element_located(x)
-        self.genUsername = lambda x, y: x+str(random.randint(1,int('9'*y)))
+        
 
         self.username = username
-        if not username:
-            self.username = self.genUsername('Guest', 4)
+        
+        if self.username:
+            self.console = logging.getLogger(f'{self.username} CONSOLE')
+        else:
+            self.console = logging.getLogger(f'BOT CONSOLE')
 
-        self.console = logging.getLogger(f'{self.username} CONSOLE')
         self.console.setLevel(logging.DEBUG)
 
         ch = logging.StreamHandler()
@@ -59,30 +59,47 @@ class BPB():
         else:
             proxy = 'localhost'
         self.driver = webdriver.Chrome(service=service, options=chrome_options, seleniumwire_options=seleniumwire_options)
-        self.console.info(f'initialized bot {self.username} running @ {proxy}')
 
-        
+        if self.username:
+            self.console.info(f'initialized bot {self.username} running @ {proxy}')
+        else:
+            self.console.info(f'initialized bot running @ {proxy}')
 
         ##settings
         self.maxWait = 5
         # self.selectMode = 'long'
-        # self.selectMode = 'short'
-        self.selectMode = 'smart'
+        self.selectMode = 'short'
+        # self.selectMode = 'smart'
 
-        # self.cyberbullying = True
+        #burst typing - randomly type fast
+        #random letter delete letter to simulate mistakes and also mistake rate
+        #if its your turn in quick succession, increase typing speed
+        #if there are fewer answers to a syllable or if the answer is long, type slower or pause before typing
 
+        
+        self.settings = { #eventually have this in a config file as well and be passed by manager to the bot
+            'selectMode' :'smart',
+            'cyberbullying' : False,
+            'offset' : 0.6,
+            'rate': 0.12,
+            'randomness' : 0.07,
+            'mistakes' : True,
+            'frantic' : True,
+            'dynamicPauses' : True}
+        
         self.cyberbullying = False
+        # self.cyberbullying = True
         self.offset = 0.6
 
-        self.typeDelay = 0.10
-        self.randomness = 0.07
+        self.rate = 0.15
+        self.randomness = 0.1
 
-        self.tickSpeed = 0.05
+        self.tickSpeed = 0.005 #const for the most part; determines polling speed
 
         self.dicts = dicts
 
         self.joinedRoom = self.joinRoom(roomCode)
-
+    
     
     def findSuffix(self, suffix):
         lst = []
@@ -96,11 +113,9 @@ class BPB():
         except IndexError:
             pass
             return None        
-    
+        
 
-    def locate(self, locator, lmd, delay = None):
-        if not delay:
-            delay = self.maxWait
+    def locate(self, locator, lmd, delay = 0):
         browser = self.driver
 
         wait = WebDriverWait(browser, delay+self.tickSpeed, poll_frequency=self.tickSpeed) #always at least 1 check
@@ -128,14 +143,12 @@ class BPB():
         
         WebDriverWait(browser, self.maxWait)
         
-
-        textbox = self.locate((By.XPATH, '//input[@class = "styled nickname"]'), lmd = self.visibleCondition, delay=self.maxWait)
+        if self.username:
+            textbox = self.locate((By.XPATH, '//input[@class = "styled nickname"]'), lmd = self.visibleCondition, delay=self.maxWait)
+            textbox.send_keys(Keys.CONTROL + Keys.BACKSPACE)
+            textbox.send_keys(self.username)
 
         submit = self.locate((By.XPATH, "/html/body/div[2]/div[3]/form/div[2]/button"), lmd = self.clickableCondition, delay=self.maxWait)
-        
-        textbox.send_keys(Keys.CONTROL + Keys.BACKSPACE)
-        sleep(0.1)
-        textbox.send_keys(self.username)
         submit.click()
         WebDriverWait(browser, self.maxWait)
 
@@ -143,87 +156,97 @@ class BPB():
     def updateIframe(self):
         browser = self.driver
         browser.switch_to.default_content()
-        iFrame = self.locate((By.XPATH, "//iframe[contains(@src, 'bombparty')]"), lmd= self.presenceCondition,delay=self.tickSpeed)
-        browser.switch_to.frame(iFrame)
+        iFrame = self.locate((By.XPATH, "//iframe[contains(@src, 'bombparty')]"), lmd= self.presenceCondition)
+        try:
+            browser.switch_to.frame(iFrame)
+        except:
+            pass
 
 
-    def join(self, delay):
-        join = self.locate((By.XPATH, "//button[@class = 'styled joinRound']"), delay= delay, lmd = self.clickableCondition)
-        if join:
+    def checkDisconnect(self):
+        browser = self.driver
+        disconnected = self.locate((By.XPATH, '//div[@class = "disconnected page"]'), lmd = self.visibleCondition)
+        if disconnected:
+            browser.quit()
+            return True
+        return False
+    
+    def checkJoin(self):
+        join = self.locate((By.XPATH, "//button[@class = 'styled joinRound']"), lmd = self.clickableCondition)
+        try:
             join.click()
+            self.dicts = self.dicts+self.replace
+            self.replace= []
+        except:
+            pass
+
         
     def updateLoop(self):
         browser = self.driver
         browser.switch_to.default_content()
-        disconnected = self.locate((By.XPATH, '//div[@class = "disconnected page"]'), delay= self.tickSpeed, lmd = self.visibleCondition)
-        if disconnected:
-            browser.quit()
+        if self.checkDisconnect():
             return False
         self.updateIframe()
-        
-        lastRound = self.locate((By.XPATH, '//div[@class = "lastRound"]'), delay= self.tickSpeed, lmd = self.visibleCondition)
-        if lastRound:
-            self.join(self.maxWait)
-            self.dicts = self.dicts+self.replace
-            self.replace= []
+        self.checkJoin()
         return True
 
     
     def botLoop(self):
 
         self.replace = []
-        self.updateIframe()
-        self.join(self.maxWait)
+
         while self.updateLoop():
 
-            ans = None
-            syllable = self.locate((By.XPATH, "//div[@class = 'syllable']"), delay=self.tickSpeed, lmd = self.visibleCondition)
-            textbox = self.locate((By.XPATH, '//form//input[@maxlength = "30"]'), delay=self.tickSpeed, lmd = self.visibleCondition)
-            if textbox and syllable:
-                syllable = syllable.text
-                self.console.info(f'found syllable: {syllable}')
-                lst = self.findSuffix(syllable)
+            
 
-                if lst:
-                    if self.selectMode == 'long':
-                        ans = lst[len(lst)-1]
-                    elif self.selectMode == 'short':
-                        ans = lst[0]
-                    elif self.selectMode == 'smart':
-                        ans = lst[0]
-                        if len(lst[len(lst)-1])>20:
+                try:
+                    textbox = self.locate((By.XPATH, '//form//input[@maxlength = "30"]'), lmd = self.visibleCondition)
+                    syllable = self.locate((By.XPATH, "//div[@class = 'syllable']"), lmd = self.visibleCondition)
+                    syllable = syllable.text## unfortunately can end up choosing the previous person's syllable because the webpage does not update as fast :/
+                    
+                    lst = self.findSuffix(syllable)
+
+                    if lst:
+                        if self.selectMode == 'long':
                             ans = lst[len(lst)-1]
+                        elif self.selectMode == 'short':
+                            ans = lst[0]
+                        elif self.selectMode == 'smart':
+                            ans = lst[0]
+                            if len(lst[len(lst)-1])>20:
+                                ans = lst[len(lst)-1]
 
-                if ans:
-                    
-                    self.console.info(f'found answer: {ans}')
-                    if self.cyberbullying:
-                        try:
-                            textbox.send_keys(ans+Keys.ENTER) ##if you wanna get hackusated
-                        except ElementNotInteractableException:
-                            pass
-                    else:
+                        if self.cyberbullying:
+                            textbox.send_keys(ans)
+                            textbox.send_keys(Keys.ENTER) ##if you wanna get hackusated
+                        else:
+                            self.simType(textbox, ans)
+                            textbox.send_keys(Keys.ENTER)
                         
-                        self.simType(textbox, ans+Keys.ENTER)
-                    
-                    self.replace.append(ans)
-                    self.dicts.remove(ans)
-                else:
-                    self.console.error("syllable not in dictionary !")
-                    textbox.send_keys('/suicide'+Keys.ENTER)
+                        self.replace.append(ans)
+                        self.dicts.remove(ans)
+                    else:
+                        self.console.error(f"syllable {syllable} not in dictionary !")
+                        textbox.send_keys('/suicide')
+                        textbox.send_keys(Keys.ENTER)
+                except:
+                    pass
+
+
 
     def simType(self, obj, txt):
         sleep(self.offset)
         txtArr = list(txt)
         for letter in txtArr:
             obj.send_keys(letter)
-            sleep((random.randint(-10,10)*0.1)*self.randomness+self.typeDelay)
+            sleep((random.randint(-10,10)*0.1)*self.randomness+self.rate)
         
 
 
 
 
 class BotManager():
+
     #manage bot persistence, proxies and other settings, etc.
     def __init__(self, dictFile, roomCode = None, proxyFile = None, username = None):
         
@@ -257,7 +280,7 @@ class BotManager():
         dictUrls = self.loadFromFile(dictFile, "^((https|http)\:\/\/)((\w*\.\w*\.\w*)|(\w*\.\w*))((\/\w*(\.\w*)?)*)?")
 
         if dictUrls:
-            self.console.info("loading dicts from urls")
+            self.console.info(f"loading {len(dictUrls)} dictionaries from urls")
             self.dicts += self.loadUrls(dictUrls)
 
         dictPlainText = self.loadFromFile(dictFile, "^\w*$")
@@ -316,17 +339,18 @@ class BotManager():
                     bot = self.botInit()
                     try:
                         bot.botLoop()
-                        self.console.info(f'Bot {bot.username} disconnected successfully')
+                        self.console.info(f'Bot disconnected successfully')
                         bot = None
                         retries = 0
                         proxyNo+=1
                         
                     except Exception as s:
-                        self.console.info(f'Exception {s} in Bot {bot.username}; retrying with proxy {self.proxy}')
+                        self.console.info(f'Exception {s} in Bot; retrying with proxy {self.proxy}')
                         bot = None
                         retries += 1
                 else:
                     self.console.info(f'reached maximum retry limit for proxy {self.proxy}')
+                    bot = None
                     retries = 0
                     proxyNo+=1    
         bot = None
