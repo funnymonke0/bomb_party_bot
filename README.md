@@ -24,7 +24,7 @@ A Bomb Party bot and bot manager built in Python with Selenium.
 
 - Python 🐍
 - Selenium WebDriver
-- Selenium Wire (for proxy injection)
+- Selenium Wire (for proxy)
 
 ---
 
