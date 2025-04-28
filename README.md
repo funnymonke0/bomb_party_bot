@@ -69,11 +69,11 @@ dynamicPauses:True
 | Setting | Description |
 | :------ | :----------- |
 | `selectMode` | `'smart'`, `'short'`, or `'long'` — how the bot picks answers |
-| `cyberbullying` | instant type if 1 player is remaining |
+| `cyberbullying` | Instant type if 1 player is remaining |
 | `maxOffset` | Max delay before typing (simulates thinking before typing) |
 | `rate` | Base typing speed (seconds per character) |
 | `burstType` | Enable fast "burst" typing spurts |
-| `burstRate` | rate during bursts |
+| `burstRate` | Rate during bursts |
 | `burstChance` | Chance of burst happening per character |
 | `randomness` | Percent variance of typing rate |
 | `mistakes` | Enable typo simulation |
