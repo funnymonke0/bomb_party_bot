@@ -777,3 +777,848 @@ loaded 10 proxies from proxies.config
 loading 6 dictionaries from urls
 loaded 273417 words from dictionaries.txt
 Bot disconnected successfully
+Bot disconnected successfully
+Bot disconnected successfully
+Bot disconnected successfully
+Bot disconnected successfully
+Bot disconnected successfully
+Bot disconnected successfully
+Bot disconnected successfully
+Bot disconnected successfully
+Bot disconnected successfully
+goodbye!
+loaded 10 proxies from proxies.config
+loading 6 dictionaries from urls
+loaded 273417 words from dictionaries.txt
+['selectMode : smart,\n', 'cyberbullying : False,\n', 'offset : 0.6,\n', 'rate: 0.12,\n', 'randomness : 0.07,\n', 'mistakes : True,\n', 'frantic : True,\n', 'dynamicPauses : True']
+loaded 10 proxies from proxies.config
+loading 6 dictionaries from urls
+loaded 273417 words from dictionaries.txt
+['selectMode : smart\n', 'cyberbullying : False\n', 'offset:0.6\n', 'rate:0.12\n', 'randomness:0.07\n', 'mistakes:True\n', 'frantic:True\n', 'dynamicPauses:True']
+loaded 10 proxies from proxies.config
+loading 6 dictionaries from urls
+loaded 273417 words from dictionaries.txt
+['selectMode : smart\n', 'cyberbullying : False\n', 'offset:0.6\n', 'rate:0.12\n', 'randomness:0.07\n', 'mistakes:True\n', 'frantic:True\n', 'dynamicPauses:True']
+loading 6 dictionaries from urls
+loaded 273417 words from dictionaries.txt
+['selectMode : smart\n', 'cyberbullying : False\n', 'offset:0.6\n', 'rate:0.12\n', 'randomness:0.07\n', 'mistakes:True\n', 'frantic:True\n', 'dynamicPauses:True']
+loading 6 dictionaries from urls
+loaded 273417 words from dictionaries.txt
+['selectMode : smart\n', 'cyberbullying : False\n', 'offset:0.6\n', 'rate:0.12\n', 'randomness:0.07\n', 'mistakes:True\n', 'frantic:True\n', 'dynamicPauses:True']
+loading 6 dictionaries from urls
+Cannot get url https://raw.githubusercontent.com/YoungsterGlenn/bpDictionaryStatistics/master/dictionary.txt
+
+Cannot get url https://norvig.com/ngrams/sowpods.txt
+
+Cannot get url https://norvig.com/ngrams/enable1.txt
+
+Cannot get url https://pastebin.com/raw/UegdKLq8
+
+Cannot get url https://pastebin.com/raw/M6TZ8Uxy
+
+Cannot get url https://raw.githubusercontent.com/NachozQ/BombParty-Lists/refs/heads/main/Main/chemicals.txt
+loaded 0 words from dictionaries.txt
+['selectMode : smart\n', 'cyberbullying : False\n', 'offset:0.6\n', 'rate:0.12\n', 'randomness:0.07\n', 'mistakes:True\n', 'frantic:True\n', 'dynamicPauses:True']
+loading 6 dictionaries from urls
+loaded 273417 words from dictionaries.txt
+['selectMode : smart\n', 'cyberbullying : False\n', 'offset:0.6\n', 'rate:0.12\n', 'randomness:0.07\n', 'mistakes:True\n', 'frantic:True\n', 'dynamicPauses:True']
+loading 6 dictionaries from urls
+loaded 273417 words from dictionaries.txt
+['selectMode : smart\n', 'cyberbullying : False\n', 'offset:0.6\n', 'rate:0.12\n', 'randomness:0.07\n', 'mistakes:True\n', 'frantic:True\n', 'dynamicPauses:True']
+loaded 10 proxies from proxies.config
+loading 6 dictionaries from urls
+loaded 273417 words from dictionaries.txt
+Exception ('Connection aborted.', ConnectionResetError(10054, 'An existing connection was forcibly closed by the remote host', None, 10054, None)) in Bot; retrying with proxy p.webshare.io:80:adzzhfmh-1:v4xvjox8zqxk
+
+[]
+loaded 10 proxies from proxies.config
+loading 6 dictionaries from urls
+loaded 273417 words from dictionaries.txt
+[]
+loaded 10 proxies from proxies.config
+loading 6 dictionaries from urls
+loaded 273417 words from dictionaries.txt
+[]
+loaded 10 proxies from proxies.config
+loading 6 dictionaries from urls
+loaded 273417 words from dictionaries.txt
+Exception Message: invalid argument: 'using' must be a string
+  (Session info: chrome=135.0.7049.96)
+Stacktrace:
+	GetHandleVerifier [0x00007FF7BB74EFA5+77893]
+	GetHandleVerifier [0x00007FF7BB74F000+77984]
+	(No symbol) [0x00007FF7BB5191BA]
+	(No symbol) [0x00007FF7BB56EF35]
+	(No symbol) [0x00007FF7BB56F41C]
+	(No symbol) [0x00007FF7BB5C2237]
+	(No symbol) [0x00007FF7BB59716F]
+	(No symbol) [0x00007FF7BB5BF07F]
+	(No symbol) [0x00007FF7BB596F03]
+	(No symbol) [0x00007FF7BB560328]
+	(No symbol) [0x00007FF7BB561093]
+	GetHandleVerifier [0x00007FF7BBA07B6D+2931725]
+	GetHandleVerifier [0x00007FF7BBA02132+2908626]
+	GetHandleVerifier [0x00007FF7BBA200F3+3031443]
+	GetHandleVerifier [0x00007FF7BB7691EA+184970]
+	GetHandleVerifier [0x00007FF7BB77086F+215311]
+	GetHandleVerifier [0x00007FF7BB756EC4+110436]
+	GetHandleVerifier [0x00007FF7BB757072+110866]
+	GetHandleVerifier [0x00007FF7BB73D479+5401]
+	BaseThreadInitThunk [0x00007FFC12FA7374+20]
+	RtlUserThreadStart [0x00007FFC14BDCC91+33]
+ in Bot; retrying with proxy p.webshare.io:80:adzzhfmh-1:v4xvjox8zqxk
+
+Exception Message: invalid argument: 'using' must be a string
+  (Session info: chrome=135.0.7049.96)
+Stacktrace:
+	GetHandleVerifier [0x00007FF7BB74EFA5+77893]
+	GetHandleVerifier [0x00007FF7BB74F000+77984]
+	(No symbol) [0x00007FF7BB5191BA]
+	(No symbol) [0x00007FF7BB56EF35]
+	(No symbol) [0x00007FF7BB56F41C]
+	(No symbol) [0x00007FF7BB5C2237]
+	(No symbol) [0x00007FF7BB59716F]
+	(No symbol) [0x00007FF7BB5BF07F]
+	(No symbol) [0x00007FF7BB596F03]
+	(No symbol) [0x00007FF7BB560328]
+	(No symbol) [0x00007FF7BB561093]
+	GetHandleVerifier [0x00007FF7BBA07B6D+2931725]
+	GetHandleVerifier [0x00007FF7BBA02132+2908626]
+	GetHandleVerifier [0x00007FF7BBA200F3+3031443]
+	GetHandleVerifier [0x00007FF7BB7691EA+184970]
+	GetHandleVerifier [0x00007FF7BB77086F+215311]
+	GetHandleVerifier [0x00007FF7BB756EC4+110436]
+	GetHandleVerifier [0x00007FF7BB757072+110866]
+	GetHandleVerifier [0x00007FF7BB73D479+5401]
+	BaseThreadInitThunk [0x00007FFC12FA7374+20]
+	RtlUserThreadStart [0x00007FFC14BDCC91+33]
+ in Bot; retrying with proxy p.webshare.io:80:adzzhfmh-1:v4xvjox8zqxk
+
+Exception Message: invalid argument: 'using' must be a string
+  (Session info: chrome=135.0.7049.96)
+Stacktrace:
+	GetHandleVerifier [0x00007FF7BB74EFA5+77893]
+	GetHandleVerifier [0x00007FF7BB74F000+77984]
+	(No symbol) [0x00007FF7BB5191BA]
+	(No symbol) [0x00007FF7BB56EF35]
+	(No symbol) [0x00007FF7BB56F41C]
+	(No symbol) [0x00007FF7BB5C2237]
+	(No symbol) [0x00007FF7BB59716F]
+	(No symbol) [0x00007FF7BB5BF07F]
+	(No symbol) [0x00007FF7BB596F03]
+	(No symbol) [0x00007FF7BB560328]
+	(No symbol) [0x00007FF7BB561093]
+	GetHandleVerifier [0x00007FF7BBA07B6D+2931725]
+	GetHandleVerifier [0x00007FF7BBA02132+2908626]
+	GetHandleVerifier [0x00007FF7BBA200F3+3031443]
+	GetHandleVerifier [0x00007FF7BB7691EA+184970]
+	GetHandleVerifier [0x00007FF7BB77086F+215311]
+	GetHandleVerifier [0x00007FF7BB756EC4+110436]
+	GetHandleVerifier [0x00007FF7BB757072+110866]
+	GetHandleVerifier [0x00007FF7BB73D479+5401]
+	BaseThreadInitThunk [0x00007FFC12FA7374+20]
+	RtlUserThreadStart [0x00007FFC14BDCC91+33]
+ in Bot; retrying with proxy p.webshare.io:80:adzzhfmh-1:v4xvjox8zqxk
+
+reached maximum retry limit for proxy p.webshare.io:80:adzzhfmh-1:v4xvjox8zqxk
+
+[]
+loaded 10 proxies from proxies.config
+loading 6 dictionaries from urls
+loaded 273417 words from dictionaries.txt
+Bot disconnected successfully
+Bot disconnected successfully
+[]
+loaded 10 proxies from proxies.config
+loading 6 dictionaries from urls
+loaded 273417 words from dictionaries.txt
+[]
+loading 7 dictionaries from urls
+loaded 275350 words from dictionaries.txt
+Bot disconnected successfully
+goodbye!
+[]
+loading 7 dictionaries from urls
+loaded 275350 words from dictionaries.txt
+Bot disconnected successfully
+goodbye!
+[]
+loading 7 dictionaries from urls
+loaded 275350 words from dictionaries.txt
+Bot disconnected successfully
+goodbye!
+['selectMode : smart\n', 'cyberbullying : False\n', 'offset:0.6\n', 'rate:0.12\n', 'randomness:0.07\n', 'mistakes:True\n', 'frantic:True\n', 'dynamicPauses:True']
+loading 7 dictionaries from urls
+loading entries from plaintext
+loaded 275546 words from dictionaries.txt
+Bot disconnected successfully
+goodbye!
+['selectMode : smart\n', 'cyberbullying : False\n', 'offset:0.6\n', 'rate:0.12\n', 'randomness:0.07\n', 'mistakes:True\n', 'frantic:True\n', 'dynamicPauses:True']
+loading 7 dictionaries from urls
+loading entries from plaintext
+loaded 275546 words from dictionaries.txt
+Bot disconnected successfully
+goodbye!
+['selectMode : smart\n', 'cyberbullying : False\n', 'offset:0.6\n', 'rate:0.12\n', 'randomness:0.07\n', 'mistakes:True\n', 'frantic:True\n', 'dynamicPauses:True']
+loading 7 dictionaries from urls
+loading entries from plaintext
+loaded 275546 words from dictionaries.txt
+Exception Message: element not interactable
+  (Session info: chrome=135.0.7049.96)
+Stacktrace:
+	GetHandleVerifier [0x00007FF7BB74EFA5+77893]
+	GetHandleVerifier [0x00007FF7BB74F000+77984]
+	(No symbol) [0x00007FF7BB518FEC]
+	(No symbol) [0x00007FF7BB570624]
+	(No symbol) [0x00007FF7BB562134]
+	(No symbol) [0x00007FF7BB59712A]
+	(No symbol) [0x00007FF7BB5619E6]
+	(No symbol) [0x00007FF7BB597340]
+	(No symbol) [0x00007FF7BB5BF07F]
+	(No symbol) [0x00007FF7BB596F03]
+	(No symbol) [0x00007FF7BB560328]
+	(No symbol) [0x00007FF7BB561093]
+	GetHandleVerifier [0x00007FF7BBA07B6D+2931725]
+	GetHandleVerifier [0x00007FF7BBA02132+2908626]
+	GetHandleVerifier [0x00007FF7BBA200F3+3031443]
+	GetHandleVerifier [0x00007FF7BB7691EA+184970]
+	GetHandleVerifier [0x00007FF7BB77086F+215311]
+	GetHandleVerifier [0x00007FF7BB756EC4+110436]
+	GetHandleVerifier [0x00007FF7BB757072+110866]
+	GetHandleVerifier [0x00007FF7BB73D479+5401]
+	BaseThreadInitThunk [0x00007FFC12FA7374+20]
+	RtlUserThreadStart [0x00007FFC14BDCC91+33]
+ in Bot; retrying with proxy None
+['selectMode : smart\n', 'cyberbullying : False\n', 'offset:0.6\n', 'rate:0.12\n', 'randomness:0.07\n', 'mistakes:True\n', 'frantic:True\n', 'dynamicPauses:True']
+loading 7 dictionaries from urls
+loading entries from plaintext
+loaded 275546 words from dictionaries.txt
+Exception Message: element not interactable
+  (Session info: chrome=135.0.7049.96)
+Stacktrace:
+	GetHandleVerifier [0x00007FF7BB74EFA5+77893]
+	GetHandleVerifier [0x00007FF7BB74F000+77984]
+	(No symbol) [0x00007FF7BB518FEC]
+	(No symbol) [0x00007FF7BB570624]
+	(No symbol) [0x00007FF7BB562134]
+	(No symbol) [0x00007FF7BB59712A]
+	(No symbol) [0x00007FF7BB5619E6]
+	(No symbol) [0x00007FF7BB597340]
+	(No symbol) [0x00007FF7BB5BF07F]
+	(No symbol) [0x00007FF7BB596F03]
+	(No symbol) [0x00007FF7BB560328]
+	(No symbol) [0x00007FF7BB561093]
+	GetHandleVerifier [0x00007FF7BBA07B6D+2931725]
+	GetHandleVerifier [0x00007FF7BBA02132+2908626]
+	GetHandleVerifier [0x00007FF7BBA200F3+3031443]
+	GetHandleVerifier [0x00007FF7BB7691EA+184970]
+	GetHandleVerifier [0x00007FF7BB77086F+215311]
+	GetHandleVerifier [0x00007FF7BB756EC4+110436]
+	GetHandleVerifier [0x00007FF7BB757072+110866]
+	GetHandleVerifier [0x00007FF7BB73D479+5401]
+	BaseThreadInitThunk [0x00007FFC12FA7374+20]
+	RtlUserThreadStart [0x00007FFC14BDCC91+33]
+ in Bot; retrying with proxy None
+['selectMode : smart\n', 'cyberbullying : False\n', 'offset:0.6\n', 'rate:0.12\n', 'randomness:0.07\n', 'mistakes:True\n', 'frantic:True\n', 'dynamicPauses:True']
+loading 7 dictionaries from urls
+loading entries from plaintext
+loaded 275546 words from dictionaries.txt
+Exception 'BPB' object has no attribute 'replace' in Bot; retrying with proxy None
+['selectMode : smart\n', 'cyberbullying : False\n', 'offset:0.6\n', 'rate:0.12\n', 'randomness:0.07\n', 'mistakes:True\n', 'frantic:True\n', 'dynamicPauses:True']
+loading 7 dictionaries from urls
+loading entries from plaintext
+loaded 275546 words from dictionaries.txt
+['selectMode : smart\n', 'cyberbullying : False\n', 'offset:0.6\n', 'rate:0.12\n', 'randomness:0.07\n', 'mistakes:True\n', 'frantic:True\n', 'dynamicPauses:True']
+loading 7 dictionaries from urls
+loading entries from plaintext
+loaded 275546 words from dictionaries.txt
+Bot disconnected successfully
+goodbye!
+['selectMode : smart\n', 'cyberbullying : False\n', 'offset:0.6\n', 'rate:0.12\n', 'randomness:0.07\n', 'mistakes:True\n', 'frantic:True\n', 'dynamicPauses:True']
+loading 7 dictionaries from urls
+['https://raw.githubusercontent.com/YoungsterGlenn/bpDictionaryStatistics/master/dictionary.txt\n', 'https://norvig.com/ngrams/sowpods.txt\n', 'https://norvig.com/ngrams/enable1.txt\n', 'https://pastebin.com/raw/UegdKLq8\n', 'https://pastebin.com/raw/M6TZ8Uxy\n', 'https://raw.githubusercontent.com/NachozQ/BombParty-Lists/refs/heads/main/Main/chemicals.txt\n', 'https://raw.githubusercontent.com/DO-Ui/bombparty-bot/refs/heads/master/wordlist.txt\n']
+['aaargh\n', '\n', 'nagkesar\n', '\n', 'ahkam\n', '\n', 'dghajsa\n', 'yakju\n', '\n', 'shaojiu\n', '\n', 'patxaran\n', '\n', 'awqaf\n', '\n', 'azkar\n', '\n', 'rhabds\n', '\n', 'zubrs\n', '\n', 'obvs\n', '\n', 'subzero\n', '\n', 'paczki\n', 'gwyddbwyll\n', '\n', 'adhkar\n', '\n', 'hadjs\n', '\n', 'badnjak\n', '\n', 'skweee\n', '\n', 'ehh\n', '\n', 'leiqin\n', '\n', 'pinnekjott\n', '\n', 'pekmez\n', '\n', 'prereqs\n', '\n', 'tevbe\n', '\n', 'offkey\n', '\n', 'aufgehoben\n', '\n', 'offsuit\n', '\n', 'fye\n', '\n', 'smaragds\n', '\n', 'highkey\n', '\n', 'gijinka\n', '\n', 'gikun\n', '\n', 'indigiqueer\n', '\n', 'designful\n', '\n', 'songpyeon\n', '\n', 'gqom\n', '\n', 'changquan\n', '\n', 'forthby\n', '\n', 'shhh\n', '\n', 'durchkomponiert\n', '\n', 'droshky\n', '\n', 'rhythmless\n', '\n', 'lehrjahre\n', '\n', 'mouthsful\n', '\n', 'lachsschinken\n', '\n', 'mathsy\n', '\n', 'huoguo\n', '\n', 'huqin\n', '\n', 'chuunibyou\n', '\n', '\n', '\n', 'honigkuchen\n', '\n', 'coraciiform\n', '\n', 'viili\n', '\n', 'mijwiz\n', '\n', 'fiqh\n', 'niqqud\n', '\n', 'kumisz\n', '\n', 'antiwrinkle\n', '\n', 'sixfold\n', '\n', 'kopiyka\n', '\n', 'mizpah\n', '\n', 'slojds\n', '\n', 'punjiing\n', '\n', 'jjolmyeon\n', '\n', 'hajjs\n', '\n', 'tahajjud\n', '\n', 'majles\n', '\n', 'yajnopavita\n', '\n', 'honjozo\n', '\n', 'tajweed\n', '\n', 'ryijyt\n', '\n', '\n', 'wakfs\n', '\n', 'yakgwa\n', '\n', 'knjaz\n', '\n', 'muktzeh\n', '\n', 'kvlt\n', '\n', 'alfvenic\n', '\n', 'filmjolk\n', '\n', 'qalqalah\n', '\n', 'jelqing\n', '\n', 'jelqs\n', '\n', 'neolttwigi\n', '\n', 'luwuk\n', '\n', 'edelzwicker\n', '\n', 'schmalzy\n', '\n', 'ulzzang\n', '\n', 'fremds\n', 'mhm\n', '\n', 'ollamhs\n', '\n', 'gastrocnemii\n', '\n', 'dumky\n', '\n', 'bottomry\n', '\n', 'confs\n', '\n', 'benjy\n', '\n', 'nonpneumatic\n', '\n', 'tranqed\n', '\n', 'transzonal\n', '\n', 'sphinxlike\n', '\n', 'minxy\n', '\n', 'obpyriform\n', '\n', 'tteokguk\n', '\n', 'folx\n', '\n', 'womxn\n', '\n', 'fotiaoqiang\n', '\n', 'coqs\n', '\n', 'dovga\n', '\n', 'cevapcici\n', '\n', 'pfft\n', '\n', 'napfkuchen\n', '\n', 'phpht\n', '\n', 'phwoar\n', '\n', 'bupkus\n', '\n', 'pljeskavica\n', '\n', 'sexprs\n', '\n', 'muhaqqaq\n', '\n', 'qaum\n', '\n', 'waqfs\n', '\n', 'tsaddiqim\n', '\n', 'qis\n', '\n', 'taqleed\n', '\n', 'maqluba\n', '\n', 'faqrs\n', '\n', 'taqsim\n', '\n', 'umquhile\n', '\n', 'quziqvo\n', '\n', 'miqvoth\n', '\n', 'arcform\n', '\n', 'warpwise\n', '\n', 'kaiserschmarrn\n', '\n', 'barszcz\n', '\n', 'lesbs\n', '\n', 'schismless\n', '\n', 'bosns\n', '\n', 'claspt\n', '\n', 'dumaresqs\n', '\n', 'swy\n', '\n', 'szlachta\n', '\n', 'groszy\n', '\n', 'qutbs\n', '\n', 'postpneumonic\n', '\n', 'postrhinal\n', '\n', 'outvying\n', '\n', 'twp\n', '\n', 'sitzfleisch\n', '\n', 'subxiphoid\n', '\n', 'quinquevalent\n', '\n', 'neufchatel\n', '\n', '\n', '\n', 'suffixaufnahme\n', '\n', 'aufwuchs\n', '\n', 'zuhd\n', '\n', 'fuhgeddaboudit\n', '\n', 'uhh\n', '\n', 'uhm\n', '\n', 'cuauhxicalli\n', '\n', 'agujjim\n', '\n', 'yukgaejang\n', '\n', 'cheonggukjang\n', '\n', 'hukm\n', '\n', 'circumjacent\n', '\n', 'quoad\n', '\n', 'makuuchi\n', '\n', 'vrouws\n', '\n', 'uzvar\n', '\n', 'evhoe\n', '\n', 'domoviye\n', '\n', 'vly\n', '\n', 'eevns\n', '\n', 'dvojnice\n', '\n', 'bowfront\n', '\n', 'mawger\n', '\n', 'wuji\n', '\n', 'wuwei\n', '\n', 'skewwhiff\n', '\n', 'rowwise\n', '\n', 'hexavalent\n', '\n', 'sexdigital\n', '\n', 'xiqin\n', '\n', 'nextdoor\n', '\n', 'xuc\n', '\n', 'guoxue\n', '\n', 'mycs\n', '\n', 'hygge\n', '\n', 'synperiplanar\n', '\n', 'oscypki\n', '\n', 'dysvascular\n', '\n', 'yueqin\n', '\n', 'kyujitai\n', '\n', 'yuxiang\n', '\n', 'hizbs\n', '\n', 'pirozhki\n', '\n', 'shlimazls\n', '\n', 'tanztheater\n', '\n', 'mizuage\n', '\n', 'buzuq\n', '\n', 'mizuya\n', '\n', 'zydeco']
+loading 392 entries from plaintext
+loaded 275546 words from dictionaries.txt
+['selectMode : smart', 'cyberbullying : False', 'offset:0.6', 'rate:0.12', 'randomness:0.07', 'mistakes:True', 'frantic:True', 'dynamicPauses:True']
+loading 7 dictionaries from urls
+['https://raw.githubusercontent.com/YoungsterGlenn/bpDictionaryStatistics/master/dictionary.txt', 'https://norvig.com/ngrams/sowpods.txt', 'https://norvig.com/ngrams/enable1.txt', 'https://pastebin.com/raw/UegdKLq8', 'https://pastebin.com/raw/M6TZ8Uxy', 'https://raw.githubusercontent.com/NachozQ/BombParty-Lists/refs/heads/main/Main/chemicals.txt', 'https://raw.githubusercontent.com/DO-Ui/bombparty-bot/refs/heads/master/wordlist.txt']
+['aaargh', '', 'nagkesar', '', 'ahkam', '', 'dghajsa', 'yakju', '', 'shaojiu', '', 'patxaran', '', 'awqaf', '', 'azkar', '', 'rhabds', '', 'zubrs', '', 'obvs', '', 'subzero', '', 'paczki', 'gwyddbwyll', '', 'adhkar', '', 'hadjs', '', 'badnjak', '', 'skweee', '', 'ehh', '', 'leiqin', '', 'pinnekjott', '', 'pekmez', '', 'prereqs', '', 'tevbe', '', 'offkey', '', 'aufgehoben', '', 'offsuit', '', 'fye', '', 'smaragds', '', 'highkey', '', 'gijinka', '', 'gikun', '', 'indigiqueer', '', 'designful', '', 'songpyeon', '', 'gqom', '', 'changquan', '', 'forthby', '', 'shhh', '', 'durchkomponiert', '', 'droshky', '', 'rhythmless', '', 'lehrjahre', '', 'mouthsful', '', 'lachsschinken', '', 'mathsy', '', 'huoguo', '', 'huqin', '', 'chuunibyou', '', '', '', 'honigkuchen', '', 'coraciiform', '', 'viili', '', 'mijwiz', '', 'fiqh', 'niqqud', '', 'kumisz', '', 'antiwrinkle', '', 'sixfold', '', 'kopiyka', '', 'mizpah', '', 'slojds', '', 'punjiing', '', 'jjolmyeon', '', 'hajjs', '', 'tahajjud', '', 'majles', '', 'yajnopavita', '', 'honjozo', '', 'tajweed', '', 'ryijyt', '', '', 'wakfs', '', 'yakgwa', '', 'knjaz', '', 'muktzeh', '', 'kvlt', '', 'alfvenic', '', 'filmjolk', '', 'qalqalah', '', 'jelqing', '', 'jelqs', '', 'neolttwigi', '', 'luwuk', '', 'edelzwicker', '', 'schmalzy', '', 'ulzzang', '', 'fremds', 'mhm', '', 'ollamhs', '', 'gastrocnemii', '', 'dumky', '', 'bottomry', '', 'confs', '', 'benjy', '', 'nonpneumatic', '', 'tranqed', '', 'transzonal', '', 'sphinxlike', '', 'minxy', '', 'obpyriform', '', 'tteokguk', '', 'folx', '', 'womxn', '', 'fotiaoqiang', '', 'coqs', '', 'dovga', '', 'cevapcici', '', 'pfft', '', 'napfkuchen', '', 'phpht', '', 'phwoar', '', 'bupkus', '', 'pljeskavica', '', 'sexprs', '', 'muhaqqaq', '', 'qaum', '', 'waqfs', '', 'tsaddiqim', '', 'qis', '', 'taqleed', '', 'maqluba', '', 'faqrs', '', 'taqsim', '', 'umquhile', '', 'quziqvo', '', 'miqvoth', '', 'arcform', '', 'warpwise', '', 'kaiserschmarrn', '', 'barszcz', '', 'lesbs', '', 'schismless', '', 'bosns', '', 'claspt', '', 'dumaresqs', '', 'swy', '', 'szlachta', '', 'groszy', '', 'qutbs', '', 'postpneumonic', '', 'postrhinal', '', 'outvying', '', 'twp', '', 'sitzfleisch', '', 'subxiphoid', '', 'quinquevalent', '', 'neufchatel', '', '', '', 'suffixaufnahme', '', 'aufwuchs', '', 'zuhd', '', 'fuhgeddaboudit', '', 'uhh', '', 'uhm', '', 'cuauhxicalli', '', 'agujjim', '', 'yukgaejang', '', 'cheonggukjang', '', 'hukm', '', 'circumjacent', '', 'quoad', '', 'makuuchi', '', 'vrouws', '', 'uzvar', '', 'evhoe', '', 'domoviye', '', 'vly', '', 'eevns', '', 'dvojnice', '', 'bowfront', '', 'mawger', '', 'wuji', '', 'wuwei', '', 'skewwhiff', '', 'rowwise', '', 'hexavalent', '', 'sexdigital', '', 'xiqin', '', 'nextdoor', '', 'xuc', '', 'guoxue', '', 'mycs', '', 'hygge', '', 'synperiplanar', '', 'oscypki', '', 'dysvascular', '', 'yueqin', '', 'kyujitai', '', 'yuxiang', '', 'hizbs', '', 'pirozhki', '', 'shlimazls', '', 'tanztheater', '', 'mizuage', '', 'buzuq', '', 'mizuya', '', 'zydeco']
+loading 392 entries from plaintext
+loaded 275494 words from dictionaries.txt
+['selectMode : smart', 'cyberbullying : False', 'offset:0.6', 'rate:0.12', 'randomness:0.07', 'mistakes:True', 'frantic:True', 'dynamicPauses:True']
+['p.webshare.io:80:adzzhfmh-1:v4xvjox8zqxk', 'p.webshare.io:80:adzzhfmh-2:v4xvjox8zqxk', 'p.webshare.io:80:adzzhfmh-3:v4xvjox8zqxk', 'p.webshare.io:80:adzzhfmh-4:v4xvjox8zqxk', 'p.webshare.io:80:adzzhfmh-5:v4xvjox8zqxk', 'p.webshare.io:80:adzzhfmh-6:v4xvjox8zqxk', 'p.webshare.io:80:adzzhfmh-7:v4xvjox8zqxk', 'p.webshare.io:80:adzzhfmh-8:v4xvjox8zqxk', 'p.webshare.io:80:adzzhfmh-9:v4xvjox8zqxk', 'p.webshare.io:80:adzzhfmh-10:v4xvjox8zqxk']
+loaded 10 proxies from proxies.config
+loading 7 dictionaries from urls
+Cannot get url https://raw.githubusercontent.com/NachozQ/BombParty-Lists/refs/heads/main/Main/chemicals.txt
+Cannot get url https://raw.githubusercontent.com/DO-Ui/bombparty-bot/refs/heads/master/wordlist.txt
+['https://raw.githubusercontent.com/YoungsterGlenn/bpDictionaryStatistics/master/dictionary.txt', 'https://norvig.com/ngrams/sowpods.txt', 'https://norvig.com/ngrams/enable1.txt', 'https://pastebin.com/raw/UegdKLq8', 'https://pastebin.com/raw/M6TZ8Uxy', 'https://raw.githubusercontent.com/NachozQ/BombParty-Lists/refs/heads/main/Main/chemicals.txt', 'https://raw.githubusercontent.com/DO-Ui/bombparty-bot/refs/heads/master/wordlist.txt']
+['', 'aaargh', '', 'nagkesar', '', 'ahkam', '', 'dghajsa', 'yakju', '', 'shaojiu', '', 'patxaran', '', 'awqaf', '', 'azkar', '', 'rhabds', '', 'zubrs', '', 'obvs', '', 'subzero', '', 'paczki', 'gwyddbwyll', '', 'adhkar', '', 'hadjs', '', 'badnjak', '', 'skweee', '', 'ehh', '', 'leiqin', '', 'pinnekjott', '', 'pekmez', '', 'prereqs', '', 'tevbe', '', 'offkey', '', 'aufgehoben', '', 'offsuit', '', 'fye', '', 'smaragds', '', 'highkey', '', 'gijinka', '', 'gikun', '', 'indigiqueer', '', 'designful', '', 'songpyeon', '', 'gqom', '', 'changquan', '', 'forthby', '', 'shhh', '', 'durchkomponiert', '', 'droshky', '', 'rhythmless', '', 'lehrjahre', '', 'mouthsful', '', 'lachsschinken', '', 'mathsy', '', 'huoguo', '', 'huqin', '', 'chuunibyou', '', '', '', 'honigkuchen', '', 'coraciiform', '', 'viili', '', 'mijwiz', '', 'fiqh', 'niqqud', '', 'kumisz', '', 'antiwrinkle', '', 'sixfold', '', 'kopiyka', '', 'mizpah', '', 'slojds', '', 'punjiing', '', 'jjolmyeon', '', 'hajjs', '', 'tahajjud', '', 'majles', '', 'yajnopavita', '', 'honjozo', '', 'tajweed', '', 'ryijyt', '', '', 'wakfs', '', 'yakgwa', '', 'knjaz', '', 'muktzeh', '', 'kvlt', '', 'alfvenic', '', 'filmjolk', '', 'qalqalah', '', 'jelqing', '', 'jelqs', '', 'neolttwigi', '', 'luwuk', '', 'edelzwicker', '', 'schmalzy', '', 'ulzzang', '', 'fremds', 'mhm', '', 'ollamhs', '', 'gastrocnemii', '', 'dumky', '', 'bottomry', '', 'confs', '', 'benjy', '', 'nonpneumatic', '', 'tranqed', '', 'transzonal', '', 'sphinxlike', '', 'minxy', '', 'obpyriform', '', 'tteokguk', '', 'folx', '', 'womxn', '', 'fotiaoqiang', '', 'coqs', '', 'dovga', '', 'cevapcici', '', 'pfft', '', 'napfkuchen', '', 'phpht', '', 'phwoar', '', 'bupkus', '', 'pljeskavica', '', 'sexprs', '', 'muhaqqaq', '', 'qaum', '', 'waqfs', '', 'tsaddiqim', '', 'qis', '', 'taqleed', '', 'maqluba', '', 'faqrs', '', 'taqsim', '', 'umquhile', '', 'quziqvo', '', 'miqvoth', '', 'arcform', '', 'warpwise', '', 'kaiserschmarrn', '', 'barszcz', '', 'lesbs', '', 'schismless', '', 'bosns', '', 'claspt', '', 'dumaresqs', '', 'swy', '', 'szlachta', '', 'groszy', '', 'qutbs', '', 'postpneumonic', '', 'postrhinal', '', 'outvying', '', 'twp', '', 'sitzfleisch', '', 'subxiphoid', '', 'quinquevalent', '', 'neufchatel', '', 'suffixaufnahme', '', 'aufwuchs', '', 'zuhd', '', 'fuhgeddaboudit', '', 'uhh', '', 'uhm', '', 'cuauhxicalli', '', 'agujjim', '', 'yukgaejang', '', 'cheonggukjang', '', 'hukm', '', 'circumjacent', '', 'quoad', '', 'makuuchi', '', 'vrouws', '', 'uzvar', '', 'evhoe', '', 'domoviye', '', 'vly', '', 'eevns', '', 'dvojnice', '', 'bowfront', '', 'mawger', '', 'wuji', '', 'wuwei', '', 'skewwhiff', '', 'rowwise', '', 'hexavalent', '', 'sexdigital', '', 'xiqin', '', 'nextdoor', '', 'xuc', '', 'guoxue', '', 'mycs', '', 'hygge', '', 'synperiplanar', '', 'oscypki', '', 'dysvascular', '', 'yueqin', '', 'kyujitai', '', 'yuxiang', '', 'hizbs', '', 'pirozhki', '', 'shlimazls', '', 'tanztheater', '', 'mizuage', '', 'buzuq', '', 'mizuya', '', 'zydeco']
+loading 391 entries from plaintext
+loaded 273373 words from dictionaries.txt
+['selectMode:smart', 'cyberbullying:False', 'offset:0.6', 'rate:0.12', 'randomness:0.07', 'mistakes:True', 'frantic:True', 'dynamicPauses:True']
+['p.webshare.io:80:adzzhfmh-1:v4xvjox8zqxk', 'p.webshare.io:80:adzzhfmh-2:v4xvjox8zqxk', 'p.webshare.io:80:adzzhfmh-3:v4xvjox8zqxk', 'p.webshare.io:80:adzzhfmh-4:v4xvjox8zqxk', 'p.webshare.io:80:adzzhfmh-5:v4xvjox8zqxk', 'p.webshare.io:80:adzzhfmh-6:v4xvjox8zqxk', 'p.webshare.io:80:adzzhfmh-7:v4xvjox8zqxk', 'p.webshare.io:80:adzzhfmh-8:v4xvjox8zqxk', 'p.webshare.io:80:adzzhfmh-9:v4xvjox8zqxk', 'p.webshare.io:80:adzzhfmh-10:v4xvjox8zqxk']
+loaded 10 proxies from proxies.config
+loading 7 dictionaries from urls
+['https://raw.githubusercontent.com/YoungsterGlenn/bpDictionaryStatistics/master/dictionary.txt', 'https://norvig.com/ngrams/sowpods.txt', 'https://norvig.com/ngrams/enable1.txt', 'https://pastebin.com/raw/UegdKLq8', 'https://pastebin.com/raw/M6TZ8Uxy', 'https://raw.githubusercontent.com/NachozQ/BombParty-Lists/refs/heads/main/Main/chemicals.txt', 'https://raw.githubusercontent.com/DO-Ui/bombparty-bot/refs/heads/master/wordlist.txt']
+['', 'aaargh', '', 'nagkesar', '', 'ahkam', '', 'dghajsa', 'yakju', '', 'shaojiu', '', 'patxaran', '', 'awqaf', '', 'azkar', '', 'rhabds', '', 'zubrs', '', 'obvs', '', 'subzero', '', 'paczki', 'gwyddbwyll', '', 'adhkar', '', 'hadjs', '', 'badnjak', '', 'skweee', '', 'ehh', '', 'leiqin', '', 'pinnekjott', '', 'pekmez', '', 'prereqs', '', 'tevbe', '', 'offkey', '', 'aufgehoben', '', 'offsuit', '', 'fye', '', 'smaragds', '', 'highkey', '', 'gijinka', '', 'gikun', '', 'indigiqueer', '', 'designful', '', 'songpyeon', '', 'gqom', '', 'changquan', '', 'forthby', '', 'shhh', '', 'durchkomponiert', '', 'droshky', '', 'rhythmless', '', 'lehrjahre', '', 'mouthsful', '', 'lachsschinken', '', 'mathsy', '', 'huoguo', '', 'huqin', '', 'chuunibyou', '', '', '', 'honigkuchen', '', 'coraciiform', '', 'viili', '', 'mijwiz', '', 'fiqh', 'niqqud', '', 'kumisz', '', 'antiwrinkle', '', 'sixfold', '', 'kopiyka', '', 'mizpah', '', 'slojds', '', 'punjiing', '', 'jjolmyeon', '', 'hajjs', '', 'tahajjud', '', 'majles', '', 'yajnopavita', '', 'honjozo', '', 'tajweed', '', 'ryijyt', '', '', 'wakfs', '', 'yakgwa', '', 'knjaz', '', 'muktzeh', '', 'kvlt', '', 'alfvenic', '', 'filmjolk', '', 'qalqalah', '', 'jelqing', '', 'jelqs', '', 'neolttwigi', '', 'luwuk', '', 'edelzwicker', '', 'schmalzy', '', 'ulzzang', '', 'fremds', 'mhm', '', 'ollamhs', '', 'gastrocnemii', '', 'dumky', '', 'bottomry', '', 'confs', '', 'benjy', '', 'nonpneumatic', '', 'tranqed', '', 'transzonal', '', 'sphinxlike', '', 'minxy', '', 'obpyriform', '', 'tteokguk', '', 'folx', '', 'womxn', '', 'fotiaoqiang', '', 'coqs', '', 'dovga', '', 'cevapcici', '', 'pfft', '', 'napfkuchen', '', 'phpht', '', 'phwoar', '', 'bupkus', '', 'pljeskavica', '', 'sexprs', '', 'muhaqqaq', '', 'qaum', '', 'waqfs', '', 'tsaddiqim', '', 'qis', '', 'taqleed', '', 'maqluba', '', 'faqrs', '', 'taqsim', '', 'umquhile', '', 'quziqvo', '', 'miqvoth', '', 'arcform', '', 'warpwise', '', 'kaiserschmarrn', '', 'barszcz', '', 'lesbs', '', 'schismless', '', 'bosns', '', 'claspt', '', 'dumaresqs', '', 'swy', '', 'szlachta', '', 'groszy', '', 'qutbs', '', 'postpneumonic', '', 'postrhinal', '', 'outvying', '', 'twp', '', 'sitzfleisch', '', 'subxiphoid', '', 'quinquevalent', '', 'neufchatel', '', 'suffixaufnahme', '', 'aufwuchs', '', 'zuhd', '', 'fuhgeddaboudit', '', 'uhh', '', 'uhm', '', 'cuauhxicalli', '', 'agujjim', '', 'yukgaejang', '', 'cheonggukjang', '', 'hukm', '', 'circumjacent', '', 'quoad', '', 'makuuchi', '', 'vrouws', '', 'uzvar', '', 'evhoe', '', 'domoviye', '', 'vly', '', 'eevns', '', 'dvojnice', '', 'bowfront', '', 'mawger', '', 'wuji', '', 'wuwei', '', 'skewwhiff', '', 'rowwise', '', 'hexavalent', '', 'sexdigital', '', 'xiqin', '', 'nextdoor', '', 'xuc', '', 'guoxue', '', 'mycs', '', 'hygge', '', 'synperiplanar', '', 'oscypki', '', 'dysvascular', '', 'yueqin', '', 'kyujitai', '', 'yuxiang', '', 'hizbs', '', 'pirozhki', '', 'shlimazls', '', 'tanztheater', '', 'mizuage', '', 'buzuq', '', 'mizuya', '', 'zydeco']
+loading 391 entries from plaintext
+loaded 275494 words from dictionaries.txt
+[]
+[]
+loaded 0 proxies from proxies.config
+loaded 0 words from dictionaries.txt
+goodbye!
+[]
+[]
+loaded 0 proxies from proxies.config
+loaded 0 words from dictionaries.txt
+goodbye!
+['selectMode : smart\n', 'cyberbullying : False\n', 'offset:0.6\n', 'rate:0.12\n', 'randomness:0.07\n', 'mistakes:True\n', 'frantic:True\n', 'dynamicPauses:True']
+['p.webshare.io:80:adzzhfmh-1:v4xvjox8zqxk\n', 'p.webshare.io:80:adzzhfmh-2:v4xvjox8zqxk\n', 'p.webshare.io:80:adzzhfmh-3:v4xvjox8zqxk\n', 'p.webshare.io:80:adzzhfmh-4:v4xvjox8zqxk\n', 'p.webshare.io:80:adzzhfmh-5:v4xvjox8zqxk\n', 'p.webshare.io:80:adzzhfmh-6:v4xvjox8zqxk\n', 'p.webshare.io:80:adzzhfmh-7:v4xvjox8zqxk\n', 'p.webshare.io:80:adzzhfmh-8:v4xvjox8zqxk\n', 'p.webshare.io:80:adzzhfmh-9:v4xvjox8zqxk\n', 'p.webshare.io:80:adzzhfmh-10:v4xvjox8zqxk\n']
+loaded 10 proxies from proxies.config
+loading 7 dictionaries from urls
+Cannot get url https://norvig.com/ngrams/sowpods.txt
+
+Cannot get url https://norvig.com/ngrams/enable1.txt
+
+Cannot get url https://pastebin.com/raw/UegdKLq8
+
+Cannot get url https://pastebin.com/raw/M6TZ8Uxy
+
+Cannot get url https://raw.githubusercontent.com/NachozQ/BombParty-Lists/refs/heads/main/Main/chemicals.txt
+
+Cannot get url https://raw.githubusercontent.com/DO-Ui/bombparty-bot/refs/heads/master/wordlist.txt
+
+['https://raw.githubusercontent.com/YoungsterGlenn/bpDictionaryStatistics/master/dictionary.txt\n', 'https://norvig.com/ngrams/sowpods.txt\n', 'https://norvig.com/ngrams/enable1.txt\n', 'https://pastebin.com/raw/UegdKLq8\n', 'https://pastebin.com/raw/M6TZ8Uxy\n', 'https://raw.githubusercontent.com/NachozQ/BombParty-Lists/refs/heads/main/Main/chemicals.txt\n', 'https://raw.githubusercontent.com/DO-Ui/bombparty-bot/refs/heads/master/wordlist.txt\n']
+['https://raw.githubusercontent.com/YoungsterGlenn/bpDictionaryStatistics/master/dictionary.txt\n', 'https://norvig.com/ngrams/sowpods.txt\n', 'https://norvig.com/ngrams/enable1.txt\n', 'https://pastebin.com/raw/UegdKLq8\n', 'https://pastebin.com/raw/M6TZ8Uxy\n', 'https://raw.githubusercontent.com/NachozQ/BombParty-Lists/refs/heads/main/Main/chemicals.txt\n', 'https://raw.githubusercontent.com/DO-Ui/bombparty-bot/refs/heads/master/wordlist.txt\n', 'aaargh\n', 'nagkesar\n', 'ahkam\n', 'dghajsa\n', 'yakju\n', 'shaojiu\n', 'patxaran\n', 'awqaf\n', 'azkar\n', 'rhabds\n', 'zubrs\n', 'obvs\n', 'subzero\n', 'paczki\n', 'gwyddbwyll\n', 'adhkar\n', 'hadjs\n', 'badnjak\n', 'skweee\n', 'ehh\n', 'leiqin\n', 'pinnekjott\n', 'pekmez\n', 'prereqs\n', 'tevbe\n', 'offkey\n', 'aufgehoben\n', 'offsuit\n', 'fye\n', 'smaragds\n', 'highkey\n', 'gijinka\n', 'gikun\n', 'indigiqueer\n', 'designful\n', 'songpyeon\n', 'gqom\n', 'changquan\n', 'forthby\n', 'shhh\n', 'durchkomponiert\n', 'droshky\n', 'rhythmless\n', 'lehrjahre\n', 'mouthsful\n', 'lachsschinken\n', 'mathsy\n', 'huoguo\n', 'huqin\n', 'chuunibyou\n', 'honigkuchen\n', 'coraciiform\n', 'viili\n', 'mijwiz\n', 'fiqh\n', 'niqqud\n', 'kumisz\n', 'antiwrinkle\n', 'sixfold\n', 'kopiyka\n', 'mizpah\n', 'slojds\n', 'punjiing\n', 'jjolmyeon\n', 'hajjs\n', 'tahajjud\n', 'majles\n', 'yajnopavita\n', 'honjozo\n', 'tajweed\n', 'ryijyt\n', "ajza'\n", 'wakfs\n', 'yakgwa\n', 'knjaz\n', 'muktzeh\n', 'kvlt\n', 'alfvenic\n', 'filmjolk\n', 'qalqalah\n', 'jelqing\n', 'jelqs\n', 'neolttwigi\n', 'luwuk\n', 'edelzwicker\n', 'schmalzy\n', 'ulzzang\n', 'fremds\n', 'mhm\n', 'ollamhs\n', 'gastrocnemii\n', 'dumky\n', 'bottomry\n', 'confs\n', 'benjy\n', 'nonpneumatic\n', 'tranqed\n', 'transzonal\n', 'sphinxlike\n', 'minxy\n', 'obpyriform\n', 'tteokguk\n', 'folx\n', 'womxn\n', 'fotiaoqiang\n', 'coqs\n', 'dovga\n', 'cevapcici\n', 'pfft\n', 'napfkuchen\n', 'phpht\n', 'phwoar\n', 'bupkus\n', 'pljeskavica\n', 'sexprs\n', 'muhaqqaq\n', 'qaum\n', 'waqfs\n', 'tsaddiqim\n', 'qis\n', 'taqleed\n', 'maqluba\n', 'faqrs\n', 'taqsim\n', 'umquhile\n', 'quziqvo\n', 'miqvoth\n', 'arcform\n', 'warpwise\n', 'kaiserschmarrn\n', 'barszcz\n', 'lesbs\n', 'schismless\n', 'bosns\n', 'claspt\n', 'dumaresqs\n', 'swy\n', 'szlachta\n', 'groszy\n', 'qutbs\n', 'postpneumonic\n', 'postrhinal\n', 'outvying\n', 'twp\n', 'sitzfleisch\n', 'subxiphoid\n', 'quinquevalent\n', 'neufchatel\n', 'suffixaufnahme\n', 'aufwuchs\n', 'zuhd\n', 'fuhgeddaboudit\n', 'uhh\n', 'uhm\n', 'cuauhxicalli\n', 'agujjim\n', 'yukgaejang\n', 'cheonggukjang\n', 'hukm\n', 'circumjacent\n', 'quoad\n', 'makuuchi\n', 'vrouws\n', 'uzvar\n', 'evhoe\n', 'domoviye\n', 'vly\n', 'eevns\n', 'dvojnice\n', 'bowfront\n', 'mawger\n', 'wuji\n', 'wuwei\n', 'skewwhiff\n', 'rowwise\n', 'hexavalent\n', 'sexdigital\n', 'xiqin\n', 'nextdoor\n', 'xuc\n', 'guoxue\n', 'mycs\n', 'hygge\n', 'synperiplanar\n', 'oscypki\n', 'dysvascular\n', 'yueqin\n', 'kyujitai\n', 'yuxiang\n', 'hizbs\n', 'pirozhki\n', 'shlimazls\n', 'tanztheater\n', 'mizuage\n', 'buzuq\n', 'mizuya\n', 'zydeco']
+loading 204 entries from plaintext
+loaded 273414 words from dictionaries.txt
+['selectMode:smart', 'cyberbullying:False', 'offset:0.6', 'rate:0.12', 'randomness:0.07', 'mistakes:True', 'frantic:True', 'dynamicPauses:True']
+['p.webshare.io:80:adzzhfmh-1:v4xvjox8zqxk', 'p.webshare.io:80:adzzhfmh-2:v4xvjox8zqxk', 'p.webshare.io:80:adzzhfmh-3:v4xvjox8zqxk', 'p.webshare.io:80:adzzhfmh-4:v4xvjox8zqxk', 'p.webshare.io:80:adzzhfmh-5:v4xvjox8zqxk', 'p.webshare.io:80:adzzhfmh-6:v4xvjox8zqxk', 'p.webshare.io:80:adzzhfmh-7:v4xvjox8zqxk', 'p.webshare.io:80:adzzhfmh-8:v4xvjox8zqxk', 'p.webshare.io:80:adzzhfmh-9:v4xvjox8zqxk', 'p.webshare.io:80:adzzhfmh-10:v4xvjox8zqxk']
+loaded 10 proxies from proxies.config
+loading 7 dictionaries from urls
+['https://raw.githubusercontent.com/YoungsterGlenn/bpDictionaryStatistics/master/dictionary.txt', 'https://norvig.com/ngrams/sowpods.txt', 'https://norvig.com/ngrams/enable1.txt', 'https://pastebin.com/raw/UegdKLq8', 'https://pastebin.com/raw/M6TZ8Uxy', 'https://raw.githubusercontent.com/NachozQ/BombParty-Lists/refs/heads/main/Main/chemicals.txt', 'https://raw.githubusercontent.com/DO-Ui/bombparty-bot/refs/heads/master/wordlist.txt']
+['https://raw.githubusercontent.com/YoungsterGlenn/bpDictionaryStatistics/master/dictionary.txt', 'https://norvig.com/ngrams/sowpods.txt', 'https://norvig.com/ngrams/enable1.txt', 'https://pastebin.com/raw/UegdKLq8', 'https://pastebin.com/raw/M6TZ8Uxy', 'https://raw.githubusercontent.com/NachozQ/BombParty-Lists/refs/heads/main/Main/chemicals.txt', 'https://raw.githubusercontent.com/DO-Ui/bombparty-bot/refs/heads/master/wordlist.txt', 'aaargh', 'nagkesar', 'ahkam', 'dghajsa', 'yakju', 'shaojiu', 'patxaran', 'awqaf', 'azkar', 'rhabds', 'zubrs', 'obvs', 'subzero', 'paczki', 'gwyddbwyll', 'adhkar', 'hadjs', 'badnjak', 'skweee', 'ehh', 'leiqin', 'pinnekjott', 'pekmez', 'prereqs', 'tevbe', 'offkey', 'aufgehoben', 'offsuit', 'fye', 'smaragds', 'highkey', 'gijinka', 'gikun', 'indigiqueer', 'designful', 'songpyeon', 'gqom', 'changquan', 'forthby', 'shhh', 'durchkomponiert', 'droshky', 'rhythmless', 'lehrjahre', 'mouthsful', 'lachsschinken', 'mathsy', 'huoguo', 'huqin', 'chuunibyou', 'honigkuchen', 'coraciiform', 'viili', 'mijwiz', 'fiqh', 'niqqud', 'kumisz', 'antiwrinkle', 'sixfold', 'kopiyka', 'mizpah', 'slojds', 'punjiing', 'jjolmyeon', 'hajjs', 'tahajjud', 'majles', 'yajnopavita', 'honjozo', 'tajweed', 'ryijyt', "ajza'", 'wakfs', 'yakgwa', 'knjaz', 'muktzeh', 'kvlt', 'alfvenic', 'filmjolk', 'qalqalah', 'jelqing', 'jelqs', 'neolttwigi', 'luwuk', 'edelzwicker', 'schmalzy', 'ulzzang', 'fremds', 'mhm', 'ollamhs', 'gastrocnemii', 'dumky', 'bottomry', 'confs', 'benjy', 'nonpneumatic', 'tranqed', 'transzonal', 'sphinxlike', 'minxy', 'obpyriform', 'tteokguk', 'folx', 'womxn', 'fotiaoqiang', 'coqs', 'dovga', 'cevapcici', 'pfft', 'napfkuchen', 'phpht', 'phwoar', 'bupkus', 'pljeskavica', 'sexprs', 'muhaqqaq', 'qaum', 'waqfs', 'tsaddiqim', 'qis', 'taqleed', 'maqluba', 'faqrs', 'taqsim', 'umquhile', 'quziqvo', 'miqvoth', 'arcform', 'warpwise', 'kaiserschmarrn', 'barszcz', 'lesbs', 'schismless', 'bosns', 'claspt', 'dumaresqs', 'swy', 'szlachta', 'groszy', 'qutbs', 'postpneumonic', 'postrhinal', 'outvying', 'twp', 'sitzfleisch', 'subxiphoid', 'quinquevalent', 'neufchatel', 'suffixaufnahme', 'aufwuchs', 'zuhd', 'fuhgeddaboudit', 'uhh', 'uhm', 'cuauhxicalli', 'agujjim', 'yukgaejang', 'cheonggukjang', 'hukm', 'circumjacent', 'quoad', 'makuuchi', 'vrouws', 'uzvar', 'evhoe', 'domoviye', 'vly', 'eevns', 'dvojnice', 'bowfront', 'mawger', 'wuji', 'wuwei', 'skewwhiff', 'rowwise', 'hexavalent', 'sexdigital', 'xiqin', 'nextdoor', 'xuc', 'guoxue', 'mycs', 'hygge', 'synperiplanar', 'oscypki', 'dysvascular', 'yueqin', 'kyujitai', 'yuxiang', 'hizbs', 'pirozhki', 'shlimazls', 'tanztheater', 'mizuage', 'buzuq', 'mizuya', 'zydeco']
+loading 204 entries from plaintext
+loaded 275501 words from dictionaries.txt
+loaded 10 proxies from proxies.config
+loading 7 dictionaries from urls
+loading 204 entries from plaintext
+loaded 275501 words from dictionaries.txt
+loaded 10 proxies from proxies.config
+loading 7 dictionaries from urls
+loading 204 entries from plaintext
+loaded 275501 words from dictionaries.txt
+loaded 10 proxies from proxies.config
+loading 7 dictionaries from urls
+loading 204 entries from plaintext
+loaded 275501 words from dictionaries.txt
+loaded 10 proxies from proxies.config
+loading 7 dictionaries from urls
+loading 204 entries from plaintext
+loaded 275501 words from dictionaries.txt
+loaded 10 proxies from proxies.config
+loading 7 dictionaries from urls
+loading 204 entries from plaintext
+loaded 275501 words from dictionaries.txt
+Exception cannot access local variable 'lst' where it is not associated with a value in Bot; retrying with proxy p.webshare.io:80:adzzhfmh-1:v4xvjox8zqxk
+loaded 10 proxies from proxies.config
+loading 7 dictionaries from urls
+loading 204 entries from plaintext
+loaded 275501 words from dictionaries.txt
+loaded 0 proxies from proxies.config
+loading 7 dictionaries from urls
+loading 204 entries from plaintext
+loaded 275501 words from dictionaries.txt
+Exception ('Connection aborted.', ConnectionResetError(10054, 'An existing connection was forcibly closed by the remote host', None, 10054, None)) in Bot; retrying with proxy None
+Exception ('Connection aborted.', ConnectionResetError(10054, 'An existing connection was forcibly closed by the remote host', None, 10054, None)) in Bot; retrying with proxy None
+loaded 10 proxies from proxies.config
+loading 7 dictionaries from urls
+loaded 10 proxies from proxies.config
+loading 7 dictionaries from urls
+loading 204 entries from plaintext
+loaded 275501 words from dictionaries.txt
+Exception ('Connection aborted.', ConnectionResetError(10054, 'An existing connection was forcibly closed by the remote host', None, 10054, None)) in Bot; retrying with proxy p.webshare.io:80:adzzhfmh-1:v4xvjox8zqxk
+loaded 10 proxies from proxies.config
+loading 7 dictionaries from urls
+Cannot get url https://raw.githubusercontent.com/DO-Ui/bombparty-bot/refs/heads/master/wordlist.txt
+loaded 0 proxies from proxies.config
+loading 7 dictionaries from urls
+loading 204 entries from plaintext
+loaded 275501 words from dictionaries.txt
+loaded 0 proxies from proxies.config
+loading 7 dictionaries from urls
+loading 204 entries from plaintext
+loaded 275501 words from dictionaries.txt
+Exception ('Connection aborted.', ConnectionResetError(10054, 'An existing connection was forcibly closed by the remote host', None, 10054, None)) in Bot; retrying with proxy None
+loaded 0 proxies from proxies.config
+loading 7 dictionaries from urls
+loading 204 entries from plaintext
+loaded 275501 words from dictionaries.txt
+Exception ('Connection aborted.', ConnectionResetError(10054, 'An existing connection was forcibly closed by the remote host', None, 10054, None)) in Bot; retrying with proxy None
+loaded 0 proxies from proxies.config
+loading 7 dictionaries from urls
+loading 204 entries from plaintext
+loaded 275501 words from dictionaries.txt
+loaded 0 proxies from proxies.config
+loading 7 dictionaries from urls
+loading 204 entries from plaintext
+loaded 275501 words from dictionaries.txt
+loaded 0 proxies from proxies.config
+loading 7 dictionaries from urls
+loading 204 entries from plaintext
+loaded 275501 words from dictionaries.txt
+Exception ('Connection aborted.', ConnectionResetError(10054, 'An existing connection was forcibly closed by the remote host', None, 10054, None)) in Bot; retrying with proxy None
+loaded 0 proxies from proxies.config
+loading 7 dictionaries from urls
+loading 196 entries from plaintext
+loaded 275493 words from dictionaries.txt
+loaded 0 proxies from proxies.config
+loading 7 dictionaries from urls
+loading 196 entries from plaintext
+loaded 275493 words from dictionaries.txt
+loaded 0 proxies from proxies.config
+loading 7 dictionaries from urls
+loading 196 entries from plaintext
+loaded 275493 words from dictionaries.txt
+Exception ('Connection aborted.', ConnectionResetError(10054, 'An existing connection was forcibly closed by the remote host', None, 10054, None)) in Bot; retrying with proxy None
+loaded 0 proxies from proxies.config
+loading 7 dictionaries from urls
+loading 196 entries from plaintext
+loaded 275493 words from dictionaries.txt
+loaded 0 proxies from proxies.config
+loading 7 dictionaries from urls
+loading 196 entries from plaintext
+loaded 275493 words from dictionaries.txt
+loaded 0 proxies from proxies.config
+loading 7 dictionaries from urls
+loading 196 entries from plaintext
+loaded 275493 words from dictionaries.txt
+loaded 0 proxies from proxies.config
+loading 7 dictionaries from urls
+loading 196 entries from plaintext
+loaded 275493 words from dictionaries.txt
+loaded 0 proxies from proxies.config
+loading 7 dictionaries from urls
+loading 196 entries from plaintext
+loaded 275493 words from dictionaries.txt
+loaded 0 proxies from proxies.config
+loading 7 dictionaries from urls
+loading 196 entries from plaintext
+loaded 275493 words from dictionaries.txt
+Exception Message: script timeout
+  (Session info: chrome=135.0.7049.96)
+Stacktrace:
+	GetHandleVerifier [0x00007FF7BB74EFA5+77893]
+	GetHandleVerifier [0x00007FF7BB74F000+77984]
+	(No symbol) [0x00007FF7BB518FEC]
+	(No symbol) [0x00007FF7BB5C02EE]
+	(No symbol) [0x00007FF7BB59712A]
+	(No symbol) [0x00007FF7BB5BF07F]
+	(No symbol) [0x00007FF7BB596F03]
+	(No symbol) [0x00007FF7BB560328]
+	(No symbol) [0x00007FF7BB561093]
+	GetHandleVerifier [0x00007FF7BBA07B6D+2931725]
+	GetHandleVerifier [0x00007FF7BBA02132+2908626]
+	GetHandleVerifier [0x00007FF7BBA200F3+3031443]
+	GetHandleVerifier [0x00007FF7BB7691EA+184970]
+	GetHandleVerifier [0x00007FF7BB77086F+215311]
+	GetHandleVerifier [0x00007FF7BB756EC4+110436]
+	GetHandleVerifier [0x00007FF7BB757072+110866]
+	GetHandleVerifier [0x00007FF7BB73D479+5401]
+	BaseThreadInitThunk [0x00007FFC12FA7374+20]
+	RtlUserThreadStart [0x00007FFC14BDCC91+33]
+ in Bot; retrying with proxy None
+Exception Message: no such element: element not found
+  (Session info: chrome=135.0.7049.96); For documentation on this error, please visit: https://www.selenium.dev/documentation/webdriver/troubleshooting/errors#no-such-element-exception
+Stacktrace:
+	GetHandleVerifier [0x00007FF7BB74EFA5+77893]
+	GetHandleVerifier [0x00007FF7BB74F000+77984]
+	(No symbol) [0x00007FF7BB5191BA]
+	(No symbol) [0x00007FF7BB52F524]
+	(No symbol) [0x00007FF7BB52DFF3]
+	(No symbol) [0x00007FF7BB521819]
+	(No symbol) [0x00007FF7BB521993]
+	(No symbol) [0x00007FF7BB51F69F]
+	(No symbol) [0x00007FF7BB523EA1]
+	(No symbol) [0x00007FF7BB5C02B8]
+	(No symbol) [0x00007FF7BB59712A]
+	(No symbol) [0x00007FF7BB5BF07F]
+	(No symbol) [0x00007FF7BB596F03]
+	(No symbol) [0x00007FF7BB560328]
+	(No symbol) [0x00007FF7BB561093]
+	GetHandleVerifier [0x00007FF7BBA07B6D+2931725]
+	GetHandleVerifier [0x00007FF7BBA02132+2908626]
+	GetHandleVerifier [0x00007FF7BBA200F3+3031443]
+	GetHandleVerifier [0x00007FF7BB7691EA+184970]
+	GetHandleVerifier [0x00007FF7BB77086F+215311]
+	GetHandleVerifier [0x00007FF7BB756EC4+110436]
+	GetHandleVerifier [0x00007FF7BB757072+110866]
+	GetHandleVerifier [0x00007FF7BB73D479+5401]
+	BaseThreadInitThunk [0x00007FFC12FA7374+20]
+	RtlUserThreadStart [0x00007FFC14BDCC91+33]
+ in Bot; retrying with proxy None
+Bot disconnected successfully
+goodbye!
+loaded 0 proxies from proxies.config
+loading 7 dictionaries from urls
+loading 196 entries from plaintext
+loaded 275493 words from dictionaries.txt
+loaded 0 proxies from proxies.config
+loading 7 dictionaries from urls
+loading 196 entries from plaintext
+loaded 275493 words from dictionaries.txt
+loaded 0 proxies from proxies.config
+loading 7 dictionaries from urls
+loading 196 entries from plaintext
+loaded 275493 words from dictionaries.txt
+Exception ('Connection aborted.', ConnectionResetError(10054, 'An existing connection was forcibly closed by the remote host', None, 10054, None)) in Bot; retrying with proxy None
+loaded 0 proxies from proxies.config
+loading 7 dictionaries from urls
+loading 196 entries from plaintext
+loaded 275493 words from dictionaries.txt
+Exception ('Connection aborted.', ConnectionResetError(10054, 'An existing connection was forcibly closed by the remote host', None, 10054, None)) in Bot; retrying with proxy None
+loaded 0 proxies from proxies.config
+loading 7 dictionaries from urls
+loading 196 entries from plaintext
+loaded 275493 words from dictionaries.txt
+Exception ('Connection aborted.', ConnectionResetError(10054, 'An existing connection was forcibly closed by the remote host', None, 10054, None)) in Bot; retrying with proxy None
+loaded 0 proxies from proxies.config
+loading 7 dictionaries from urls
+loading 196 entries from plaintext
+loaded 275493 words from dictionaries.txt
+Exception ('Connection aborted.', ConnectionResetError(10054, 'An existing connection was forcibly closed by the remote host', None, 10054, None)) in Bot; retrying with proxy None
+loaded 0 proxies from proxies.config
+loading 7 dictionaries from urls
+loading 196 entries from plaintext
+loaded 275493 words from dictionaries.txt
+Exception ('Connection aborted.', ConnectionResetError(10054, 'An existing connection was forcibly closed by the remote host', None, 10054, None)) in Bot; retrying with proxy None
+loaded 0 proxies from proxies.config
+loading 7 dictionaries from urls
+loading 196 entries from plaintext
+loaded 275493 words from dictionaries.txt
+loaded 0 proxies from proxies.config
+loading 7 dictionaries from urls
+loading 196 entries from plaintext
+loaded 275493 words from dictionaries.txt
+loaded 0 proxies from proxies.config
+loading 7 dictionaries from urls
+loading 196 entries from plaintext
+loaded 275493 words from dictionaries.txt
+loaded 0 proxies from proxies.config
+loading 7 dictionaries from urls
+loading 196 entries from plaintext
+loaded 275493 words from dictionaries.txt
+loaded 0 proxies from proxies.config
+loading 7 dictionaries from urls
+loading 196 entries from plaintext
+loaded 275493 words from dictionaries.txt
+loaded 0 proxies from proxies.config
+loading 7 dictionaries from urls
+loading 196 entries from plaintext
+loaded 275493 words from dictionaries.txt
+loaded 0 proxies from proxies.config
+loading 7 dictionaries from urls
+loading 196 entries from plaintext
+loaded 275493 words from dictionaries.txt
+loaded 0 proxies from proxies.config
+loading 7 dictionaries from urls
+loading 196 entries from plaintext
+loaded 275493 words from dictionaries.txt
+loaded 0 proxies from proxies.config
+loading 7 dictionaries from urls
+loading 196 entries from plaintext
+loaded 275493 words from dictionaries.txt
+loaded 0 proxies from proxies.config
+loading 7 dictionaries from urls
+loading 196 entries from plaintext
+loaded 275493 words from dictionaries.txt
+loaded 0 proxies from proxies.config
+loading 7 dictionaries from urls
+loading 196 entries from plaintext
+loaded 275493 words from dictionaries.txt
+loaded 0 proxies from proxies.config
+loading 7 dictionaries from urls
+loading 196 entries from plaintext
+loaded 275493 words from dictionaries.txt
+loaded 0 proxies from proxies.config
+loading 7 dictionaries from urls
+loading 196 entries from plaintext
+loaded 275493 words from dictionaries.txt
+loaded 0 proxies from proxies.config
+loading 7 dictionaries from urls
+Cannot get url https://raw.githubusercontent.com/YoungsterGlenn/bpDictionaryStatistics/master/dictionary.txt
+loaded 0 proxies from proxies.config
+loading 7 dictionaries from urls
+loading 196 entries from plaintext
+loaded 275493 words from dictionaries.txt
+loaded 0 proxies from proxies.config
+loading 7 dictionaries from urls
+loading 196 entries from plaintext
+loaded 275493 words from dictionaries.txt
+loaded 0 proxies from proxies.config
+loading 7 dictionaries from urls
+loading 196 entries from plaintext
+loaded 275493 words from dictionaries.txt
+loaded 0 proxies from proxies.config
+loading 7 dictionaries from urls
+loading 196 entries from plaintext
+loaded 275493 words from dictionaries.txt
+loaded 0 proxies from proxies.config
+loading 7 dictionaries from urls
+loading 196 entries from plaintext
+loaded 275493 words from dictionaries.txt
+loaded 0 proxies from proxies.config
+loading 7 dictionaries from urls
+loading 196 entries from plaintext
+loaded 275493 words from dictionaries.txt
+loaded 0 proxies from proxies.config
+loading 7 dictionaries from urls
+loading 196 entries from plaintext
+loaded 275493 words from dictionaries.txt
+loaded 0 proxies from proxies.config
+loading 7 dictionaries from urls
+loading 196 entries from plaintext
+loaded 275493 words from dictionaries.txt
+loaded 0 proxies from proxies.config
+loading 7 dictionaries from urls
+loading 196 entries from plaintext
+loaded 275493 words from dictionaries.txt
+loaded 10 proxies from proxies.config
+loading 7 dictionaries from urls
+loading 196 entries from plaintext
+loaded 275493 words from dictionaries.txt
+loaded 10 proxies from proxies.config
+loading 8 dictionaries from urls
+loading 196 entries from plaintext
+loaded 278547 words from dictionaries.txt
+loaded 10 proxies from proxies.config
+loading 8 dictionaries from urls
+loading 196 entries from plaintext
+loaded 278547 words from dictionaries.txt
+loaded 10 proxies from proxies.config
+loading 8 dictionaries from urls
+loading 196 entries from plaintext
+loaded 278547 words from dictionaries.txt
+loaded 10 proxies from proxies.config
+loading 8 dictionaries from urls
+loading 196 entries from plaintext
+loaded 278547 words from dictionaries.txt
+loaded 10 proxies from proxies.config
+loading 8 dictionaries from urls
+loading 196 entries from plaintext
+loaded 278547 words from dictionaries.txt
+loaded 10 proxies from proxies.config
+loading 8 dictionaries from urls
+loading 196 entries from plaintext
+loaded 278547 words from dictionaries.txt
+Exception Message: invalid selector: Unable to locate an element with the xpath expression //div[@class"main page"] because of the following error:
+SyntaxError: Failed to execute 'evaluate' on 'Document': The string '//div[@class"main page"]' is not a valid XPath expression.
+  (Session info: chrome=135.0.7049.96); For documentation on this error, please visit: https://www.selenium.dev/documentation/webdriver/troubleshooting/errors#invalid-selector-exception
+Stacktrace:
+	GetHandleVerifier [0x00007FF7BB74EFA5+77893]
+	GetHandleVerifier [0x00007FF7BB74F000+77984]
+	(No symbol) [0x00007FF7BB5191BA]
+	(No symbol) [0x00007FF7BB520AEC]
+	(No symbol) [0x00007FF7BB523B5C]
+	(No symbol) [0x00007FF7BB523C2F]
+	(No symbol) [0x00007FF7BB56EA17]
+	(No symbol) [0x00007FF7BB56F41C]
+	(No symbol) [0x00007FF7BB5C2267]
+	(No symbol) [0x00007FF7BB59716F]
+	(No symbol) [0x00007FF7BB5BF07F]
+	(No symbol) [0x00007FF7BB596F03]
+	(No symbol) [0x00007FF7BB560328]
+	(No symbol) [0x00007FF7BB561093]
+	GetHandleVerifier [0x00007FF7BBA07B6D+2931725]
+	GetHandleVerifier [0x00007FF7BBA02132+2908626]
+	GetHandleVerifier [0x00007FF7BBA200F3+3031443]
+	GetHandleVerifier [0x00007FF7BB7691EA+184970]
+	GetHandleVerifier [0x00007FF7BB77086F+215311]
+	GetHandleVerifier [0x00007FF7BB756EC4+110436]
+	GetHandleVerifier [0x00007FF7BB757072+110866]
+	GetHandleVerifier [0x00007FF7BB73D479+5401]
+	BaseThreadInitThunk [0x00007FFC12FA7374+20]
+	RtlUserThreadStart [0x00007FFC14BDCC91+33]
+ in Bot; retrying with proxy p.webshare.io:80:adzzhfmh-1:v4xvjox8zqxk
+Exception Message: invalid selector: Unable to locate an element with the xpath expression //div[@class"main page"] because of the following error:
+SyntaxError: Failed to execute 'evaluate' on 'Document': The string '//div[@class"main page"]' is not a valid XPath expression.
+  (Session info: chrome=135.0.7049.96); For documentation on this error, please visit: https://www.selenium.dev/documentation/webdriver/troubleshooting/errors#invalid-selector-exception
+Stacktrace:
+	GetHandleVerifier [0x00007FF7BB74EFA5+77893]
+	GetHandleVerifier [0x00007FF7BB74F000+77984]
+	(No symbol) [0x00007FF7BB5191BA]
+	(No symbol) [0x00007FF7BB520AEC]
+	(No symbol) [0x00007FF7BB523B5C]
+	(No symbol) [0x00007FF7BB523C2F]
+	(No symbol) [0x00007FF7BB56EA17]
+	(No symbol) [0x00007FF7BB56F41C]
+	(No symbol) [0x00007FF7BB5C2267]
+	(No symbol) [0x00007FF7BB59716F]
+	(No symbol) [0x00007FF7BB5BF07F]
+	(No symbol) [0x00007FF7BB596F03]
+	(No symbol) [0x00007FF7BB560328]
+	(No symbol) [0x00007FF7BB561093]
+	GetHandleVerifier [0x00007FF7BBA07B6D+2931725]
+	GetHandleVerifier [0x00007FF7BBA02132+2908626]
+	GetHandleVerifier [0x00007FF7BBA200F3+3031443]
+	GetHandleVerifier [0x00007FF7BB7691EA+184970]
+	GetHandleVerifier [0x00007FF7BB77086F+215311]
+	GetHandleVerifier [0x00007FF7BB756EC4+110436]
+	GetHandleVerifier [0x00007FF7BB757072+110866]
+	GetHandleVerifier [0x00007FF7BB73D479+5401]
+	BaseThreadInitThunk [0x00007FFC12FA7374+20]
+	RtlUserThreadStart [0x00007FFC14BDCC91+33]
+ in Bot; retrying with proxy p.webshare.io:80:adzzhfmh-1:v4xvjox8zqxk
+loaded 0 proxies from proxies.config
+loading 8 dictionaries from urls
+loading 196 entries from plaintext
+loaded 278547 words from dictionaries.txt
+loaded 0 proxies from proxies.config
+loading 8 dictionaries from urls
+loading 196 entries from plaintext
+loaded 278547 words from dictionaries.txt
+Exception 'NoneType' object has no attribute 'find_elements' in Bot; retrying with proxy None
+Exception 'NoneType' object has no attribute 'find_elements' in Bot; retrying with proxy None
+loaded 0 proxies from proxies.config
+loading 8 dictionaries from urls
+loading 196 entries from plaintext
+loaded 278547 words from dictionaries.txt
+Exception 'NoneType' object has no attribute 'find_elements' in Bot; retrying with proxy None
+Exception 'NoneType' object has no attribute 'find_elements' in Bot; retrying with proxy None
+Exception 'NoneType' object has no attribute 'find_elements' in Bot; retrying with proxy None
+reached maximum retry limit for proxy None
+goodbye!
+loaded 0 proxies from proxies.config
+loading 8 dictionaries from urls
+loading 196 entries from plaintext
+loaded 278547 words from dictionaries.txt
+Exception 'NoneType' object has no attribute 'find_elements' in Bot; retrying with proxy None
+loaded 0 proxies from proxies.config
+loading 8 dictionaries from urls
+loading 196 entries from plaintext
+loaded 278547 words from dictionaries.txt
+Bot disconnected successfully
+goodbye!
+loaded 0 proxies from proxies.config
+loading 8 dictionaries from urls
+loading 196 entries from plaintext
+loaded 278547 words from dictionaries.txt
+loaded 0 proxies from proxies.config
+loading 8 dictionaries from urls
+loading 196 entries from plaintext
+loaded 278547 words from dictionaries.txt
+Bot disconnected successfully
+goodbye!
+loaded 0 proxies from proxies.config
+loading 8 dictionaries from urls
+loading 196 entries from plaintext
+loaded 278547 words from dictionaries.txt
+Bot disconnected successfully
+goodbye!
+loaded 0 proxies from proxies.config
+loading 8 dictionaries from urls
+loading 196 entries from plaintext
+loaded 278547 words from dictionaries.txt
+Bot disconnected successfully
+goodbye!
+loaded 0 proxies from proxies.config
+loading 8 dictionaries from urls
+loading 196 entries from plaintext
+loaded 278547 words from dictionaries.txt
+Bot disconnected successfully
+goodbye!
+loaded 0 proxies from proxies.config
+loading 8 dictionaries from urls
+loading 196 entries from plaintext
+loaded 278547 words from dictionaries.txt
+Bot disconnected successfully
+goodbye!
+loaded 0 proxies from proxies.config
+loading 8 dictionaries from urls
+loading 196 entries from plaintext
+loaded 278547 words from dictionaries.txt
+loaded 0 proxies from proxies.config
+loading 8 dictionaries from urls
+loading 196 entries from plaintext
+loaded 278547 words from dictionaries.txt
+Bot disconnected successfully
+goodbye!
+loaded 0 proxies from proxies.config
+loading 8 dictionaries from urls
+loading 196 entries from plaintext
+loaded 278547 words from dictionaries.txt
+loaded 0 proxies from proxies.config
+loading 8 dictionaries from urls
+loading 196 entries from plaintext
+loaded 278547 words from dictionaries.txt
+Exception 'NoneType' object has no attribute 'find_elements' in Bot; retrying with proxy None
+loaded 0 proxies from proxies.config
+loading 8 dictionaries from urls
+loading 196 entries from plaintext
+loaded 278547 words from dictionaries.txt
+loaded 0 proxies from proxies.config
+loading 8 dictionaries from urls
+loading 196 entries from plaintext
+loaded 278547 words from dictionaries.txt
+loaded 0 proxies from proxies.config
+loading 8 dictionaries from urls
+loading 196 entries from plaintext
+loaded 278547 words from dictionaries.txt
+loaded 0 proxies from proxies.config
+loading 8 dictionaries from urls
+loading 196 entries from plaintext
+loaded 278547 words from dictionaries.txt
+loaded 0 proxies from proxies.config
+loading 8 dictionaries from urls
+loading 196 entries from plaintext
+loaded 278547 words from dictionaries.txt
+loaded 0 proxies from proxies.config
+loading 8 dictionaries from urls
+loading 196 entries from plaintext
+loaded 278547 words from dictionaries.txt
+loaded 0 proxies from proxies.config
+loading 8 dictionaries from urls
+loading 196 entries from plaintext
+loaded 278547 words from dictionaries.txt
+Exception 'WebElement' object is not iterable in Bot; retrying with proxy None
+loaded 0 proxies from proxies.config
+loading 8 dictionaries from urls
+loading 196 entries from plaintext
+loaded 278547 words from dictionaries.txt
+loaded 0 proxies from proxies.config
+loading 8 dictionaries from urls
+loading 196 entries from plaintext
+loaded 278547 words from dictionaries.txt
+Bot disconnected successfully
+goodbye!
+loaded 0 proxies from proxies.config
+loading 8 dictionaries from urls
+loading 196 entries from plaintext
+loaded 278547 words from dictionaries.txt
+Exception Message: stale element reference: stale element not found in the current frame
+  (Session info: chrome=135.0.7049.96); For documentation on this error, please visit: https://www.selenium.dev/documentation/webdriver/troubleshooting/errors#stale-element-reference-exception
+Stacktrace:
+	GetHandleVerifier [0x00007FF7BB74EFA5+77893]
+	GetHandleVerifier [0x00007FF7BB74F000+77984]
+	(No symbol) [0x00007FF7BB5191BA]
+	(No symbol) [0x00007FF7BB520AEC]
+	(No symbol) [0x00007FF7BB523EA1]
+	(No symbol) [0x00007FF7BB5C02B8]
+	(No symbol) [0x00007FF7BB59712A]
+	(No symbol) [0x00007FF7BB5BF07F]
+	(No symbol) [0x00007FF7BB596F03]
+	(No symbol) [0x00007FF7BB560328]
+	(No symbol) [0x00007FF7BB561093]
+	GetHandleVerifier [0x00007FF7BBA07B6D+2931725]
+	GetHandleVerifier [0x00007FF7BBA02132+2908626]
+	GetHandleVerifier [0x00007FF7BBA200F3+3031443]
+	GetHandleVerifier [0x00007FF7BB7691EA+184970]
+	GetHandleVerifier [0x00007FF7BB77086F+215311]
+	GetHandleVerifier [0x00007FF7BB756EC4+110436]
+	GetHandleVerifier [0x00007FF7BB757072+110866]
+	GetHandleVerifier [0x00007FF7BB73D479+5401]
+	BaseThreadInitThunk [0x00007FFC12FA7374+20]
+	RtlUserThreadStart [0x00007FFC14BDCC91+33]
+ in Bot; retrying with proxy None

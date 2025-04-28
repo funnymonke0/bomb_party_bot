@@ -3,10 +3,10 @@ from selenium.webdriver.chrome.service import Service as ChromeService
 from selenium.webdriver.chrome.options import Options as ChromeOptions
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
-from selenium.common.exceptions import NoSuchElementException, TimeoutException, ElementNotInteractableException
+from selenium.common.exceptions import TimeoutException,ElementNotInteractableException, StaleElementReferenceException, ElementClickInterceptedException, NoSuchFrameException
 from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
-import random
+import random, string
 import re
 from time import sleep
 import logging
@@ -14,9 +14,18 @@ import logging
 
 
 class BPB():
-    def __init__(self, dicts, username, roomCode=None, proxy=None):
+    def __init__(self, dicts, username, roomCode, proxy=None, settings = [
+                        'selectMode:smart',
+                        'cyberbullying:False',
+                        'offset:0.6',
+                        'rate:0.15',
+                        'randomness:0.1',
+                        'mistakes:True',
+                        'frantic:True',
+                        'dynamicPauses:True']):
 
         self.visibleCondition = lambda x: EC.visibility_of_element_located(x)
+        self.instantVisibleCondition = lambda x: x.is_displayed()
         self.clickableCondition = lambda x: EC.element_to_be_clickable(x)
         self.presenceCondition = lambda x: EC.presence_of_element_located(x)
         
@@ -67,9 +76,6 @@ class BPB():
 
         ##settings
         self.maxWait = 5
-        # self.selectMode = 'long'
-        self.selectMode = 'short'
-        # self.selectMode = 'smart'
 
         #burst typing - randomly type fast
         #random letter delete letter to simulate mistakes and also mistake rate
@@ -77,29 +83,42 @@ class BPB():
         #if there are fewer answers to a syllable or if the answer is long, type slower or pause before typing
 
         
-        self.settings = { #eventually have this in a config file as well and be passed by manager to the bot
-            'selectMode' :'smart',
-            'cyberbullying' : False,
-            'offset' : 0.6,
-            'rate': 0.12,
-            'randomness' : 0.07,
-            'mistakes' : True,
-            'frantic' : True,
-            'dynamicPauses' : True}
-        
-        self.cyberbullying = False
-        # self.cyberbullying = True
-        self.offset = 0.6
+        self.settings = self.parseSettings(settings)
 
-        self.rate = 0.15
-        self.randomness = 0.1
-
-        self.tickSpeed = 0.005 #const for the most part; determines polling speed
+        self.selectMode = self.settings['selectMode']
+        self.cyberbullying = self.settings['cyberbullying']
+        self.maxOffset = self.settings['maxOffset']
+        self.rate = self.settings['rate']
+        self.burstType = self.settings['burstType']
+        self.burstRate = self.settings['burstRate']
+        self.burstChance = self.settings['burstChance']
+        self.randomness = self.settings['randomness']
+        self.mistakes = self.settings['mistakes']
+        self.mistakeChance = self.settings['mistakeChance']
+        self.mistakePause = self.settings['mistakePause']
+        self.franticType = self.settings['franticType']
+        self.dynamicPauses = self.settings['dynamicPauses']
 
         self.dicts = dicts
 
         self.joinedRoom = self.joinRoom(roomCode)
     
+    def parseSettings(self, settings):
+        settingsDict={}
+        for line in settings:
+            key, value = line.split(':', 1)
+            if value.lower() == 'true':
+                settingsDict[key] = True
+            elif value.lower() == 'false':
+                settingsDict[key] = False
+            else:
+                try:
+                    settingsDict[key] = float(value)
+                except:
+                    settingsDict[key] = value
+                    pass
+        return settingsDict
+            
     
     def findSuffix(self, suffix):
         lst = []
@@ -115,14 +134,23 @@ class BPB():
             return None        
         
 
-    def locate(self, locator, lmd, delay = 0):
+    def instantLocate(self, locator, lmd): #delayless is better for proxies
         browser = self.driver
-
-        wait = WebDriverWait(browser, delay+self.tickSpeed, poll_frequency=self.tickSpeed) #always at least 1 check
+        by, string = locator
+    
+        out = browser.find_elements(by, string)
+        if out:
+            out = out[0]
+            if lmd(out):
+                return out
+        return None
+    
+    def locate(self, locator, lmd):
+        browser = self.driver
+        wait = WebDriverWait(browser, self.maxWait)
         try:
-            out = wait.until(lmd(locator))
-            return out
-
+            return wait.until(lmd(locator))
+    
         except TimeoutException:
             pass
         return None
@@ -131,79 +159,86 @@ class BPB():
     def joinRoom(self, roomCode):
         browser = self.driver
         browser.get("https://jklm.fun/"+roomCode)
-
-        if not roomCode:
-            self.console.info('waiting for room selection')
-            while True:
-                try:
-                    if WebDriverWait(browser, self.tickSpeed).until(EC.url_matches("^((https|http)\:\/\/jklm\.fun\/)[A-Z][A-Z][A-Z][A-Z]")):
-                        break
-                except TimeoutException:
-                    pass
-        
-        WebDriverWait(browser, self.maxWait)
         
         if self.username:
-            textbox = self.locate((By.XPATH, '//input[@class = "styled nickname"]'), lmd = self.visibleCondition, delay=self.maxWait)
+            textbox = self.locate((By.XPATH, '//input[@class = "styled nickname"]'), lmd = self.visibleCondition)
             textbox.send_keys(Keys.CONTROL + Keys.BACKSPACE)
             textbox.send_keys(self.username)
 
-        submit = self.locate((By.XPATH, "/html/body/div[2]/div[3]/form/div[2]/button"), lmd = self.clickableCondition, delay=self.maxWait)
+        submit = self.locate((By.XPATH, "/html/body/div[2]/div[3]/form/div[2]/button"), lmd = self.clickableCondition)
         submit.click()
-        WebDriverWait(browser, self.maxWait)
 
 
     def updateIframe(self):
         browser = self.driver
         browser.switch_to.default_content()
-        iFrame = self.locate((By.XPATH, "//iframe[contains(@src, 'bombparty')]"), lmd= self.presenceCondition)
-        try:
-            browser.switch_to.frame(iFrame)
-        except:
-            pass
+        iFrame = self.instantLocate((By.XPATH, "//iframe[contains(@src, 'bombparty')]"), lmd= self.presenceCondition)
+        if iFrame:
+            try:
+                browser.switch_to.frame(iFrame)
+            except NoSuchFrameException:
+                pass
 
 
     def checkDisconnect(self):
-        browser = self.driver
-        disconnected = self.locate((By.XPATH, '//div[@class = "disconnected page"]'), lmd = self.visibleCondition)
+        disconnected = self.instantLocate((By.XPATH, '//div[@class = "reason"]'), lmd = self.instantVisibleCondition)
         if disconnected:
-            browser.quit()
             return True
         return False
     
-    def checkJoin(self):
-        join = self.locate((By.XPATH, "//button[@class = 'styled joinRound']"), lmd = self.clickableCondition)
-        try:
-            join.click()
-            self.dicts = self.dicts+self.replace
-            self.replace= []
-        except:
-            pass
+    def tryJoin(self):
+        join = self.instantLocate((By.XPATH, "//button[@class = 'styled joinRound']"), lmd = self.clickableCondition)
+        if join:
+            try:
+                join.click()
+                return True
+            except (ElementNotInteractableException,ElementClickInterceptedException, StaleElementReferenceException):
+                pass
+        return False
 
-        
+    def recordPlayers(self):
+        self.playerList = []
+        table =  self.instantLocate((By.XPATH, '//table[@class = "statsTable"]'), lmd= self.presenceCondition)
+        if table:
+            for player in table.find_elements(By.XPATH, './/tr'):
+                self.playerList.append(player)
+                if player.get_attribute('class') == 'isDead':
+                    self.playerList.remove(player)
+
+
     def updateLoop(self):
         browser = self.driver
         browser.switch_to.default_content()
         if self.checkDisconnect():
+            browser.quit()
             return False
+        
+        self.recordPlayers()
+
         self.updateIframe()
-        self.checkJoin()
+
+
+        if self.tryJoin():
+            self.dicts = self.dicts+self.replace
+            self.replace = []
         return True
 
     
     def botLoop(self):
-
         self.replace = []
-
+        self.mult = 1
+        self.frantic = False
+        prevSyll = None
         while self.updateLoop():
-
-            
-
+            textbox = self.instantLocate((By.XPATH, '//form//input[@maxlength = "30"]'), lmd = self.instantVisibleCondition)
+            syllable = self.instantLocate((By.XPATH, "//div[@class = 'syllable']"), lmd = self.instantVisibleCondition)
+            if textbox and syllable:
                 try:
-                    textbox = self.locate((By.XPATH, '//form//input[@maxlength = "30"]'), lmd = self.visibleCondition)
-                    syllable = self.locate((By.XPATH, "//div[@class = 'syllable']"), lmd = self.visibleCondition)
-                    syllable = syllable.text## unfortunately can end up choosing the previous person's syllable because the webpage does not update as fast :/
-                    
+                    textbox.clear()
+                    syllable = syllable.text
+                    if prevSyll == syllable:
+                        self.frantic = True
+
                     lst = self.findSuffix(syllable)
 
                     if lst:
@@ -215,40 +250,70 @@ class BPB():
                             ans = lst[0]
                             if len(lst[len(lst)-1])>20:
                                 ans = lst[len(lst)-1]
-
-                        if self.cyberbullying:
-                            textbox.send_keys(ans)
-                            textbox.send_keys(Keys.ENTER) ##if you wanna get hackusated
-                        else:
-                            self.simType(textbox, ans)
-                            textbox.send_keys(Keys.ENTER)
+                                self.frantic = True
                         
+                        if self.dynamicPauses:
+                            self.mult = len(lst)/len(self.dicts) #how frequent it is
+
+                        if self.cyberbullying and len(self.playerList) == 3:##including table head
+                            textbox.send_keys(ans+Keys.ENTER)##if you wanna get hackusated
+                        else:
+                            self.simType(textbox, ans+Keys.ENTER)
+                            
                         self.replace.append(ans)
                         self.dicts.remove(ans)
+                        self.frantic = False
+                        prevSyll = syllable
                     else:
-                        self.console.error(f"syllable {syllable} not in dictionary !")
-                        textbox.send_keys('/suicide')
-                        textbox.send_keys(Keys.ENTER)
-                except:
+                        
+                        if self.cyberbullying:
+                            textbox.send_keys("/suicide"+Keys.ENTER)
+                        else:
+                            self.simType(textbox, "/suicide"+Keys.ENTER)
+
+                except Exception as s:
                     pass
 
 
-
     def simType(self, obj, txt):
-        sleep(self.offset)
         txtArr = list(txt)
-        for letter in txtArr:
-            obj.send_keys(letter)
-            sleep((random.randint(-10,10)*0.1)*self.randomness+self.rate)
         
+        defaultRate = self.rate
+        mistake = False
+        if self.frantic:
+            defaultRate = self.burstRate
+        else:
+            w = self.maxOffset-self.maxOffset*self.mult
+            if w > 0:
+                sleep(w)
+        
+        for letter in txtArr:
+            
+            rate = defaultRate
 
+            if self.burstType:
+                burst = (random.random() <= self.burstChance)
+                if burst:
+                    rate = self.burstRate
 
+            if self.mistakes:
+                mistake = (random.random() <= self.mistakeChance)
 
+            if mistake:
+                obj.send_keys(random.choice(string.ascii_lowercase))
+                w = self.mistakePause + random.uniform(-1, 1)*self.randomness*self.mistakePause
+                sleep(w)
+                obj.send_keys(Keys.BACKSPACE)
 
+            obj.send_keys(letter)
+            w = rate + random.uniform(-1, 1)*self.randomness*rate
+            sleep(w)
+                
+            
 class BotManager():
 
     #manage bot persistence, proxies and other settings, etc.
-    def __init__(self, dictFile, roomCode = None, proxyFile = None, username = None):
+    def __init__(self, dictFile, roomCode, settingsFile, proxyFile, username = None):
         
         self.console = logging.getLogger('MANAGER CONSOLE')
         self.console.setLevel(logging.DEBUG)
@@ -267,27 +332,36 @@ class BotManager():
         
         self.roomCode = roomCode
         self.username = username
-        self.proxy = None
-        self.proxyList = [None]
+        
         self.dicts = []
         
-        
-        proxyRegex = "(((25[0-5]|2[0-4]\d|1\d\d|[1-9]\d|[1-9])\.){3}(25[0-5]|2[0-4]\d|1\d\d|[1-9]\d|[1-9])|(\w*\.\w*\.\w*))\:(6553[0-5]|655[0-2]\d|65[0-4]\d\d|6[0-4]\d\d\d|[1-5]\d\d\d|[1-9]\d\d\d|[1-9]\d\d|[1-9]\d|[1-9])(\:.*\:.*)?"
-        if proxyFile:
-            self.proxyList = self.loadFromFile(proxyFile, proxyRegex)
-            self.console.info(f"loaded {len(self.proxyList)} proxies from {proxyFile}")
+        settingsRegex = r"^\w+(\s*)\:(\s*)(\w+)(\.\w+)?"
+        proxyRegex = r"(((25[0-5]|2[0-4]\d|1\d\d|[1-9]\d|[1-9])\.){3}(25[0-5]|2[0-4]\d|1\d\d|[1-9]\d|[1-9])|(\w+\.\w+\.\w+))\:(6553[0-5]|655[0-2]\d|65[0-4]\d\d|6[0-4]\d\d\d|[1-5]\d\d\d|[1-9]\d\d\d|[1-9]\d\d|[1-9]\d|[1-9])(\:.+\:.+)?"
+        plaintextRegex = r"^\w+(\-\w+)?$"
+        urlRegex = r"^((https|http)\:\/\/)((\w+\.\w+\.\w+)|(\w+\.\w+))((\/.+)+)?"
 
-        dictUrls = self.loadFromFile(dictFile, "^((https|http)\:\/\/)((\w*\.\w*\.\w*)|(\w*\.\w*))((\/\w*(\.\w*)?)*)?")
+        self.settings = self.parseFromFile(settingsFile, settingsRegex) 
+
+
+        self.proxyList = self.parseFromFile(proxyFile, proxyRegex)
+
+        self.console.info(f"loaded {len(self.proxyList)} proxies from {proxyFile}")
+        
+        dictUrls = self.parseFromFile(dictFile, urlRegex)
 
         if dictUrls:
             self.console.info(f"loading {len(dictUrls)} dictionaries from urls")
             self.dicts += self.loadUrls(dictUrls)
 
-        dictPlainText = self.loadFromFile(dictFile, "^\w*$")
+        
+        dictPlainText = self.parseFromFile(dictFile, plaintextRegex)
+
         if dictPlainText:
-            self.console.info("loading dicts from plaintext")
+            self.console.info(f"loading {len(dictPlainText)} entries from plaintext")
             self.dicts += dictPlainText
+
         self.dicts = list(set(self.dicts))
+
         self.console.info(f"loaded {len(self.dicts)} words from {dictFile}")
 
 
@@ -302,11 +376,12 @@ class BotManager():
             try:
                 browser.get(url)
                 WebDriverWait(browser, 5)
-                content = browser.find_element(By.XPATH, '//pre').text.lower()
-                dicts += content.split('\n')
             except:
                 self.console.info(f'Cannot get url {url}')
                 pass
+            content = browser.find_elements(By.XPATH, '//pre')[0]
+            if content:
+                dicts += content.text.lower().split('\n')
 
         return dicts
 
@@ -315,13 +390,13 @@ class BotManager():
         username = self.username
 
         if self.proxy:
-            addr, port, user, pswd = self.loadProxy(self.proxy)
+            addr, port, user, pswd = self.parseProxy(self.proxy)
 
             fProxy = f"https://{addr}:{port}"
             if user and pswd:
                 fProxy = f"https://{user}:{pswd}@{addr}:{port}"
 
-        bot = BPB(dicts=self.dicts, proxy=fProxy, username=username, roomCode=self.roomCode)
+        bot = BPB(dicts=self.dicts, proxy=fProxy, username=username, roomCode=self.roomCode, settings=self.settings)
         return bot
         
     
@@ -330,6 +405,8 @@ class BotManager():
         proxyNo = 0
         bot = None
         proxyList = self.proxyList
+        if not proxyList:
+            proxyList = [None]
         retries = 0
         thresh = 2
         while proxyNo < len(proxyList):
@@ -356,50 +433,45 @@ class BotManager():
         bot = None
         self.console.info('goodbye!')
 
-    def loadFromFile(self, filename, ex):
+    def parseFromFile(self, filename, ex):
 
         lst = []
         try:
             with open(filename, 'r') as file:
                 out = file.readlines()
+            
+            
             for x in out:
                 if re.match(ex,x):
-                    lst.append(x)
+                    lst.append(re.sub(r"\s+", "", x))
             return lst
     
         except FileNotFoundError:
             pass
-            self.console.error(f'cannot find file {filename}!')
+            self.console.error(f'cannot find file {filename} !')
             return None
 
     
-    def loadProxy(self, proxy):
+    def parseProxy(self, proxy):
         split = proxy.split(':')
         if len(split) == 4:
             return split[0], split[1], split[2], split[3]
         elif len(split) == 2:
             return split[0], split[1], None, None
-
-##TO-DO: change these setting to be stored in a config file    
+        
 if __name__ == "__main__" :
 
-    # filename = None
-    # filename = str(input("filename (of proxies): "))
-    # proxies = None
     proxies = 'proxies.config'
-    # dictionaries = str(input("filename (of dictionaries): "))
+    settings = 'settings.config'
     dictionaries = 'dictionaries.txt'
     link = str(input("paste code: ")).upper()
     name = str(input("username: "))
 
-    if proxies == '':
-        proxies = None
-    if dictionaries == '':
-        dictionaries = None
     if link == '':
-        link = None
+        print('ERROR: Must input room code !')
+        quit()
     if name == '':
         name = None
 
-    manager = BotManager(dictFile=dictionaries, roomCode=link, proxyFile=proxies, username=name)
+    manager = BotManager(dictFile=dictionaries, roomCode=link, proxyFile=proxies, username=name, settingsFile=settings)
     manager.persistLoop()
