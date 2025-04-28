@@ -205,10 +205,16 @@ class BPB():
         self.playerList = []
         table =  self.instantLocate((By.XPATH, '//table[@class = "statsTable"]'), lmd= self.presenceCondition)
         if table:
-            for player in table.find_elements(By.XPATH, './/tr'):
-                self.playerList.append(player)
-                if player.get_attribute('class') == 'isDead':
-                    self.playerList.remove(player)
+            try:
+                for player in table.find_elements(By.XPATH, './/tr'):
+                    self.playerList.append(player)
+                    try:
+                        if player.get_attribute('class') == 'isDead':
+                            self.playerList.remove(player)
+                    except:
+                        pass
+            except:
+                pass
 
 
     def updateLoop(self):
@@ -425,7 +431,6 @@ class BotManager():
                         
                     except Exception as s:
                         self.console.info(f'Exception {s} in Bot; retrying with proxy {self.proxy}')
-                        bot = None
                         retries += 1
                 else:
                     self.console.info(f'reached maximum retry limit for proxy {self.proxy}')
