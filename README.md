@@ -1,26 +1,150 @@
 # 💣 bomb_party_bot  
 > *hexakosioihexekontahexaphobia🗣️🔥💯*
 
-A Bomb Party bot coded in Python using Selenium, for all your trolling needs
+A Bomb Party bot and bot manager built in Python with Selenium.
+
+---
 
 ## 🚀 Features
 
-- 🤖 **Bot Manager** – Handles bot persistence and initialization.
-- 📖 **Customizable Dictionary** – Fine-tune the wordlist to your liking.
-- 🛡️ **Proxies Support** – Avoid IP bans while playing and persistent lobby rejoining even after bans.
-- ⚙️ **Custom Bot Settings** – (Coming soon)
+- 🤖 **Bot Manager**  
+  Handles bot persistence, automatic reconnection, and proxy rotation.
+- 📖 **Customizable Dictionary**  
+  Load your own wordlists (plain text or URLs).
+- 🛡️ **Proxy Support**  
+  Optional Rotating or static proxy support to counter IP bans. Auto-rejoin lobbies after bans.
+- 🛠️ **Dynamic Typing Simulation**  
+  Adjustable typing rates, mistake generation, burst typing, and smart delays to mimic human behavior.
+- ⚙️ **Custom Bot Settings**  
+  Fine-tune everything from typing randomness to mistake rates with easy configuration files.
+
+---
 
 ## 🛠️ Built With
 
 - Python 🐍
 - Selenium WebDriver
-- Optional proxy support (rotating or static)
+- Selenium Wire (for proxy injection)
 
-  ## 🧩 Installation
+---
 
-1. Clone this repository:
-   git clone https://github.com/funnymonke0/bomb_party_bot.git
-   cd bomb_party_bot
+## 🧩 Installation
 
-2. install reqs:
-   pip install -r requirements.txt
+```bash
+# 1. Clone this repository
+git clone https://github.com/funnymonke0/bomb_party_bot.git
+cd bomb_party_bot
+
+# 2. Install the requirements
+pip install -r requirements.txt
+```
+
+---
+
+## ⚙️ Configuration
+
+### Settings
+
+Settings are loaded from `settings.config` and can be customized. 
+DISCLAIMER: Only change the ones you understand, otherwise some weird behavior might happen.
+
+Example:
+
+```
+selectMode:short
+cyberbullying:True
+maxOffset:1.2
+rate:0.13
+burstType:True
+burstRate:0.055
+burstChance:0.17
+randomness:0.70
+mistakes:True
+mistakeChance:0.035
+mistakePause:0.25
+franticType:True
+dynamicPauses:True
+```
+
+| Setting | Description |
+| :------ | :----------- |
+| `selectMode` | `'smart'`, `'short'`, or `'long'` — how the bot picks answers |
+| `cyberbullying` | instant type if 1 player is remaining |
+| `maxOffset` | Max delay before typing (simulates thinking before typing) |
+| `rate` | Base typing speed (seconds per character) |
+| `burstType` | Enable fast "burst" typing spurts |
+| `burstRate` | rate during bursts |
+| `burstChance` | Chance of burst happening per character |
+| `randomness` | Percent variance of typing rate |
+| `mistakes` | Enable typo simulation |
+| `mistakeChance` | Chance per character of mistake |
+| `mistakePause` | Delay when correcting a typo |
+| `franticType` | Type faster if answered wrong or if word is long |
+| `dynamicPauses` | Adjust typing delay based on word frequency |
+
+---
+
+### Proxies
+
+Proxy format for `proxies.config` (with or without auth):
+
+```
+ip:port:user:password
+ip:port
+```
+
+---
+
+### Dictionaries
+
+Add a combination of wordlists via URLs or plain words in `dictionaries.txt`.  
+Example URLs:
+
+```
+https://raw.githubusercontent.com/YoungsterGlenn/bpDictionaryStatistics/master/dictionary.txt
+https://norvig.com/ngrams/sowpods.txt
+https://norvig.com/ngrams/enable1.txt
+https://pastebin.com/raw/UegdKLq8
+...
+```
+
+Plaintext:
+
+```
+hyperventilate
+photosynthesis
+xylophone
+```
+
+---
+
+## 🏃 Usage
+
+After setting up your configs, run:
+
+```bash
+python3 bomb_party_bot.py
+```
+
+You’ll be prompted to:
+
+- Enter a **Room Code** (e.g., `ABCD`)
+- Enter a **Username** (or leave blank for a random one)
+
+The Bot Manager will:
+
+- Load dictionaries
+- Load proxies
+- Spawn a bot
+- Persist across disconnects and bans
+- Cycle proxies if needed
+
+---
+
+## 🙏 Credits
+
+- JKLM.fun for making Bomb Party
+- Open wordlists
+- Spring Break
+- That one Youtube video
+- Everyone who got mad and ragequit because of this bot 💀
