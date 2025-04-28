@@ -181,8 +181,11 @@ class BPB():
 
 
     def checkDisconnect(self):
+        browser = self.driver
+        browser.switch_to.default_content()
         disconnected = self.instantLocate((By.XPATH, '//div[@class = "reason"]'), lmd = self.instantVisibleCondition)
         if disconnected:
+            browser.quit()
             return True
         return False
     
@@ -197,6 +200,8 @@ class BPB():
         return False
 
     def recordPlayers(self):
+        browser = self.driver
+        browser.switch_to.default_content()
         self.playerList = []
         table =  self.instantLocate((By.XPATH, '//table[@class = "statsTable"]'), lmd= self.presenceCondition)
         if table:
@@ -207,10 +212,7 @@ class BPB():
 
 
     def updateLoop(self):
-        browser = self.driver
-        browser.switch_to.default_content()
         if self.checkDisconnect():
-            browser.quit()
             return False
         
         self.recordPlayers()

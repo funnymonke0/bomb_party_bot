@@ -1622,3 +1622,38 @@ Stacktrace:
 	BaseThreadInitThunk [0x00007FFC12FA7374+20]
 	RtlUserThreadStart [0x00007FFC14BDCC91+33]
  in Bot; retrying with proxy None
+loaded 10 proxies from proxies.config
+loading 8 dictionaries from urls
+loading 196 entries from plaintext
+loaded 278547 words from dictionaries.txt
+Exception Message: stale element reference: stale element not found in the current frame
+  (Session info: chrome=135.0.7049.96); For documentation on this error, please visit: https://www.selenium.dev/documentation/webdriver/troubleshooting/errors#stale-element-reference-exception
+Stacktrace:
+	GetHandleVerifier [0x00007FF7BB74EFA5+77893]
+	GetHandleVerifier [0x00007FF7BB74F000+77984]
+	(No symbol) [0x00007FF7BB5191BA]
+	(No symbol) [0x00007FF7BB520AEC]
+	(No symbol) [0x00007FF7BB523B5C]
+	(No symbol) [0x00007FF7BB523C2F]
+	(No symbol) [0x00007FF7BB5C1999]
+	(No symbol) [0x00007FF7BB59712A]
+	(No symbol) [0x00007FF7BB5BF07F]
+	(No symbol) [0x00007FF7BB596F03]
+	(No symbol) [0x00007FF7BB560328]
+	(No symbol) [0x00007FF7BB561093]
+	GetHandleVerifier [0x00007FF7BBA07B6D+2931725]
+	GetHandleVerifier [0x00007FF7BBA02132+2908626]
+	GetHandleVerifier [0x00007FF7BBA200F3+3031443]
+	GetHandleVerifier [0x00007FF7BB7691EA+184970]
+	GetHandleVerifier [0x00007FF7BB77086F+215311]
+	GetHandleVerifier [0x00007FF7BB756EC4+110436]
+	GetHandleVerifier [0x00007FF7BB757072+110866]
+	GetHandleVerifier [0x00007FF7BB73D479+5401]
+	BaseThreadInitThunk [0x00007FFC12FA7374+20]
+	RtlUserThreadStart [0x00007FFC14BDCC91+33]
+ in Bot; retrying with proxy p.webshare.io:80:adzzhfmh-1:v4xvjox8zqxk
+Bot disconnected successfully
+loaded 10 proxies from proxies.config
+loading 8 dictionaries from urls
+loading 196 entries from plaintext
+loaded 278547 words from dictionaries.txt
