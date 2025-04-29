@@ -114,7 +114,7 @@ class BPB():
             else:
                 try:
                     settingsDict[key] = float(value)
-                except:
+                except ValueError:
                     settingsDict[key] = value
                     pass
         return settingsDict
@@ -169,23 +169,19 @@ class BPB():
         submit.click()
 
 
-    def updateIframe(self):
+    def switchIframe(self):
         browser = self.driver
         browser.switch_to.default_content()
         iFrame = self.instantLocate((By.XPATH, "//iframe[contains(@src, 'bombparty')]"), lmd= self.presenceCondition)
         if iFrame:
             try:
                 browser.switch_to.frame(iFrame)
-            except NoSuchFrameException:
+            except NoSuchFrameException as e:
                 pass
 
 
     def checkDisconnect(self):
-        browser = self.driver
-        browser.switch_to.default_content()
-        disconnected = self.instantLocate((By.XPATH, '//div[@class = "reason"]'), lmd = self.instantVisibleCondition)
-        if disconnected:
-            browser.quit()
+        if self.instantLocate((By.XPATH, '//div[@class = "reason"]'), lmd = self.instantVisibleCondition):
             return True
         return False
     
@@ -195,36 +191,35 @@ class BPB():
             try:
                 join.click()
                 return True
-            except (ElementNotInteractableException,ElementClickInterceptedException, StaleElementReferenceException):
+            except (ElementNotInteractableException,ElementClickInterceptedException, StaleElementReferenceException) as e:
                 pass
         return False
 
     def recordPlayers(self):
-        browser = self.driver
-        browser.switch_to.default_content()
+        
+        
         self.playerList = []
         table =  self.instantLocate((By.XPATH, '//table[@class = "statsTable"]'), lmd= self.presenceCondition)
         if table:
-            try:
-                for player in table.find_elements(By.XPATH, './/tr'):
+            entries = table.find_elements(By.XPATH, './/tr')
+            if entries:
+                for player in entries:
                     self.playerList.append(player)
-                    try:
-                        if player.get_attribute('class') == 'isDead':
-                            self.playerList.remove(player)
-                    except:
-                        pass
-            except:
-                pass
+                    if player.get_attribute('class') == 'isDead':
+                        self.playerList.remove(player)
+                        
 
 
     def updateLoop(self):
+        browser = self.driver
+        browser.switch_to.default_content()
         if self.checkDisconnect():
+            browser.quit()
             return False
         
         self.recordPlayers()
 
-        self.updateIframe()
-
+        self.switchIframe()
 
         if self.tryJoin():
             self.dicts = self.dicts+self.replace
@@ -237,6 +232,7 @@ class BPB():
         self.mult = 1
         self.frantic = False
         prevSyll = None
+        lmb = None
         while self.updateLoop():
             textbox = self.instantLocate((By.XPATH, '//form//input[@maxlength = "30"]'), lmd = self.instantVisibleCondition)
             syllable = self.instantLocate((By.XPATH, "//div[@class = 'syllable']"), lmd = self.instantVisibleCondition)
@@ -248,7 +244,7 @@ class BPB():
                         self.frantic = True
 
                     lst = self.findSuffix(syllable)
-
+                    
                     if lst:
                         if self.selectMode == 'long':
                             ans = lst[len(lst)-1]
@@ -259,63 +255,60 @@ class BPB():
                             if len(lst[len(lst)-1])>20:
                                 ans = lst[len(lst)-1]
                                 self.frantic = True
-                        
+
+                        self.console.info(f"found answer {ans} to syllable {syllable}")
                         if self.dynamicPauses:
                             self.mult = len(lst)/len(self.dicts) #how frequent it is
 
                         if self.cyberbullying and len(self.playerList) == 3:##including table head
-                            textbox.send_keys(ans+Keys.ENTER)##if you wanna get hackusated
+                            lmb = lambda x: textbox.send_keys(x)##if you wanna get hackusated
                         else:
-                            self.simType(textbox, ans+Keys.ENTER)
-                            
+                            lmb = lambda x: self.simType(textbox, x)
+
+                        lmb(ans+Keys.ENTER)
+
                         self.replace.append(ans)
                         self.dicts.remove(ans)
                         self.frantic = False
                         prevSyll = syllable
                     else:
-                        
-                        if self.cyberbullying:
-                            textbox.send_keys("/suicide"+Keys.ENTER)
-                        else:
-                            self.simType(textbox, "/suicide"+Keys.ENTER)
+
+                        self.console.info(f"Cannot find answer to syllable {syllable} !")
+                        lmb("/suicide"+Keys.ENTER)
 
                 except Exception as s:
                     pass
 
 
     def simType(self, obj, txt):
-        txtArr = list(txt)
         
-        defaultRate = self.rate
-        mistake = False
-        if self.frantic:
-            defaultRate = self.burstRate
-        else:
-            w = self.maxOffset-self.maxOffset*self.mult
+        if not self.frantic:
+            w = self.maxOffset-(self.maxOffset*self.mult)
             if w > 0:
                 sleep(w)
         
-        for letter in txtArr:
+        ratesList = []
+        rand = lambda x: x*(1+random.uniform(-1, 1)*self.randomness)
+        for letter in txt:
+
+            rate = self.rate
+
+            if self.frantic:
+                rate = self.burstRate
+
+            elif self.burstType and(random.random() <= self.burstChance):
+                rate = self.burstRate
             
-            rate = defaultRate
+            ratesList.append(rand(rate))
 
-            if self.burstType:
-                burst = (random.random() <= self.burstChance)
-                if burst:
-                    rate = self.burstRate
-
-            if self.mistakes:
-                mistake = (random.random() <= self.mistakeChance)
-
-            if mistake:
+        for letter, delay in list(zip(txt, ratesList)):
+            if self.mistakes and (random.random() <= self.mistakeChance):
                 obj.send_keys(random.choice(string.ascii_lowercase))
-                w = self.mistakePause + random.uniform(-1, 1)*self.randomness*self.mistakePause
-                sleep(w)
+                sleep(rand(self.mistakePause))
                 obj.send_keys(Keys.BACKSPACE)
 
             obj.send_keys(letter)
-            w = rate + random.uniform(-1, 1)*self.randomness*rate
-            sleep(w)
+            sleep(delay)
                 
             
 class BotManager():
@@ -384,8 +377,8 @@ class BotManager():
             try:
                 browser.get(url)
                 WebDriverWait(browser, 5)
-            except:
-                self.console.info(f'Cannot get url {url}')
+            except (ConnectionResetError,ConnectionAbortedError,ConnectionError,ConnectionRefusedError) as e:
+                self.console.info(f'Cannot get url {url} because of Exception {e}')
                 pass
             content = browser.find_elements(By.XPATH, '//pre')[0]
             if content:
@@ -431,6 +424,7 @@ class BotManager():
                         
                     except Exception as s:
                         self.console.info(f'Exception {s} in Bot; retrying with proxy {self.proxy}')
+                        bot = None
                         retries += 1
                 else:
                     self.console.info(f'reached maximum retry limit for proxy {self.proxy}')
