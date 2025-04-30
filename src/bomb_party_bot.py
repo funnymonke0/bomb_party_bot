@@ -200,14 +200,16 @@ class BPB():
         
         self.playerList = []
         table =  self.instantLocate((By.XPATH, '//table[@class = "statsTable"]'), lmd= self.presenceCondition)
-        if table:
-            entries = table.find_elements(By.XPATH, './/tr')
-            if entries:
-                for player in entries:
-                    self.playerList.append(player)
-                    if player.get_attribute('class') == 'isDead':
-                        self.playerList.remove(player)
-                        
+        try:
+            if table:
+                entries = table.find_elements(By.XPATH, './/tr')
+                if entries:
+                    for player in entries:
+                        self.playerList.append(player)
+                        if player.get_attribute('class') == 'isDead':
+                            self.playerList.remove(player)
+        except (ElementNotInteractableException,ElementClickInterceptedException, StaleElementReferenceException) as e:
+                pass
 
 
     def updateLoop(self):
@@ -250,6 +252,8 @@ class BPB():
                             ans = lst[len(lst)-1]
                         elif self.selectMode == 'short':
                             ans = lst[0]
+                        elif self.selectMode == 'avg':
+                            ans = lst[int((len(lst)-1)/2)]
                         elif self.selectMode == 'smart':
                             ans = lst[0]
                             if len(lst[len(lst)-1])>20:
@@ -276,7 +280,7 @@ class BPB():
                         self.console.info(f"Cannot find answer to syllable {syllable} !")
                         lmb("/suicide"+Keys.ENTER)
 
-                except Exception as s:
+                except (ElementNotInteractableException,ElementClickInterceptedException, StaleElementReferenceException) as e:
                     pass
 
 
@@ -291,15 +295,16 @@ class BPB():
         rand = lambda x: x*(1+random.uniform(-1, 1)*self.randomness)
         for letter in txt:
 
-            rate = self.rate
-
             if self.frantic:
-                rate = self.burstRate
+                ratesList.append(rand(self.burstRate))
 
             elif self.burstType and(random.random() <= self.burstChance):
-                rate = self.burstRate
+                ratesList.append(rand(self.burstRate))
+
+            else:
+                ratesList.append(rand(self.rate))
             
-            ratesList.append(rand(rate))
+            
 
         for letter, delay in list(zip(txt, ratesList)):
             if self.mistakes and (random.random() <= self.mistakeChance):
@@ -309,7 +314,9 @@ class BPB():
 
             obj.send_keys(letter)
             sleep(delay)
-                
+    
+    def __del__(self):
+        self.console.info("POOF!")
             
 class BotManager():
 
@@ -337,7 +344,7 @@ class BotManager():
         self.dicts = []
         
         settingsRegex = r"^\w+(\s*)\:(\s*)(\w+)(\.\w+)?"
-        proxyRegex = r"(((25[0-5]|2[0-4]\d|1\d\d|[1-9]\d|[1-9])\.){3}(25[0-5]|2[0-4]\d|1\d\d|[1-9]\d|[1-9])|(\w+\.\w+\.\w+))\:(6553[0-5]|655[0-2]\d|65[0-4]\d\d|6[0-4]\d\d\d|[1-5]\d\d\d|[1-9]\d\d\d|[1-9]\d\d|[1-9]\d|[1-9])(\:.+\:.+)?"
+        proxyRegex = r"^(\d{1,3}\.){3}(\d{1,3}):(\d{1,5})(:.+:.+)?"
         plaintextRegex = r"^\w+(\-\w+)?$"
         urlRegex = r"^((https|http)\:\/\/)((\w+\.\w+\.\w+)|(\w+\.\w+))((\/.+)+)?"
 
@@ -408,29 +415,19 @@ class BotManager():
         proxyList = self.proxyList
         if not proxyList:
             proxyList = [None]
-        retries = 0
-        thresh = 2
         while proxyNo < len(proxyList):
-            if not bot:
-                if retries <= thresh:
-                    self.proxy = proxyList[proxyNo]
-                    bot = self.botInit()
-                    try:
-                        bot.botLoop()
-                        self.console.info(f'Bot disconnected successfully')
-                        bot = None
-                        retries = 0
-                        proxyNo+=1
+
+            self.proxy = proxyList[proxyNo]
+            try:
+                bot = self.botInit()
+                bot.botLoop()
+                self.console.info(f'Bot {self.proxy} disconnected successfully')
+            except Exception as e:
+                self.console.error(f"Exception {e} in bot {self.proxy}")
+                
+            del bot
+            proxyNo+=1
                         
-                    except Exception as s:
-                        self.console.info(f'Exception {s} in Bot; retrying with proxy {self.proxy}')
-                        bot = None
-                        retries += 1
-                else:
-                    self.console.info(f'reached maximum retry limit for proxy {self.proxy}')
-                    bot = None
-                    retries = 0
-                    proxyNo+=1    
         bot = None
         self.console.info('goodbye!')
 
