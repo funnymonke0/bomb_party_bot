@@ -223,7 +223,11 @@ class BPB():
                     lst = self.findSuffix(syllable)
                     
                     if lst:
-                        if self.selectMode == 'long':
+                        lmb = lambda x: self.simType(textbox, x)
+                        if self.cyberbullying and len(self.playerList) == 3:##including table head
+                            ans = lst[len(lst)-1]
+                            lmb = lambda x: textbox.send_keys(x)##if you wanna get hackusated
+                        elif self.selectMode == 'long':
                             ans = lst[len(lst)-1]
                         elif self.selectMode == 'short':
                             ans = lst[0]
@@ -239,11 +243,7 @@ class BPB():
                         if self.dynamicPauses:
                             self.mult = len(lst)/len(self.dicts) #how frequent it is
 
-                        if self.cyberbullying and len(self.playerList) == 3:##including table head
-                            ans = lst[len(lst)-1]
-                            lmb = lambda x: textbox.send_keys(x)##if you wanna get hackusated
-                        else:
-                            lmb = lambda x: self.simType(textbox, x)
+                        
 
                         lmb(ans+Keys.ENTER)
 
