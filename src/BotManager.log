@@ -1845,3 +1845,896 @@ loaded 10 proxies from proxies.config
 loading 8 dictionaries from urls
 loading 196 entries from plaintext
 loaded 278547 words from dictionaries.txt
+Exception Message: unknown error: unhandled inspector error: {"code":-32000,"message":"Node with given id does not belong to the document"}
+  (Session info: chrome=135.0.7049.96)
+Stacktrace:
+	GetHandleVerifier [0x00007FF7BB74EFA5+77893]
+	GetHandleVerifier [0x00007FF7BB74F000+77984]
+	(No symbol) [0x00007FF7BB5191BA]
+	(No symbol) [0x00007FF7BB505920]
+	(No symbol) [0x00007FF7BB504118]
+	(No symbol) [0x00007FF7BB50491F]
+	(No symbol) [0x00007FF7BB52CC41]
+	(No symbol) [0x00007FF7BB52F946]
+	(No symbol) [0x00007FF7BB52DFF3]
+	(No symbol) [0x00007FF7BB521819]
+	(No symbol) [0x00007FF7BB51F69F]
+	(No symbol) [0x00007FF7BB523B5C]
+	(No symbol) [0x00007FF7BB523C2F]
+	(No symbol) [0x00007FF7BB57132D]
+	(No symbol) [0x00007FF7BB5702E9]
+	(No symbol) [0x00007FF7BB562134]
+	(No symbol) [0x00007FF7BB59712A]
+	(No symbol) [0x00007FF7BB5619E6]
+	(No symbol) [0x00007FF7BB597340]
+	(No symbol) [0x00007FF7BB5BF07F]
+	(No symbol) [0x00007FF7BB596F03]
+	(No symbol) [0x00007FF7BB560328]
+	(No symbol) [0x00007FF7BB561093]
+	GetHandleVerifier [0x00007FF7BBA07B6D+2931725]
+	GetHandleVerifier [0x00007FF7BBA02132+2908626]
+	GetHandleVerifier [0x00007FF7BBA200F3+3031443]
+	GetHandleVerifier [0x00007FF7BB7691EA+184970]
+	GetHandleVerifier [0x00007FF7BB77086F+215311]
+	GetHandleVerifier [0x00007FF7BB756EC4+110436]
+	GetHandleVerifier [0x00007FF7BB757072+110866]
+	GetHandleVerifier [0x00007FF7BB73D479+5401]
+	BaseThreadInitThunk [0x00007FFC12FA7374+20]
+	RtlUserThreadStart [0x00007FFC14BDCC91+33]
+ in bot 38.153.152.244:9594:ioymapym:1oo7rddcebdz
+loaded 10 proxies from proxies.config
+loading 8 dictionaries from urls
+loading 196 entries from plaintext
+loaded 278547 words from dictionaries.txt
+loaded 10 proxies from proxies.config
+loading 8 dictionaries from urls
+loading 196 entries from plaintext
+loaded 278547 words from dictionaries.txt
+Bot 38.153.152.244:9594:ioymapym:1oo7rddcebdz disconnected successfully
+loaded 10 proxies from proxies.config
+loading 8 dictionaries from urls
+loading 196 entries from plaintext
+loaded 278547 words from dictionaries.txt
+Bot 38.153.152.244:9594:ioymapym:1oo7rddcebdz disconnected successfully
+loaded 10 proxies from proxies.config
+loading 8 dictionaries from urls
+loading 196 entries from plaintext
+loaded 278547 words from dictionaries.txt
+Bot 38.153.152.244:9594:ioymapym:1oo7rddcebdz disconnected successfully
+Bot 86.38.234.176:6630:ioymapym:1oo7rddcebdz disconnected successfully
+Exception Message: invalid element state: Element is not currently interactable and may not be manipulated
+  (Session info: chrome=135.0.7049.96)
+Stacktrace:
+	GetHandleVerifier [0x00007FF7BB74EFA5+77893]
+	GetHandleVerifier [0x00007FF7BB74F000+77984]
+	(No symbol) [0x00007FF7BB5191BA]
+	(No symbol) [0x00007FF7BB520AEC]
+	(No symbol) [0x00007FF7BB523B5C]
+	(No symbol) [0x00007FF7BB523C2F]
+	(No symbol) [0x00007FF7BB564F97]
+	(No symbol) [0x00007FF7BB59712A]
+	(No symbol) [0x00007FF7BB5619E6]
+	(No symbol) [0x00007FF7BB597340]
+	(No symbol) [0x00007FF7BB5BF07F]
+	(No symbol) [0x00007FF7BB596F03]
+	(No symbol) [0x00007FF7BB560328]
+	(No symbol) [0x00007FF7BB561093]
+	GetHandleVerifier [0x00007FF7BBA07B6D+2931725]
+	GetHandleVerifier [0x00007FF7BBA02132+2908626]
+	GetHandleVerifier [0x00007FF7BBA200F3+3031443]
+	GetHandleVerifier [0x00007FF7BB7691EA+184970]
+	GetHandleVerifier [0x00007FF7BB77086F+215311]
+	GetHandleVerifier [0x00007FF7BB756EC4+110436]
+	GetHandleVerifier [0x00007FF7BB757072+110866]
+	GetHandleVerifier [0x00007FF7BB73D479+5401]
+	BaseThreadInitThunk [0x00007FFC12FA7374+20]
+	RtlUserThreadStart [0x00007FFC14BDCC91+33]
+ in bot 173.211.0.148:6641:ioymapym:1oo7rddcebdz
+Bot 216.10.27.159:6837:ioymapym:1oo7rddcebdz disconnected successfully
+Bot 154.36.110.199:6853:ioymapym:1oo7rddcebdz disconnected successfully
+Exception Message: invalid element state: Element is not currently interactable and may not be manipulated
+  (Session info: chrome=135.0.7049.96)
+Stacktrace:
+	GetHandleVerifier [0x00007FF7BB74EFA5+77893]
+	GetHandleVerifier [0x00007FF7BB74F000+77984]
+	(No symbol) [0x00007FF7BB5191BA]
+	(No symbol) [0x00007FF7BB520AEC]
+	(No symbol) [0x00007FF7BB523B5C]
+	(No symbol) [0x00007FF7BB523C2F]
+	(No symbol) [0x00007FF7BB564F97]
+	(No symbol) [0x00007FF7BB59712A]
+	(No symbol) [0x00007FF7BB5619E6]
+	(No symbol) [0x00007FF7BB597340]
+	(No symbol) [0x00007FF7BB5BF07F]
+	(No symbol) [0x00007FF7BB596F03]
+	(No symbol) [0x00007FF7BB560328]
+	(No symbol) [0x00007FF7BB561093]
+	GetHandleVerifier [0x00007FF7BBA07B6D+2931725]
+	GetHandleVerifier [0x00007FF7BBA02132+2908626]
+	GetHandleVerifier [0x00007FF7BBA200F3+3031443]
+	GetHandleVerifier [0x00007FF7BB7691EA+184970]
+	GetHandleVerifier [0x00007FF7BB77086F+215311]
+	GetHandleVerifier [0x00007FF7BB756EC4+110436]
+	GetHandleVerifier [0x00007FF7BB757072+110866]
+	GetHandleVerifier [0x00007FF7BB73D479+5401]
+	BaseThreadInitThunk [0x00007FFC12FA7374+20]
+	RtlUserThreadStart [0x00007FFC14BDCC91+33]
+ in bot 45.151.162.198:6600:ioymapym:1oo7rddcebdz
+Exception Message: invalid element state: Element is not currently interactable and may not be manipulated
+  (Session info: chrome=135.0.7049.96)
+Stacktrace:
+	GetHandleVerifier [0x00007FF7BB74EFA5+77893]
+	GetHandleVerifier [0x00007FF7BB74F000+77984]
+	(No symbol) [0x00007FF7BB5191BA]
+	(No symbol) [0x00007FF7BB520AEC]
+	(No symbol) [0x00007FF7BB523B5C]
+	(No symbol) [0x00007FF7BB523C2F]
+	(No symbol) [0x00007FF7BB564F97]
+	(No symbol) [0x00007FF7BB59712A]
+	(No symbol) [0x00007FF7BB5619E6]
+	(No symbol) [0x00007FF7BB597340]
+	(No symbol) [0x00007FF7BB5BF07F]
+	(No symbol) [0x00007FF7BB596F03]
+	(No symbol) [0x00007FF7BB560328]
+	(No symbol) [0x00007FF7BB561093]
+	GetHandleVerifier [0x00007FF7BBA07B6D+2931725]
+	GetHandleVerifier [0x00007FF7BBA02132+2908626]
+	GetHandleVerifier [0x00007FF7BBA200F3+3031443]
+	GetHandleVerifier [0x00007FF7BB7691EA+184970]
+	GetHandleVerifier [0x00007FF7BB77086F+215311]
+	GetHandleVerifier [0x00007FF7BB756EC4+110436]
+	GetHandleVerifier [0x00007FF7BB757072+110866]
+	GetHandleVerifier [0x00007FF7BB73D479+5401]
+	BaseThreadInitThunk [0x00007FFC12FA7374+20]
+	RtlUserThreadStart [0x00007FFC14BDCC91+33]
+ in bot 188.74.210.3:6082:ioymapym:1oo7rddcebdz
+Exception Message: invalid element state: Element is not currently interactable and may not be manipulated
+  (Session info: chrome=135.0.7049.96)
+Stacktrace:
+	GetHandleVerifier [0x00007FF7BB74EFA5+77893]
+	GetHandleVerifier [0x00007FF7BB74F000+77984]
+	(No symbol) [0x00007FF7BB5191BA]
+	(No symbol) [0x00007FF7BB520AEC]
+	(No symbol) [0x00007FF7BB523B5C]
+	(No symbol) [0x00007FF7BB523C2F]
+	(No symbol) [0x00007FF7BB564F97]
+	(No symbol) [0x00007FF7BB59712A]
+	(No symbol) [0x00007FF7BB5619E6]
+	(No symbol) [0x00007FF7BB597340]
+	(No symbol) [0x00007FF7BB5BF07F]
+	(No symbol) [0x00007FF7BB596F03]
+	(No symbol) [0x00007FF7BB560328]
+	(No symbol) [0x00007FF7BB561093]
+	GetHandleVerifier [0x00007FF7BBA07B6D+2931725]
+	GetHandleVerifier [0x00007FF7BBA02132+2908626]
+	GetHandleVerifier [0x00007FF7BBA200F3+3031443]
+	GetHandleVerifier [0x00007FF7BB7691EA+184970]
+	GetHandleVerifier [0x00007FF7BB77086F+215311]
+	GetHandleVerifier [0x00007FF7BB756EC4+110436]
+	GetHandleVerifier [0x00007FF7BB757072+110866]
+	GetHandleVerifier [0x00007FF7BB73D479+5401]
+	BaseThreadInitThunk [0x00007FFC12FA7374+20]
+	RtlUserThreadStart [0x00007FFC14BDCC91+33]
+ in bot 188.74.210.207:6286:ioymapym:1oo7rddcebdz
+Exception Message: stale element reference: stale element not found in the current frame
+  (Session info: chrome=135.0.7049.96); For documentation on this error, please visit: https://www.selenium.dev/documentation/webdriver/troubleshooting/errors#stale-element-reference-exception
+Stacktrace:
+	GetHandleVerifier [0x00007FF7BB74EFA5+77893]
+	GetHandleVerifier [0x00007FF7BB74F000+77984]
+	(No symbol) [0x00007FF7BB5191BA]
+	(No symbol) [0x00007FF7BB520AEC]
+	(No symbol) [0x00007FF7BB523B5C]
+	(No symbol) [0x00007FF7BB523C2F]
+	(No symbol) [0x00007FF7BB572CA1]
+	(No symbol) [0x00007FF7BB5C119E]
+	(No symbol) [0x00007FF7BB59712A]
+	(No symbol) [0x00007FF7BB5BF07F]
+	(No symbol) [0x00007FF7BB596F03]
+	(No symbol) [0x00007FF7BB560328]
+	(No symbol) [0x00007FF7BB561093]
+	GetHandleVerifier [0x00007FF7BBA07B6D+2931725]
+	GetHandleVerifier [0x00007FF7BBA02132+2908626]
+	GetHandleVerifier [0x00007FF7BBA200F3+3031443]
+	GetHandleVerifier [0x00007FF7BB7691EA+184970]
+	GetHandleVerifier [0x00007FF7BB77086F+215311]
+	GetHandleVerifier [0x00007FF7BB756EC4+110436]
+	GetHandleVerifier [0x00007FF7BB757072+110866]
+	GetHandleVerifier [0x00007FF7BB73D479+5401]
+	BaseThreadInitThunk [0x00007FFC12FA7374+20]
+	RtlUserThreadStart [0x00007FFC14BDCC91+33]
+ in bot 188.74.210.21:6100:ioymapym:1oo7rddcebdz
+loaded 10 proxies from proxies.config
+loading 8 dictionaries from urls
+loading 196 entries from plaintext
+loaded 278547 words from dictionaries.txt
+Bot 38.153.152.244:9594:ioymapym:1oo7rddcebdz disconnected successfully
+Exception Message: no such element: element not found
+  (Session info: chrome=135.0.7049.96); For documentation on this error, please visit: https://www.selenium.dev/documentation/webdriver/troubleshooting/errors#no-such-element-exception
+Stacktrace:
+	GetHandleVerifier [0x00007FF7BB74EFA5+77893]
+	GetHandleVerifier [0x00007FF7BB74F000+77984]
+	(No symbol) [0x00007FF7BB5191BA]
+	(No symbol) [0x00007FF7BB52F524]
+	(No symbol) [0x00007FF7BB52DFF3]
+	(No symbol) [0x00007FF7BB521819]
+	(No symbol) [0x00007FF7BB51F69F]
+	(No symbol) [0x00007FF7BB523B5C]
+	(No symbol) [0x00007FF7BB523C2F]
+	(No symbol) [0x00007FF7BB57004A]
+	(No symbol) [0x00007FF7BB570117]
+	(No symbol) [0x00007FF7BB56598B]
+	(No symbol) [0x00007FF7BB59712A]
+	(No symbol) [0x00007FF7BB5619E6]
+	(No symbol) [0x00007FF7BB597340]
+	(No symbol) [0x00007FF7BB5BF07F]
+	(No symbol) [0x00007FF7BB596F03]
+	(No symbol) [0x00007FF7BB560328]
+	(No symbol) [0x00007FF7BB561093]
+	GetHandleVerifier [0x00007FF7BBA07B6D+2931725]
+	GetHandleVerifier [0x00007FF7BBA02132+2908626]
+	GetHandleVerifier [0x00007FF7BBA200F3+3031443]
+	GetHandleVerifier [0x00007FF7BB7691EA+184970]
+	GetHandleVerifier [0x00007FF7BB77086F+215311]
+	GetHandleVerifier [0x00007FF7BB756EC4+110436]
+	GetHandleVerifier [0x00007FF7BB757072+110866]
+	GetHandleVerifier [0x00007FF7BB73D479+5401]
+	BaseThreadInitThunk [0x00007FFC12FA7374+20]
+	RtlUserThreadStart [0x00007FFC14BDCC91+33]
+ in bot 86.38.234.176:6630:ioymapym:1oo7rddcebdz
+Exception Message: stale element reference: stale element not found in the current frame
+  (Session info: chrome=135.0.7049.96); For documentation on this error, please visit: https://www.selenium.dev/documentation/webdriver/troubleshooting/errors#stale-element-reference-exception
+Stacktrace:
+	GetHandleVerifier [0x00007FF7BB74EFA5+77893]
+	GetHandleVerifier [0x00007FF7BB74F000+77984]
+	(No symbol) [0x00007FF7BB5191BA]
+	(No symbol) [0x00007FF7BB520AEC]
+	(No symbol) [0x00007FF7BB523B5C]
+	(No symbol) [0x00007FF7BB523C2F]
+	(No symbol) [0x00007FF7BB5C1D72]
+	(No symbol) [0x00007FF7BB59712A]
+	(No symbol) [0x00007FF7BB5BF07F]
+	(No symbol) [0x00007FF7BB596F03]
+	(No symbol) [0x00007FF7BB560328]
+	(No symbol) [0x00007FF7BB561093]
+	GetHandleVerifier [0x00007FF7BBA07B6D+2931725]
+	GetHandleVerifier [0x00007FF7BBA02132+2908626]
+	GetHandleVerifier [0x00007FF7BBA200F3+3031443]
+	GetHandleVerifier [0x00007FF7BB7691EA+184970]
+	GetHandleVerifier [0x00007FF7BB77086F+215311]
+	GetHandleVerifier [0x00007FF7BB756EC4+110436]
+	GetHandleVerifier [0x00007FF7BB757072+110866]
+	GetHandleVerifier [0x00007FF7BB73D479+5401]
+	BaseThreadInitThunk [0x00007FFC12FA7374+20]
+	RtlUserThreadStart [0x00007FFC14BDCC91+33]
+ in bot 173.211.0.148:6641:ioymapym:1oo7rddcebdz
+Bot 216.10.27.159:6837:ioymapym:1oo7rddcebdz disconnected successfully
+Bot 154.36.110.199:6853:ioymapym:1oo7rddcebdz disconnected successfully
+Exception Message: stale element reference: stale element not found in the current frame
+  (Session info: chrome=135.0.7049.96); For documentation on this error, please visit: https://www.selenium.dev/documentation/webdriver/troubleshooting/errors#stale-element-reference-exception
+Stacktrace:
+	GetHandleVerifier [0x00007FF7BB74EFA5+77893]
+	GetHandleVerifier [0x00007FF7BB74F000+77984]
+	(No symbol) [0x00007FF7BB5191BA]
+	(No symbol) [0x00007FF7BB520AEC]
+	(No symbol) [0x00007FF7BB523B5C]
+	(No symbol) [0x00007FF7BB523C2F]
+	(No symbol) [0x00007FF7BB572CA1]
+	(No symbol) [0x00007FF7BB5C119E]
+	(No symbol) [0x00007FF7BB59712A]
+	(No symbol) [0x00007FF7BB5BF07F]
+	(No symbol) [0x00007FF7BB596F03]
+	(No symbol) [0x00007FF7BB560328]
+	(No symbol) [0x00007FF7BB561093]
+	GetHandleVerifier [0x00007FF7BBA07B6D+2931725]
+	GetHandleVerifier [0x00007FF7BBA02132+2908626]
+	GetHandleVerifier [0x00007FF7BBA200F3+3031443]
+	GetHandleVerifier [0x00007FF7BB7691EA+184970]
+	GetHandleVerifier [0x00007FF7BB77086F+215311]
+	GetHandleVerifier [0x00007FF7BB756EC4+110436]
+	GetHandleVerifier [0x00007FF7BB757072+110866]
+	GetHandleVerifier [0x00007FF7BB73D479+5401]
+	BaseThreadInitThunk [0x00007FFC12FA7374+20]
+	RtlUserThreadStart [0x00007FFC14BDCC91+33]
+ in bot 45.151.162.198:6600:ioymapym:1oo7rddcebdz
+Exception Message: unknown error: unhandled inspector error: {"code":-32000,"message":"Node with given id does not belong to the document"}
+  (Session info: chrome=135.0.7049.96)
+Stacktrace:
+	GetHandleVerifier [0x00007FF7BB74EFA5+77893]
+	GetHandleVerifier [0x00007FF7BB74F000+77984]
+	(No symbol) [0x00007FF7BB5191BA]
+	(No symbol) [0x00007FF7BB505920]
+	(No symbol) [0x00007FF7BB504118]
+	(No symbol) [0x00007FF7BB50491F]
+	(No symbol) [0x00007FF7BB52CC41]
+	(No symbol) [0x00007FF7BB52F946]
+	(No symbol) [0x00007FF7BB52DFF3]
+	(No symbol) [0x00007FF7BB521819]
+	(No symbol) [0x00007FF7BB51F69F]
+	(No symbol) [0x00007FF7BB523B5C]
+	(No symbol) [0x00007FF7BB523C2F]
+	(No symbol) [0x00007FF7BB572CA1]
+	(No symbol) [0x00007FF7BB5704F0]
+	(No symbol) [0x00007FF7BB562134]
+	(No symbol) [0x00007FF7BB59712A]
+	(No symbol) [0x00007FF7BB5619E6]
+	(No symbol) [0x00007FF7BB597340]
+	(No symbol) [0x00007FF7BB5BF07F]
+	(No symbol) [0x00007FF7BB596F03]
+	(No symbol) [0x00007FF7BB560328]
+	(No symbol) [0x00007FF7BB561093]
+	GetHandleVerifier [0x00007FF7BBA07B6D+2931725]
+	GetHandleVerifier [0x00007FF7BBA02132+2908626]
+	GetHandleVerifier [0x00007FF7BBA200F3+3031443]
+	GetHandleVerifier [0x00007FF7BB7691EA+184970]
+	GetHandleVerifier [0x00007FF7BB77086F+215311]
+	GetHandleVerifier [0x00007FF7BB756EC4+110436]
+	GetHandleVerifier [0x00007FF7BB757072+110866]
+	GetHandleVerifier [0x00007FF7BB73D479+5401]
+	BaseThreadInitThunk [0x00007FFC12FA7374+20]
+	RtlUserThreadStart [0x00007FFC14BDCC91+33]
+ in bot 188.74.210.3:6082:ioymapym:1oo7rddcebdz
+Bot 188.74.210.207:6286:ioymapym:1oo7rddcebdz disconnected successfully
+Exception Message: no such element: element not found
+  (Session info: chrome=135.0.7049.96); For documentation on this error, please visit: https://www.selenium.dev/documentation/webdriver/troubleshooting/errors#no-such-element-exception
+Stacktrace:
+	GetHandleVerifier [0x00007FF7BB74EFA5+77893]
+	GetHandleVerifier [0x00007FF7BB74F000+77984]
+	(No symbol) [0x00007FF7BB5191BA]
+	(No symbol) [0x00007FF7BB52F524]
+	(No symbol) [0x00007FF7BB52DFF3]
+	(No symbol) [0x00007FF7BB521819]
+	(No symbol) [0x00007FF7BB51F69F]
+	(No symbol) [0x00007FF7BB523B5C]
+	(No symbol) [0x00007FF7BB523C2F]
+	(No symbol) [0x00007FF7BB57004A]
+	(No symbol) [0x00007FF7BB570117]
+	(No symbol) [0x00007FF7BB56598B]
+	(No symbol) [0x00007FF7BB59712A]
+	(No symbol) [0x00007FF7BB5619E6]
+	(No symbol) [0x00007FF7BB597340]
+	(No symbol) [0x00007FF7BB5BF07F]
+	(No symbol) [0x00007FF7BB596F03]
+	(No symbol) [0x00007FF7BB560328]
+	(No symbol) [0x00007FF7BB561093]
+	GetHandleVerifier [0x00007FF7BBA07B6D+2931725]
+	GetHandleVerifier [0x00007FF7BBA02132+2908626]
+	GetHandleVerifier [0x00007FF7BBA200F3+3031443]
+	GetHandleVerifier [0x00007FF7BB7691EA+184970]
+	GetHandleVerifier [0x00007FF7BB77086F+215311]
+	GetHandleVerifier [0x00007FF7BB756EC4+110436]
+	GetHandleVerifier [0x00007FF7BB757072+110866]
+	GetHandleVerifier [0x00007FF7BB73D479+5401]
+	BaseThreadInitThunk [0x00007FFC12FA7374+20]
+	RtlUserThreadStart [0x00007FFC14BDCC91+33]
+ in bot 188.74.210.21:6100:ioymapym:1oo7rddcebdz
+Bot 91.246.195.196:6965:ioymapym:1oo7rddcebdz disconnected successfully
+goodbye!
+loaded 10 proxies from proxies.config
+loading 8 dictionaries from urls
+loading 196 entries from plaintext
+loaded 278547 words from dictionaries.txt
+Bot 38.153.152.244:9594:ioymapym:1oo7rddcebdz disconnected successfully
+Bot 86.38.234.176:6630:ioymapym:1oo7rddcebdz disconnected successfully
+Exception Message: invalid element state: Element is not currently interactable and may not be manipulated
+  (Session info: chrome=135.0.7049.96)
+Stacktrace:
+	GetHandleVerifier [0x00007FF7BB74EFA5+77893]
+	GetHandleVerifier [0x00007FF7BB74F000+77984]
+	(No symbol) [0x00007FF7BB5191BA]
+	(No symbol) [0x00007FF7BB520AEC]
+	(No symbol) [0x00007FF7BB523B5C]
+	(No symbol) [0x00007FF7BB523C2F]
+	(No symbol) [0x00007FF7BB564F97]
+	(No symbol) [0x00007FF7BB59712A]
+	(No symbol) [0x00007FF7BB5619E6]
+	(No symbol) [0x00007FF7BB597340]
+	(No symbol) [0x00007FF7BB5BF07F]
+	(No symbol) [0x00007FF7BB596F03]
+	(No symbol) [0x00007FF7BB560328]
+	(No symbol) [0x00007FF7BB561093]
+	GetHandleVerifier [0x00007FF7BBA07B6D+2931725]
+	GetHandleVerifier [0x00007FF7BBA02132+2908626]
+	GetHandleVerifier [0x00007FF7BBA200F3+3031443]
+	GetHandleVerifier [0x00007FF7BB7691EA+184970]
+	GetHandleVerifier [0x00007FF7BB77086F+215311]
+	GetHandleVerifier [0x00007FF7BB756EC4+110436]
+	GetHandleVerifier [0x00007FF7BB757072+110866]
+	GetHandleVerifier [0x00007FF7BB73D479+5401]
+	BaseThreadInitThunk [0x00007FFC12FA7374+20]
+	RtlUserThreadStart [0x00007FFC14BDCC91+33]
+ in bot 173.211.0.148:6641:ioymapym:1oo7rddcebdz
+Bot 216.10.27.159:6837:ioymapym:1oo7rddcebdz disconnected successfully
+Bot 154.36.110.199:6853:ioymapym:1oo7rddcebdz disconnected successfully
+Exception Message: invalid element state: Element is not currently interactable and may not be manipulated
+  (Session info: chrome=135.0.7049.96)
+Stacktrace:
+	GetHandleVerifier [0x00007FF7BB74EFA5+77893]
+	GetHandleVerifier [0x00007FF7BB74F000+77984]
+	(No symbol) [0x00007FF7BB5191BA]
+	(No symbol) [0x00007FF7BB520AEC]
+	(No symbol) [0x00007FF7BB523B5C]
+	(No symbol) [0x00007FF7BB523C2F]
+	(No symbol) [0x00007FF7BB564F97]
+	(No symbol) [0x00007FF7BB59712A]
+	(No symbol) [0x00007FF7BB5619E6]
+	(No symbol) [0x00007FF7BB597340]
+	(No symbol) [0x00007FF7BB5BF07F]
+	(No symbol) [0x00007FF7BB596F03]
+	(No symbol) [0x00007FF7BB560328]
+	(No symbol) [0x00007FF7BB561093]
+	GetHandleVerifier [0x00007FF7BBA07B6D+2931725]
+	GetHandleVerifier [0x00007FF7BBA02132+2908626]
+	GetHandleVerifier [0x00007FF7BBA200F3+3031443]
+	GetHandleVerifier [0x00007FF7BB7691EA+184970]
+	GetHandleVerifier [0x00007FF7BB77086F+215311]
+	GetHandleVerifier [0x00007FF7BB756EC4+110436]
+	GetHandleVerifier [0x00007FF7BB757072+110866]
+	GetHandleVerifier [0x00007FF7BB73D479+5401]
+	BaseThreadInitThunk [0x00007FFC12FA7374+20]
+	RtlUserThreadStart [0x00007FFC14BDCC91+33]
+ in bot 45.151.162.198:6600:ioymapym:1oo7rddcebdz
+Exception 'NoneType' object has no attribute 'click' in bot 188.74.210.3:6082:ioymapym:1oo7rddcebdz
+loaded 0 proxies from proxies.config
+loading 8 dictionaries from urls
+loading 196 entries from plaintext
+loaded 278547 words from dictionaries.txt
+Bot None disconnected successfully
+Exception cannot access local variable 'bot' where it is not associated with a value in BotManager
+goodbye!
+loaded 0 proxies from proxies.config
+loading 8 dictionaries from urls
+loading 196 entries from plaintext
+loaded 278547 words from dictionaries.txt
+Exception Message: no such element: element not found
+  (Session info: chrome=135.0.7049.96); For documentation on this error, please visit: https://www.selenium.dev/documentation/webdriver/troubleshooting/errors#no-such-element-exception
+Stacktrace:
+	GetHandleVerifier [0x00007FF7BB74EFA5+77893]
+	GetHandleVerifier [0x00007FF7BB74F000+77984]
+	(No symbol) [0x00007FF7BB5191BA]
+	(No symbol) [0x00007FF7BB52F524]
+	(No symbol) [0x00007FF7BB52DFF3]
+	(No symbol) [0x00007FF7BB521819]
+	(No symbol) [0x00007FF7BB51F69F]
+	(No symbol) [0x00007FF7BB523B5C]
+	(No symbol) [0x00007FF7BB523C2F]
+	(No symbol) [0x00007FF7BB57004A]
+	(No symbol) [0x00007FF7BB570117]
+	(No symbol) [0x00007FF7BB56598B]
+	(No symbol) [0x00007FF7BB59712A]
+	(No symbol) [0x00007FF7BB5619E6]
+	(No symbol) [0x00007FF7BB597340]
+	(No symbol) [0x00007FF7BB5BF07F]
+	(No symbol) [0x00007FF7BB596F03]
+	(No symbol) [0x00007FF7BB560328]
+	(No symbol) [0x00007FF7BB561093]
+	GetHandleVerifier [0x00007FF7BBA07B6D+2931725]
+	GetHandleVerifier [0x00007FF7BBA02132+2908626]
+	GetHandleVerifier [0x00007FF7BBA200F3+3031443]
+	GetHandleVerifier [0x00007FF7BB7691EA+184970]
+	GetHandleVerifier [0x00007FF7BB77086F+215311]
+	GetHandleVerifier [0x00007FF7BB756EC4+110436]
+	GetHandleVerifier [0x00007FF7BB757072+110866]
+	GetHandleVerifier [0x00007FF7BB73D479+5401]
+	BaseThreadInitThunk [0x00007FFC12FA7374+20]
+	RtlUserThreadStart [0x00007FFC14BDCC91+33]
+ in bot None
+goodbye!
+loaded 10 proxies from proxies.config
+loading 8 dictionaries from urls
+loading 196 entries from plaintext
+loaded 278547 words from dictionaries.txt
+Bot p.webshare.io:80:ioymapym-1:1oo7rddcebdz disconnected successfully
+Exception Message: no such element: element not found
+  (Session info: chrome=135.0.7049.96); For documentation on this error, please visit: https://www.selenium.dev/documentation/webdriver/troubleshooting/errors#no-such-element-exception
+Stacktrace:
+	GetHandleVerifier [0x00007FF7BB74EFA5+77893]
+	GetHandleVerifier [0x00007FF7BB74F000+77984]
+	(No symbol) [0x00007FF7BB5191BA]
+	(No symbol) [0x00007FF7BB52F524]
+	(No symbol) [0x00007FF7BB52DFF3]
+	(No symbol) [0x00007FF7BB521819]
+	(No symbol) [0x00007FF7BB51F69F]
+	(No symbol) [0x00007FF7BB523B5C]
+	(No symbol) [0x00007FF7BB523C2F]
+	(No symbol) [0x00007FF7BB57004A]
+	(No symbol) [0x00007FF7BB570117]
+	(No symbol) [0x00007FF7BB56598B]
+	(No symbol) [0x00007FF7BB59712A]
+	(No symbol) [0x00007FF7BB5619E6]
+	(No symbol) [0x00007FF7BB597340]
+	(No symbol) [0x00007FF7BB5BF07F]
+	(No symbol) [0x00007FF7BB596F03]
+	(No symbol) [0x00007FF7BB560328]
+	(No symbol) [0x00007FF7BB561093]
+	GetHandleVerifier [0x00007FF7BBA07B6D+2931725]
+	GetHandleVerifier [0x00007FF7BBA02132+2908626]
+	GetHandleVerifier [0x00007FF7BBA200F3+3031443]
+	GetHandleVerifier [0x00007FF7BB7691EA+184970]
+	GetHandleVerifier [0x00007FF7BB77086F+215311]
+	GetHandleVerifier [0x00007FF7BB756EC4+110436]
+	GetHandleVerifier [0x00007FF7BB757072+110866]
+	GetHandleVerifier [0x00007FF7BB73D479+5401]
+	BaseThreadInitThunk [0x00007FFC12FA7374+20]
+	RtlUserThreadStart [0x00007FFC14BDCC91+33]
+ in bot p.webshare.io:80:ioymapym-2:1oo7rddcebdz
+loaded 10 proxies from proxies.config
+loading 8 dictionaries from urls
+loading 196 entries from plaintext
+loaded 278547 words from dictionaries.txt
+[]
+Exception Message: no such element: element not found
+  (Session info: chrome=135.0.7049.96); For documentation on this error, please visit: https://www.selenium.dev/documentation/webdriver/troubleshooting/errors#no-such-element-exception
+Stacktrace:
+	GetHandleVerifier [0x00007FF7BB74EFA5+77893]
+	GetHandleVerifier [0x00007FF7BB74F000+77984]
+	(No symbol) [0x00007FF7BB5191BA]
+	(No symbol) [0x00007FF7BB52F524]
+	(No symbol) [0x00007FF7BB52DFF3]
+	(No symbol) [0x00007FF7BB521819]
+	(No symbol) [0x00007FF7BB51F69F]
+	(No symbol) [0x00007FF7BB523B5C]
+	(No symbol) [0x00007FF7BB523C2F]
+	(No symbol) [0x00007FF7BB57132D]
+	(No symbol) [0x00007FF7BB5620A0]
+	(No symbol) [0x00007FF7BB59712A]
+	(No symbol) [0x00007FF7BB5619E6]
+	(No symbol) [0x00007FF7BB597340]
+	(No symbol) [0x00007FF7BB5BF07F]
+	(No symbol) [0x00007FF7BB596F03]
+	(No symbol) [0x00007FF7BB560328]
+	(No symbol) [0x00007FF7BB561093]
+	GetHandleVerifier [0x00007FF7BBA07B6D+2931725]
+	GetHandleVerifier [0x00007FF7BBA02132+2908626]
+	GetHandleVerifier [0x00007FF7BBA200F3+3031443]
+	GetHandleVerifier [0x00007FF7BB7691EA+184970]
+	GetHandleVerifier [0x00007FF7BB77086F+215311]
+	GetHandleVerifier [0x00007FF7BB756EC4+110436]
+	GetHandleVerifier [0x00007FF7BB757072+110866]
+	GetHandleVerifier [0x00007FF7BB73D479+5401]
+	BaseThreadInitThunk [0x00007FFC12FA7374+20]
+	RtlUserThreadStart [0x00007FFC14BDCC91+33]
+ in bot #0 @ p.webshare.io:80:ioymapym-1:1oo7rddcebdz
+[<__main__.BPB object at 0x000001F5A2C43C10>]
+Bot #1 @ p.webshare.io:80:ioymapym-2:1oo7rddcebdz disconnected successfully
+[<__main__.BPB object at 0x000001F5A2C43C10>, <__main__.BPB object at 0x000001F5A5D1A310>]
+loaded 10 proxies from proxies.config
+loading 8 dictionaries from urls
+loading 196 entries from plaintext
+loaded 278547 words from dictionaries.txt
+[<__main__.BPB object at 0x000001A35A8459D0>, <__main__.BPB object at 0x000001A35A844F50>]
+Bot #0 @ https://ioymapym-1:1oo7rddcebdz@p.webshare.io:80 disconnected successfully
+[<__main__.BPB object at 0x000001A35A844F50>, <__main__.BPB object at 0x000001A35C8BF410>, <__main__.BPB object at 0x000001A35D667D10>]
+Bot #1 @ https://ioymapym-2:1oo7rddcebdz@p.webshare.io:80 disconnected successfully
+loaded 10 proxies from proxies.config
+loading 8 dictionaries from urls
+loading 196 entries from plaintext
+loaded 278547 words from dictionaries.txt
+[<__main__.BPB object at 0x0000022BFD067490>]
+Bot #0 @ https://ioymapym-1:1oo7rddcebdz@p.webshare.io:80 disconnected successfully
+[<__main__.BPB object at 0x0000022BFCA22390>]
+Exception list index out of range in bot #1 @ https://ioymapym-1:1oo7rddcebdz@p.webshare.io:80
+loaded 10 proxies from proxies.config
+loading 8 dictionaries from urls
+loaded 10 proxies from proxies.config
+loading 8 dictionaries from urls
+loading 196 entries from plaintext
+loaded 278547 words from dictionaries.txt
+loaded 10 proxies from proxies.config
+loading 8 dictionaries from urls
+loading 196 entries from plaintext
+loaded 278547 words from dictionaries.txt
+[<__main__.BPB object at 0x00000209C4564390>]
+Bot #0 @ https://ioymapym-1:1oo7rddcebdz@p.webshare.io:80 disconnected successfully
+[<__main__.BPB object at 0x00000209C74E6E50>]
+Exception list index out of range in bot #1 @ https://ioymapym-1:1oo7rddcebdz@p.webshare.io:80
+loaded 10 proxies from proxies.config
+loading 8 dictionaries from urls
+loading 196 entries from plaintext
+loaded 278547 words from dictionaries.txt
+Bot #0 @ p.webshare.io:80:ioymapym-1:1oo7rddcebdz disconnected successfully
+loaded 10 proxies from proxies.config
+loading 8 dictionaries from urls
+loading 196 entries from plaintext
+loaded 278547 words from dictionaries.txt
+loaded 10 proxies from proxies.config
+loading 8 dictionaries from urls
+loading 196 entries from plaintext
+loaded 278547 words from dictionaries.txt
+Exception 'BPB' object has no attribute 'username' in bot #0 @ p.webshare.io:80:ioymapym-1:1oo7rddcebdz
+loaded 10 proxies from proxies.config
+loading 8 dictionaries from urls
+loading 196 entries from plaintext
+loaded 278547 words from dictionaries.txt
+Exception 'BPB' object has no attribute 'username' in bot #-1 @ p.webshare.io:80:ioymapym-10:1oo7rddcebdz
+Exception 'BPB' object has no attribute 'username' in bot #0 @ p.webshare.io:80:ioymapym-1:1oo7rddcebdz
+loaded 10 proxies from proxies.config
+loading 8 dictionaries from urls
+loading 196 entries from plaintext
+loaded 278547 words from dictionaries.txt
+loaded 10 proxies from proxies.config
+loading 8 dictionaries from urls
+loading 196 entries from plaintext
+loaded 278547 words from dictionaries.txt
+Exception Message: invalid element state: Element is not currently interactable and may not be manipulated
+  (Session info: chrome=135.0.7049.96)
+Stacktrace:
+	GetHandleVerifier [0x00007FF7BB74EFA5+77893]
+	GetHandleVerifier [0x00007FF7BB74F000+77984]
+	(No symbol) [0x00007FF7BB5191BA]
+	(No symbol) [0x00007FF7BB520AEC]
+	(No symbol) [0x00007FF7BB523B5C]
+	(No symbol) [0x00007FF7BB523C2F]
+	(No symbol) [0x00007FF7BB564F97]
+	(No symbol) [0x00007FF7BB59712A]
+	(No symbol) [0x00007FF7BB5619E6]
+	(No symbol) [0x00007FF7BB597340]
+	(No symbol) [0x00007FF7BB5BF07F]
+	(No symbol) [0x00007FF7BB596F03]
+	(No symbol) [0x00007FF7BB560328]
+	(No symbol) [0x00007FF7BB561093]
+	GetHandleVerifier [0x00007FF7BBA07B6D+2931725]
+	GetHandleVerifier [0x00007FF7BBA02132+2908626]
+	GetHandleVerifier [0x00007FF7BBA200F3+3031443]
+	GetHandleVerifier [0x00007FF7BB7691EA+184970]
+	GetHandleVerifier [0x00007FF7BB77086F+215311]
+	GetHandleVerifier [0x00007FF7BB756EC4+110436]
+	GetHandleVerifier [0x00007FF7BB757072+110866]
+	GetHandleVerifier [0x00007FF7BB73D479+5401]
+	BaseThreadInitThunk [0x00007FFC12FA7374+20]
+	RtlUserThreadStart [0x00007FFC14BDCC91+33]
+ in bot #-1 @ p.webshare.io:80:ioymapym-10:1oo7rddcebdz
+Bot #0 @ p.webshare.io:80:ioymapym-1:1oo7rddcebdz disconnected successfully
+Exception Message: invalid element state: Element is not currently interactable and may not be manipulated
+  (Session info: chrome=135.0.7049.96)
+Stacktrace:
+	GetHandleVerifier [0x00007FF7BB74EFA5+77893]
+	GetHandleVerifier [0x00007FF7BB74F000+77984]
+	(No symbol) [0x00007FF7BB5191BA]
+	(No symbol) [0x00007FF7BB520AEC]
+	(No symbol) [0x00007FF7BB523B5C]
+	(No symbol) [0x00007FF7BB523C2F]
+	(No symbol) [0x00007FF7BB564F97]
+	(No symbol) [0x00007FF7BB59712A]
+	(No symbol) [0x00007FF7BB5619E6]
+	(No symbol) [0x00007FF7BB597340]
+	(No symbol) [0x00007FF7BB5BF07F]
+	(No symbol) [0x00007FF7BB596F03]
+	(No symbol) [0x00007FF7BB560328]
+	(No symbol) [0x00007FF7BB561093]
+	GetHandleVerifier [0x00007FF7BBA07B6D+2931725]
+	GetHandleVerifier [0x00007FF7BBA02132+2908626]
+	GetHandleVerifier [0x00007FF7BBA200F3+3031443]
+	GetHandleVerifier [0x00007FF7BB7691EA+184970]
+	GetHandleVerifier [0x00007FF7BB77086F+215311]
+	GetHandleVerifier [0x00007FF7BB756EC4+110436]
+	GetHandleVerifier [0x00007FF7BB757072+110866]
+	GetHandleVerifier [0x00007FF7BB73D479+5401]
+	BaseThreadInitThunk [0x00007FFC12FA7374+20]
+	RtlUserThreadStart [0x00007FFC14BDCC91+33]
+ in bot #1 @ p.webshare.io:80:ioymapym-2:1oo7rddcebdz
+Exception Message: no such element: element not found
+  (Session info: chrome=135.0.7049.96); For documentation on this error, please visit: https://www.selenium.dev/documentation/webdriver/troubleshooting/errors#no-such-element-exception
+Stacktrace:
+	GetHandleVerifier [0x00007FF7BB74EFA5+77893]
+	GetHandleVerifier [0x00007FF7BB74F000+77984]
+	(No symbol) [0x00007FF7BB5191BA]
+	(No symbol) [0x00007FF7BB52F524]
+	(No symbol) [0x00007FF7BB52DFF3]
+	(No symbol) [0x00007FF7BB521819]
+	(No symbol) [0x00007FF7BB51F69F]
+	(No symbol) [0x00007FF7BB523B5C]
+	(No symbol) [0x00007FF7BB523C2F]
+	(No symbol) [0x00007FF7BB57004A]
+	(No symbol) [0x00007FF7BB570117]
+	(No symbol) [0x00007FF7BB56598B]
+	(No symbol) [0x00007FF7BB59712A]
+	(No symbol) [0x00007FF7BB5619E6]
+	(No symbol) [0x00007FF7BB597340]
+	(No symbol) [0x00007FF7BB5BF07F]
+	(No symbol) [0x00007FF7BB596F03]
+	(No symbol) [0x00007FF7BB560328]
+	(No symbol) [0x00007FF7BB561093]
+	GetHandleVerifier [0x00007FF7BBA07B6D+2931725]
+	GetHandleVerifier [0x00007FF7BBA02132+2908626]
+	GetHandleVerifier [0x00007FF7BBA200F3+3031443]
+	GetHandleVerifier [0x00007FF7BB7691EA+184970]
+	GetHandleVerifier [0x00007FF7BB77086F+215311]
+	GetHandleVerifier [0x00007FF7BB756EC4+110436]
+	GetHandleVerifier [0x00007FF7BB757072+110866]
+	GetHandleVerifier [0x00007FF7BB73D479+5401]
+	BaseThreadInitThunk [0x00007FFC12FA7374+20]
+	RtlUserThreadStart [0x00007FFC14BDCC91+33]
+ in bot #2 @ p.webshare.io:80:ioymapym-3:1oo7rddcebdz
+Exception Message: stale element reference: stale element not found in the current frame
+  (Session info: chrome=135.0.7049.96); For documentation on this error, please visit: https://www.selenium.dev/documentation/webdriver/troubleshooting/errors#stale-element-reference-exception
+Stacktrace:
+	GetHandleVerifier [0x00007FF7BB74EFA5+77893]
+	GetHandleVerifier [0x00007FF7BB74F000+77984]
+	(No symbol) [0x00007FF7BB5191BA]
+	(No symbol) [0x00007FF7BB520AEC]
+	(No symbol) [0x00007FF7BB523B5C]
+	(No symbol) [0x00007FF7BB523C2F]
+	(No symbol) [0x00007FF7BB572CA1]
+	(No symbol) [0x00007FF7BB5C119E]
+	(No symbol) [0x00007FF7BB59712A]
+	(No symbol) [0x00007FF7BB5BF07F]
+	(No symbol) [0x00007FF7BB596F03]
+	(No symbol) [0x00007FF7BB560328]
+	(No symbol) [0x00007FF7BB561093]
+	GetHandleVerifier [0x00007FF7BBA07B6D+2931725]
+	GetHandleVerifier [0x00007FF7BBA02132+2908626]
+	GetHandleVerifier [0x00007FF7BBA200F3+3031443]
+	GetHandleVerifier [0x00007FF7BB7691EA+184970]
+	GetHandleVerifier [0x00007FF7BB77086F+215311]
+	GetHandleVerifier [0x00007FF7BB756EC4+110436]
+	GetHandleVerifier [0x00007FF7BB757072+110866]
+	GetHandleVerifier [0x00007FF7BB73D479+5401]
+	BaseThreadInitThunk [0x00007FFC12FA7374+20]
+	RtlUserThreadStart [0x00007FFC14BDCC91+33]
+ in bot #3 @ p.webshare.io:80:ioymapym-4:1oo7rddcebdz
+Exception Message: invalid element state: Element is not currently interactable and may not be manipulated
+  (Session info: chrome=135.0.7049.96)
+Stacktrace:
+	GetHandleVerifier [0x00007FF7BB74EFA5+77893]
+	GetHandleVerifier [0x00007FF7BB74F000+77984]
+	(No symbol) [0x00007FF7BB5191BA]
+	(No symbol) [0x00007FF7BB520AEC]
+	(No symbol) [0x00007FF7BB523B5C]
+	(No symbol) [0x00007FF7BB523C2F]
+	(No symbol) [0x00007FF7BB564F97]
+	(No symbol) [0x00007FF7BB59712A]
+	(No symbol) [0x00007FF7BB5619E6]
+	(No symbol) [0x00007FF7BB597340]
+	(No symbol) [0x00007FF7BB5BF07F]
+	(No symbol) [0x00007FF7BB596F03]
+	(No symbol) [0x00007FF7BB560328]
+	(No symbol) [0x00007FF7BB561093]
+	GetHandleVerifier [0x00007FF7BBA07B6D+2931725]
+	GetHandleVerifier [0x00007FF7BBA02132+2908626]
+	GetHandleVerifier [0x00007FF7BBA200F3+3031443]
+	GetHandleVerifier [0x00007FF7BB7691EA+184970]
+	GetHandleVerifier [0x00007FF7BB77086F+215311]
+	GetHandleVerifier [0x00007FF7BB756EC4+110436]
+	GetHandleVerifier [0x00007FF7BB757072+110866]
+	GetHandleVerifier [0x00007FF7BB73D479+5401]
+	BaseThreadInitThunk [0x00007FFC12FA7374+20]
+	RtlUserThreadStart [0x00007FFC14BDCC91+33]
+ in bot #4 @ p.webshare.io:80:ioymapym-5:1oo7rddcebdz
+Exception Message: invalid element state: Element is not currently interactable and may not be manipulated
+  (Session info: chrome=135.0.7049.96)
+Stacktrace:
+	GetHandleVerifier [0x00007FF7BB74EFA5+77893]
+	GetHandleVerifier [0x00007FF7BB74F000+77984]
+	(No symbol) [0x00007FF7BB5191BA]
+	(No symbol) [0x00007FF7BB520AEC]
+	(No symbol) [0x00007FF7BB523B5C]
+	(No symbol) [0x00007FF7BB523C2F]
+	(No symbol) [0x00007FF7BB564F97]
+	(No symbol) [0x00007FF7BB59712A]
+	(No symbol) [0x00007FF7BB5619E6]
+	(No symbol) [0x00007FF7BB597340]
+	(No symbol) [0x00007FF7BB5BF07F]
+	(No symbol) [0x00007FF7BB596F03]
+	(No symbol) [0x00007FF7BB560328]
+	(No symbol) [0x00007FF7BB561093]
+	GetHandleVerifier [0x00007FF7BBA07B6D+2931725]
+	GetHandleVerifier [0x00007FF7BBA02132+2908626]
+	GetHandleVerifier [0x00007FF7BBA200F3+3031443]
+	GetHandleVerifier [0x00007FF7BB7691EA+184970]
+	GetHandleVerifier [0x00007FF7BB77086F+215311]
+	GetHandleVerifier [0x00007FF7BB756EC4+110436]
+	GetHandleVerifier [0x00007FF7BB757072+110866]
+	GetHandleVerifier [0x00007FF7BB73D479+5401]
+	BaseThreadInitThunk [0x00007FFC12FA7374+20]
+	RtlUserThreadStart [0x00007FFC14BDCC91+33]
+ in bot #5 @ p.webshare.io:80:ioymapym-6:1oo7rddcebdz
+Exception 'NoneType' object has no attribute 'click' in bot #6 @ p.webshare.io:80:ioymapym-7:1oo7rddcebdz
+loaded 10 proxies from proxies.config
+loading 8 dictionaries from urls
+loading 196 entries from plaintext
+loaded 278547 words from dictionaries.txt
+Bot #-1 @ p.webshare.io:80:ioymapym-10:1oo7rddcebdz disconnected successfully
+Bot #0 @ p.webshare.io:80:ioymapym-1:1oo7rddcebdz disconnected successfully
+Bot #1 @ p.webshare.io:80:ioymapym-2:1oo7rddcebdz disconnected successfully
+Exception Message: stale element reference: stale element not found in the current frame
+  (Session info: chrome=135.0.7049.96); For documentation on this error, please visit: https://www.selenium.dev/documentation/webdriver/troubleshooting/errors#stale-element-reference-exception
+Stacktrace:
+	GetHandleVerifier [0x00007FF7BB74EFA5+77893]
+	GetHandleVerifier [0x00007FF7BB74F000+77984]
+	(No symbol) [0x00007FF7BB5191BA]
+	(No symbol) [0x00007FF7BB520AEC]
+	(No symbol) [0x00007FF7BB523B5C]
+	(No symbol) [0x00007FF7BB523C2F]
+	(No symbol) [0x00007FF7BB572CA1]
+	(No symbol) [0x00007FF7BB5C119E]
+	(No symbol) [0x00007FF7BB59712A]
+	(No symbol) [0x00007FF7BB5BF07F]
+	(No symbol) [0x00007FF7BB596F03]
+	(No symbol) [0x00007FF7BB560328]
+	(No symbol) [0x00007FF7BB561093]
+	GetHandleVerifier [0x00007FF7BBA07B6D+2931725]
+	GetHandleVerifier [0x00007FF7BBA02132+2908626]
+	GetHandleVerifier [0x00007FF7BBA200F3+3031443]
+	GetHandleVerifier [0x00007FF7BB7691EA+184970]
+	GetHandleVerifier [0x00007FF7BB77086F+215311]
+	GetHandleVerifier [0x00007FF7BB756EC4+110436]
+	GetHandleVerifier [0x00007FF7BB757072+110866]
+	GetHandleVerifier [0x00007FF7BB73D479+5401]
+	BaseThreadInitThunk [0x00007FFC12FA7374+20]
+	RtlUserThreadStart [0x00007FFC14BDCC91+33]
+ in bot #2 @ p.webshare.io:80:ioymapym-3:1oo7rddcebdz
+Exception Message: stale element reference: stale element not found in the current frame
+  (Session info: chrome=135.0.7049.96); For documentation on this error, please visit: https://www.selenium.dev/documentation/webdriver/troubleshooting/errors#stale-element-reference-exception
+Stacktrace:
+	GetHandleVerifier [0x00007FF7BB74EFA5+77893]
+	GetHandleVerifier [0x00007FF7BB74F000+77984]
+	(No symbol) [0x00007FF7BB5191BA]
+	(No symbol) [0x00007FF7BB520AEC]
+	(No symbol) [0x00007FF7BB523B5C]
+	(No symbol) [0x00007FF7BB523C2F]
+	(No symbol) [0x00007FF7BB5C1999]
+	(No symbol) [0x00007FF7BB59712A]
+	(No symbol) [0x00007FF7BB5BF07F]
+	(No symbol) [0x00007FF7BB596F03]
+	(No symbol) [0x00007FF7BB560328]
+	(No symbol) [0x00007FF7BB561093]
+	GetHandleVerifier [0x00007FF7BBA07B6D+2931725]
+	GetHandleVerifier [0x00007FF7BBA02132+2908626]
+	GetHandleVerifier [0x00007FF7BBA200F3+3031443]
+	GetHandleVerifier [0x00007FF7BB7691EA+184970]
+	GetHandleVerifier [0x00007FF7BB77086F+215311]
+	GetHandleVerifier [0x00007FF7BB756EC4+110436]
+	GetHandleVerifier [0x00007FF7BB757072+110866]
+	GetHandleVerifier [0x00007FF7BB73D479+5401]
+	BaseThreadInitThunk [0x00007FFC12FA7374+20]
+	RtlUserThreadStart [0x00007FFC14BDCC91+33]
+ in bot #3 @ p.webshare.io:80:ioymapym-4:1oo7rddcebdz
+Exception Message: stale element reference: stale element not found in the current frame
+  (Session info: chrome=135.0.7049.96); For documentation on this error, please visit: https://www.selenium.dev/documentation/webdriver/troubleshooting/errors#stale-element-reference-exception
+Stacktrace:
+	GetHandleVerifier [0x00007FF7BB74EFA5+77893]
+	GetHandleVerifier [0x00007FF7BB74F000+77984]
+	(No symbol) [0x00007FF7BB5191BA]
+	(No symbol) [0x00007FF7BB520AEC]
+	(No symbol) [0x00007FF7BB5249D0]
+	(No symbol) [0x00007FF7BB5C125F]
+	(No symbol) [0x00007FF7BB59712A]
+	(No symbol) [0x00007FF7BB5BF07F]
+	(No symbol) [0x00007FF7BB596F03]
+	(No symbol) [0x00007FF7BB560328]
+	(No symbol) [0x00007FF7BB561093]
+	GetHandleVerifier [0x00007FF7BBA07B6D+2931725]
+	GetHandleVerifier [0x00007FF7BBA02132+2908626]
+	GetHandleVerifier [0x00007FF7BBA200F3+3031443]
+	GetHandleVerifier [0x00007FF7BB7691EA+184970]
+	GetHandleVerifier [0x00007FF7BB77086F+215311]
+	GetHandleVerifier [0x00007FF7BB756EC4+110436]
+	GetHandleVerifier [0x00007FF7BB757072+110866]
+	GetHandleVerifier [0x00007FF7BB73D479+5401]
+	BaseThreadInitThunk [0x00007FFC12FA7374+20]
+	RtlUserThreadStart [0x00007FFC14BDCC91+33]
+ in bot #4 @ p.webshare.io:80:ioymapym-5:1oo7rddcebdz
+loaded 10 proxies from proxies.config
+loading 9 dictionaries from urls
+loading 267947 entries from plaintext
+loaded 546330 words from dictionaries.txt
+loaded 10 proxies from proxies.config
+loading 9 dictionaries from urls
+loaded 10 proxies from proxies.config
+loading 9 dictionaries from urls
+loading 267947 entries from plaintext
+loaded 278579 words from dictionaries.txt
+2025-05-01 19:55:47,468 - MANAGER-CONSOLE - INFO - loaded 10 proxies from proxies.config
+2025-05-01 19:55:47,626 - MANAGER-CONSOLE - INFO - loading 9 dictionaries from urls
+2025-05-01 19:56:04,486 - MANAGER-CONSOLE - INFO - loading 267947 entries from plaintext
+2025-05-01 19:56:04,642 - MANAGER-CONSOLE - INFO - loaded 278579 words from dictionaries.txt
+2025-05-01 19:56:05,933 - MANAGER-CONSOLE.BOT - INFO - initialized bot running @ https://ioymapym-10:1oo7rddcebdz@p.webshare.io:80
+2025-05-01 20:02:25,752 - MANAGER-CONSOLE.BOT - INFO - found answer crosscut to syllable SSC
+2025-05-01 20:03:33,726 - MANAGER-CONSOLE.BOT - INFO - found answer gel to syllable GEL
+2025-05-01 20:04:25,896 - MANAGER-CONSOLE.BOT - INFO - found answer witney to syllable TNE
+2025-05-01 20:05:09,571 - MANAGER-CONSOLE.BOT - INFO - found answer cusp to syllable USP
+2025-05-01 20:05:45,498 - MANAGER-CONSOLE.BOT - INFO - found answer cibol to syllable IBO
+2025-05-01 20:06:03,948 - MANAGER-CONSOLE.BOT - INFO - found answer taj to syllable AJ
+2025-05-01 20:06:22,418 - MANAGER-CONSOLE.BOT - INFO - found answer ads to syllable ADS
+2025-05-01 20:06:38,617 - MANAGER-CONSOLE.BOT - INFO - found answer lei to syllable LEI
+2025-05-01 20:06:54,947 - MANAGER-CONSOLE.BOT - INFO - found answer gut to syllable GUT

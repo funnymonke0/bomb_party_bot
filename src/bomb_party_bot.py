@@ -14,7 +14,7 @@ import logging
 
 
 class BPB():
-    def __init__(self, dicts, username, roomCode, proxy=None, settings = [
+    def __init__(self, dicts, logger, proxy=None, settings = [
                         'selectMode:smart',
                         'cyberbullying:False',
                         'offset:0.6',
@@ -29,23 +29,10 @@ class BPB():
         self.clickableCondition = lambda x: EC.element_to_be_clickable(x)
         self.presenceCondition = lambda x: EC.presence_of_element_located(x)
         
-
-        self.username = username
+        self.proxy = proxy
         
-        if self.username:
-            self.console = logging.getLogger(f'{self.username} CONSOLE')
-        else:
-            self.console = logging.getLogger(f'BOT CONSOLE')
 
-        self.console.setLevel(logging.DEBUG)
-
-        ch = logging.StreamHandler()
-        ch.setLevel(logging.DEBUG)
-
-        formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
-        ch.setFormatter(formatter)
-
-        self.console.addHandler(ch)
+        self.console = logger
 
 
         
@@ -55,33 +42,20 @@ class BPB():
         seleniumwire_options = {
             }
 
-
-        self.roomCode = roomCode
-
-        if proxy:
+        if self.proxy:
             seleniumwire_options ['proxy'] = {
-                'https': proxy,
-                'http': proxy,
+                'https': self.proxy,
+                'http': self.proxy,
                 'verify_ssl': False,
                 'no_proxy': 'localhost,127.0.0.1'
                 }
         else:
-            proxy = 'localhost'
+            self.proxy = 'localhost'
         self.driver = webdriver.Chrome(service=service, options=chrome_options, seleniumwire_options=seleniumwire_options)
 
-        if self.username:
-            self.console.info(f'initialized bot {self.username} running @ {proxy}')
-        else:
-            self.console.info(f'initialized bot running @ {proxy}')
+        self.console.info(f'initialized bot running @ {self.proxy}')
 
-        ##settings
         self.maxWait = 5
-
-        #burst typing - randomly type fast
-        #random letter delete letter to simulate mistakes and also mistake rate
-        #if its your turn in quick succession, increase typing speed
-        #if there are fewer answers to a syllable or if the answer is long, type slower or pause before typing
-
         
         self.settings = self.parseSettings(settings)
 
@@ -101,7 +75,6 @@ class BPB():
 
         self.dicts = dicts
 
-        self.joinedRoom = self.joinRoom(roomCode)
     
     def parseSettings(self, settings):
         settingsDict={}
@@ -137,12 +110,15 @@ class BPB():
     def instantLocate(self, locator, lmd): #delayless is better for proxies
         browser = self.driver
         by, string = locator
-    
-        out = browser.find_elements(by, string)
-        if out:
-            out = out[0]
-            if lmd(out):
-                return out
+
+        try:
+            out = browser.find_elements(by, string)
+            if out:
+                out = out[0]
+                if lmd(out):
+                    return out
+        except (ElementNotInteractableException,ElementClickInterceptedException, StaleElementReferenceException) as e:
+            pass
         return None
     
     def locate(self, locator, lmd):
@@ -156,14 +132,14 @@ class BPB():
         return None
 
 
-    def joinRoom(self, roomCode):
+    def joinRoom(self, roomCode, username = None):
         browser = self.driver
         browser.get("https://jklm.fun/"+roomCode)
         
-        if self.username:
+        if username:
             textbox = self.locate((By.XPATH, '//input[@class = "styled nickname"]'), lmd = self.visibleCondition)
             textbox.send_keys(Keys.CONTROL + Keys.BACKSPACE)
-            textbox.send_keys(self.username)
+            textbox.send_keys(username)
 
         submit = self.locate((By.XPATH, "/html/body/div[2]/div[3]/form/div[2]/button"), lmd = self.clickableCondition)
         submit.click()
@@ -176,7 +152,7 @@ class BPB():
         if iFrame:
             try:
                 browser.switch_to.frame(iFrame)
-            except NoSuchFrameException as e:
+            except (NoSuchFrameException, ElementNotInteractableException,ElementClickInterceptedException, StaleElementReferenceException) as e:
                 pass
 
 
@@ -216,7 +192,6 @@ class BPB():
         browser = self.driver
         browser.switch_to.default_content()
         if self.checkDisconnect():
-            browser.quit()
             return False
         
         self.recordPlayers()
@@ -265,6 +240,7 @@ class BPB():
                             self.mult = len(lst)/len(self.dicts) #how frequent it is
 
                         if self.cyberbullying and len(self.playerList) == 3:##including table head
+                            ans = lst[len(lst)-1]
                             lmb = lambda x: textbox.send_keys(x)##if you wanna get hackusated
                         else:
                             lmb = lambda x: self.simType(textbox, x)
@@ -314,17 +290,26 @@ class BPB():
 
             obj.send_keys(letter)
             sleep(delay)
+        sleep(0.05)##hardcoded delay to prevent detection of the same syllable twice
     
     def __del__(self):
+        self.driver.quit()
+        
         self.console.info("POOF!")
+
+    
             
 class BotManager():
 
     #manage bot persistence, proxies and other settings, etc.
     def __init__(self, dictFile, roomCode, settingsFile, proxyFile, username = None):
         
-        self.console = logging.getLogger('MANAGER CONSOLE')
+        self.console = logging.getLogger('MANAGER-CONSOLE')
+        self.botconsole = logging.getLogger('MANAGER-CONSOLE.BOT')
+        logger_root = logging.getLogger()
+
         self.console.setLevel(logging.DEBUG)
+        self.botconsole.setLevel(logging.DEBUG)
 
         ch = logging.StreamHandler()
         ch.setLevel(logging.DEBUG)
@@ -334,17 +319,19 @@ class BotManager():
 
         formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
         ch.setFormatter(formatter)
+        fh.setFormatter(formatter)
 
         self.console.addHandler(ch)
-        self.console.addHandler(fh)
+        logger_root.addHandler(fh)
         
         self.roomCode = roomCode
         self.username = username
         
+        
         self.dicts = []
         
         settingsRegex = r"^\w+(\s*)\:(\s*)(\w+)(\.\w+)?"
-        proxyRegex = r"^(\d{1,3}\.){3}(\d{1,3}):(\d{1,5})(:.+:.+)?"
+        proxyRegex = r"^((\d{1,3}\.){3}(\d{1,3})|\w+\.\w+(\.\w+)?):(\d{1,5})(:.+:.+)?"
         plaintextRegex = r"^\w+(\-\w+)?$"
         urlRegex = r"^((https|http)\:\/\/)((\w+\.\w+\.\w+)|(\w+\.\w+))((\/.+)+)?"
 
@@ -372,6 +359,11 @@ class BotManager():
 
         self.console.info(f"loaded {len(self.dicts)} words from {dictFile}")
 
+        if not self.proxyList:
+            self.proxyList = [None]
+        if not self.username:
+            self.username = None
+
 
     def loadUrls(self, dictUrls):
         service = ChromeService()
@@ -393,44 +385,45 @@ class BotManager():
 
         return dicts
 
-    def botInit(self):
+    def botInit(self, proxy = None):
         fProxy = None 
-        username = self.username
 
-        if self.proxy:
-            addr, port, user, pswd = self.parseProxy(self.proxy)
+        if proxy:
+            addr, port, user, pswd = self.parseProxy(proxy)
 
             fProxy = f"https://{addr}:{port}"
             if user and pswd:
                 fProxy = f"https://{user}:{pswd}@{addr}:{port}"
 
-        bot = BPB(dicts=self.dicts, proxy=fProxy, username=username, roomCode=self.roomCode, settings=self.settings)
+        bot = BPB(dicts=self.dicts, proxy=fProxy, settings=self.settings, logger=self.botconsole)
         return bot
         
     
     
     def persistLoop(self):
-        proxyNo = 0
-        bot = None
-        proxyList = self.proxyList
-        if not proxyList:
-            proxyList = [None]
-        while proxyNo < len(proxyList):
+        proxyNo = -1
+        while proxyNo < len(self.proxyList):
+            
 
-            self.proxy = proxyList[proxyNo]
             try:
-                bot = self.botInit()
+                proxy = self.proxyList[proxyNo]
+                bot = self.botInit(proxy)
+                bot.joinRoom(roomCode=self.roomCode, username=self.username)
                 bot.botLoop()
-                self.console.info(f'Bot {self.proxy} disconnected successfully')
+                self.console.info(f'Bot #{proxyNo} @ {proxy} disconnected successfully')
             except Exception as e:
-                self.console.error(f"Exception {e} in bot {self.proxy}")
-                
-            del bot
+                self.console.debug(f"Exception {e} in bot #{proxyNo} @ {proxy}")
+            
+            
+            try:
+                del bot
+            except UnboundLocalError:
+                pass
+            sleep(5) #wait for garbage collector
             proxyNo+=1
-                        
-        bot = None
+            
         self.console.info('goodbye!')
-
+        
     def parseFromFile(self, filename, ex):
 
         lst = []
@@ -465,8 +458,8 @@ if __name__ == "__main__" :
     link = str(input("paste code: ")).upper()
     name = str(input("username: "))
 
-    if link == '':
-        print('ERROR: Must input room code !')
+    if len(link) == '':
+        print('ERROR: Must input valid oom code !')
         quit()
     if name == '':
         name = None
