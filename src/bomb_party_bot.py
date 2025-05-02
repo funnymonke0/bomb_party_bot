@@ -14,15 +14,7 @@ import logging
 
 
 class BPB():
-    def __init__(self, dicts, logger, proxy=None, settings = [
-                        'selectMode:smart',
-                        'cyberbullying:False',
-                        'offset:0.6',
-                        'rate:0.15',
-                        'randomness:0.1',
-                        'mistakes:True',
-                        'frantic:True',
-                        'dynamicPauses:True']):
+    def __init__(self, dicts, logger, settings, proxy=None):
 
         self.visibleCondition = lambda x: EC.visibility_of_element_located(x)
         self.instantVisibleCondition = lambda x: x.is_displayed()
