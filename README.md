@@ -68,7 +68,7 @@ dynamicPauses:True
 
 | Setting | Description |
 | :------ | :----------- |
-| `selectMode` | `'smart'`, `'short'`, or `'long'` — how the bot picks answers |
+| `selectMode` | `'smart'`, `'short'`, `'avg'`, or `'long'` — how the bot picks answers |
 | `cyberbullying` | Instant type if 1 player is remaining |
 | `maxOffset` | Max delay before typing (simulates thinking before typing) |
 | `rate` | Base typing speed (seconds per character) |
