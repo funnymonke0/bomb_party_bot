@@ -16,20 +16,21 @@ import logging
 class BPB():
     def __init__(self, dicts, logger, settings, proxy=None):
 
-        self.visibleCondition = lambda x: x.is_displayed()
-        self.clickableCondition = lambda x: x.is_displayed() and x.is_enabled()
-        self.presenceCondition = lambda x: EC.presence_of_element_located(x)
-        
-        self.maxWait = 15
-
         self.console = logger
         self.dicts = dicts
         self.proxy = proxy
 
         self.initDriver()
-       
 
-        self.ignoredExceptions = (AttributeError, NoSuchFrameException, ElementNotInteractableException,ElementClickInterceptedException, StaleElementReferenceException,NoSuchElementException)
+        self.visibleCondition = lambda x: x.is_displayed()
+        self.clickableCondition = lambda x: x.is_displayed() and x.is_enabled()
+        self.presenceCondition = lambda x: EC.presence_of_element_located(x)
+        self.maxWait = 15
+
+        
+
+
+        self.ignoredExceptions = (AttributeError,TimeoutError, NoSuchFrameException, ElementNotInteractableException,ElementClickInterceptedException, StaleElementReferenceException,NoSuchElementException, NoSuchFrameException)
 
         
         
@@ -94,22 +95,31 @@ class BPB():
             for wrd in self.dicts:
                 if suffix.lower() in wrd.lower():
                     lst.append(wrd)
-            lst.sort(key= lambda x: len(x))
-
-            return lst
+            if lst:
+                lst.sort(key= lambda x: len(x))
+                return lst
         except IndexError:
             pass
-            return None        
+        return None        
         
 
-    def locate(self, locator, lmd): #delayless is better
+    def locate(self, locator, lmd, switch = True, obj = None, all = False): #delayless is better
         browser = self.driver
+        if obj:
+            browser = obj
         by, string = locator
+        if switch:
+            self.updateFrame()
 
         try:
-            out = browser.find_element(by, string)
-            if lmd(out):
-                return out
+            out = browser.find_elements(by, string)
+            if out:
+                if not all:
+                    out = out[0]
+                    if lmd(out):
+                        return out
+                else:
+                    return out
         except self.ignoredExceptions:
             pass
         return None
@@ -118,28 +128,25 @@ class BPB():
     def joinRoom(self, roomCode, username = None):
         browser = self.driver
         browser.get("https://jklm.fun/"+roomCode)
-        if username:
-            textbox = None
-            while not textbox:
-                textbox = self.locate((By.XPATH, '//input[@class = "styled nickname"]'), lmd = self.visibleCondition)
+        try:
+            if username:
+                textbox = WebDriverWait(browser,self.maxWait).until(EC.visibility_of_element_located((By.XPATH, '//input[@class = "styled nickname"]')))
 
-        
-            textbox.send_keys(Keys.CONTROL + Keys.BACKSPACE)
-            textbox.send_keys(username)
-        submit = None
-        while not submit:
-            submit = self.locate((By.XPATH, "/html/body/div[2]/div[3]/form/div[2]/button"), lmd = self.clickableCondition)
-        submit.click()
+                textbox.send_keys(Keys.CONTROL + Keys.BACKSPACE)
+                sleep(0.1)
+                textbox.send_keys(username)
 
-    def switchIframe(self):
-        browser = self.driver
-        browser.switch_to.default_content()
-        iFrame = self.locate((By.XPATH, "//iframe[contains(@src, 'bombparty')]"), lmd= self.presenceCondition)
-        if iFrame:
-            browser.switch_to.frame(iFrame)
+            submit = WebDriverWait(browser,self.maxWait).until(EC.element_to_be_clickable((By.XPATH, "/html/body/div[2]/div[3]/form/div[2]/button")))
+            submit.click()
+            WebDriverWait(browser,self.maxWait)
+        except self.ignoredExceptions:
+            pass
+
 
     def checkDisconnect(self):
-        if self.locate((By.XPATH, '//div[@class = "reason"]'), lmd = self.visibleCondition):
+        browser = self.driver
+        browser.switch_to.default_content()
+        if self.locate((By.XPATH, '//div[@class = "disconnected page"]'), lmd = self.visibleCondition, switch=False):
             return True
         return False
     
@@ -155,32 +162,39 @@ class BPB():
 
     def recordPlayers(self):
         
-        
+        browser = self.driver
+        browser.switch_to.default_content()
         self.playerList = []
-        table =  self.locate((By.XPATH, '//table[@class = "statsTable"]'), lmd= self.presenceCondition)
+        table = self.locate((By.XPATH, '//table[@class = "statsTable"]'),lmd=self.presenceCondition,switch=False)
         if table:
-            entries = table.find_elements(By.XPATH, './/tr')
+            entries = self.locate((By.XPATH, './/tr'), self.presenceCondition, switch=False, obj=table, all=True) 
             if entries:
                 for player in entries:
                     try:
                         self.playerList.append(player)
                         if player.get_attribute('class') == 'isDead':
                             self.playerList.remove(player)
-                    except:
+                    except self.ignoredExceptions:
+                        self.console.debug("did not find attribute 'isDead' in player")
                         continue
 
 
-
-
-    def updateLoop(self):
+    def updateFrame(self):
         browser = self.driver
         browser.switch_to.default_content()
+        frame = self.locate((By.XPATH, "//iframe[contains(@src, 'bombparty')]"), lmd= self.presenceCondition, switch=False)
+        if frame:
+            try:
+                browser.switch_to.frame(frame)
+            except self.ignoredExceptions:
+                self.console.debug("unable to switch to iframe")
+                pass
+
+    def updateLoop(self):
         if self.checkDisconnect():
             return False
         
         self.recordPlayers()
-
-        self.switchIframe()
 
         if self.tryJoin():
             self.dicts = self.dicts+self.replace
@@ -195,52 +209,54 @@ class BPB():
         prevSyll = None
         lmb = None
         while self.updateLoop():
-            textbox = self.locate((By.XPATH, '//form//input[@maxlength = "30"]'), lmd = self.visibleCondition)
+            textbox = self.locate((By.XPATH, '//form//input[@maxlength = "30"]'), lmd = self.clickableCondition)
             syllable = self.locate((By.XPATH, "//div[@class = 'syllable']"), lmd = self.visibleCondition)
 
-            try:
-                textbox.clear()
-                syllable = syllable.text
-                if prevSyll == syllable:
-                    self.frantic = True
+            if textbox and syllable:
+                try:
+                    textbox.clear()
+                    syllable = syllable.text
 
-                lst = self.findSuffix(syllable)
-                
-                if lst:
-                    lmb = lambda x: self.simType(textbox, x)
-                    if self.cyberbullying and len(self.playerList) == 3:##including table head
-                        ans = lst[len(lst)-1] ##thing to make it more blantant
-                        lmb = lambda x: textbox.send_keys(x)##if you wanna get hackusated
-                    elif self.selectMode == 'long':
-                        ans = lst[len(lst)-1]
-                    elif self.selectMode == 'short':
-                        ans = lst[0]
-                    elif self.selectMode == 'avg':
-                        ans = lst[int((len(lst)-1)/2)]
-                    elif self.selectMode == 'smart':
-                        ans = lst[0]
-                        if len(lst[len(lst)-1])>20:
+                    if prevSyll == syllable:
+                        self.frantic = True
+
+                    lst = self.findSuffix(syllable)
+                    
+                    
+                    ans = "/suicide"
+                    if lst:
+                        if self.selectMode == 'long':
                             ans = lst[len(lst)-1]
                             self.frantic = True
+                        elif self.selectMode == 'short':
+                            ans = lst[0]
+                        elif self.selectMode == 'avg':
+                            ans = lst[int((len(lst)-1)/2)]
+                        elif self.selectMode == 'smart':
+                            ans = lst[0]
+                            if len(lst[len(lst)-1])>20:
+                                ans = lst[len(lst)-1]
+                                self.frantic = True
 
-                    self.console.info(f"found answer {ans} to syllable {syllable}")
-                    if self.dynamicPauses:
-                        self.mult = len(lst)/len(self.dicts) #how frequent it is
+                        if self.dynamicPauses:
+                            self.mult = len(lst)/len(self.dicts) #how frequent it is
+                        self.replace.append(ans)
+                        self.dicts.remove(ans)
+                        self.console.info(f"found answer {ans} to syllable {syllable}")
+
+                    lmb = lambda x: self.simType(textbox, x)
+
+                    if self.cyberbullying and len(self.playerList) == 3:##including table head
+                        lmb = lambda x: textbox.send_keys(x)##if you wanna get hackusated
 
                     lmb(ans+Keys.ENTER)
                     sleep(0.1)
-                    self.replace.append(ans)
-                    self.dicts.remove(ans)
+                    
                     self.frantic = False
                     prevSyll = syllable
-                else:
-
-                    self.console.info(f"Cannot find answer to syllable {syllable} !")
-                    lmb("/suicide"+Keys.ENTER)
-            except self.ignoredExceptions:
-                pass
-
-
+                except self.ignoredExceptions as e:
+                    self.console.debug(f"Exception {e} occured in botLoop")
+                    pass
 
     def simType(self, obj, txt):
         
@@ -248,9 +264,8 @@ class BPB():
         rand = lambda x: x*(1+random.uniform(-1, 1)*self.randomness)
         
         
-        
+
         for letter in txt:
-            
             if self.mistakes and (random.random() <= self.mistakeChance):
                 txt += random.choice(string.ascii_lowercase)
                 ratesList.append(rand(self.mistakePause))
@@ -265,9 +280,6 @@ class BPB():
             else:
                 ratesList.append(rand(self.rate))
                 
-            
-
-        
 
         if self.spam:
             length = random.randint(10,21)
@@ -276,9 +288,9 @@ class BPB():
             txt = ''+spam+Keys.ENTER+''+txt
             ratesList = [self.miniPause]+rates+[0]+[self.miniPause]+ratesList
         else:
-            w = self.maxOffset-(self.maxOffset*self.mult)
-            if w > 0:
-                sleep(w)
+            wait = self.maxOffset-(self.maxOffset*self.mult)
+            sleep(wait)
+            
 
         for letter, delay in list(zip(txt, ratesList)):
             sleep(delay)
@@ -401,7 +413,7 @@ class BotManager():
         proxyNo = 0
 
 
-        thresh = 1
+        thresh = 2
         retries = 0
         while proxyNo < len(self.proxyList):
 

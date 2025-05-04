@@ -5,7 +5,6 @@ https://pastebin.com/raw/UegdKLq8
 https://pastebin.com/raw/M6TZ8Uxy
 https://raw.githubusercontent.com/NachozQ/BombParty-Lists/refs/heads/main/Main/chemicals.txt
 https://raw.githubusercontent.com/DO-Ui/bombparty-bot/refs/heads/master/wordlist.txt
-https://raw.githubusercontent.com/carreb/bombparty-practice/main/dict/hyphen-dict.txt
 https://raw.githubusercontent.com/sertdfyguhi/solo-bomb-party/refs/heads/master/assets/wordlist.txt
 aaargh
 
