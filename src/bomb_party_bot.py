@@ -254,7 +254,6 @@ class BPB():
                     self.spamToggle = False
                     prevSyll = syllable
                 except self.ignoredExceptions as e:
-                    self.console.debug(f"Exception {e} occured in botLoop")
                     pass
 
     def simType(self, obj, txt):
