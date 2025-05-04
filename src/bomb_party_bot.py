@@ -3,7 +3,7 @@ from selenium.webdriver.chrome.service import Service as ChromeService
 from selenium.webdriver.chrome.options import Options as ChromeOptions
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
-from selenium.common.exceptions import TimeoutException,ElementNotInteractableException, StaleElementReferenceException, ElementClickInterceptedException, NoSuchFrameException, NoSuchElementException
+from selenium.common.exceptions import TimeoutException,ElementNotInteractableException, StaleElementReferenceException, ElementClickInterceptedException, NoSuchFrameException, NoSuchElementException, InvalidElementStateException
 from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 import random, string
@@ -30,7 +30,7 @@ class BPB():
         
 
 
-        self.ignoredExceptions = (AttributeError,TimeoutError, NoSuchFrameException, ElementNotInteractableException,ElementClickInterceptedException, StaleElementReferenceException,NoSuchElementException, NoSuchFrameException)
+        self.ignoredExceptions = (AttributeError,TimeoutError, NoSuchFrameException, InvalidElementStateException, ElementNotInteractableException,ElementClickInterceptedException, StaleElementReferenceException,NoSuchElementException, NoSuchFrameException)
 
         
         
@@ -206,6 +206,7 @@ class BPB():
         self.replace = []
         self.mult = 1
         self.frantic = False
+        self.spamToggle = False
         prevSyll = None
         lmb = None
         while self.updateLoop():
@@ -225,18 +226,15 @@ class BPB():
                     
                     ans = "/suicide"
                     if lst:
-                        if self.selectMode == 'long':
+                        if self.selectMode == 'long' or (self.selectMode == 'smart' and len(lst[len(lst)-1])>20):
                             ans = lst[len(lst)-1]
                             self.frantic = True
-                        elif self.selectMode == 'short':
+                            self.spamToggle = True
+                        elif self.selectMode == 'short' or self.selectMode == 'smart':
                             ans = lst[0]
                         elif self.selectMode == 'avg':
                             ans = lst[int((len(lst)-1)/2)]
-                        elif self.selectMode == 'smart':
-                            ans = lst[0]
-                            if len(lst[len(lst)-1])>20:
-                                ans = lst[len(lst)-1]
-                                self.frantic = True
+    
 
                         if self.dynamicPauses:
                             self.mult = len(lst)/len(self.dicts) #how frequent it is
@@ -253,6 +251,7 @@ class BPB():
                     sleep(0.1)
                     
                     self.frantic = False
+                    self.spamToggle = False
                     prevSyll = syllable
                 except self.ignoredExceptions as e:
                     self.console.debug(f"Exception {e} occured in botLoop")
@@ -266,13 +265,13 @@ class BPB():
         
 
         for letter in txt:
-            if self.mistakes and (random.random() <= self.mistakeChance):
+            if self.mistakes and (random.uniform(0, 1) <= self.mistakeChance):
                 txt += random.choice(string.ascii_lowercase)
                 ratesList.append(rand(self.mistakePause))
                 txt += Keys.BACKSPACE
                 ratesList.append(0)
 
-            if self.frantic:
+            if self.franticType and self.frantic:
                 ratesList.append(rand(self.burstRate))
 
             elif self.burstType and(random.random() <= self.burstChance):
@@ -281,7 +280,7 @@ class BPB():
                 ratesList.append(rand(self.rate))
                 
 
-        if self.spam:
+        if self.spam and self.spamToggle:
             length = random.randint(10,21)
             spam = ''.join([random.choice(string.ascii_lowercase) for i in range(0,length)])
             rates = [rand(self.spamRate) for i in range(0,length)]
