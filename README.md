@@ -1,7 +1,7 @@
 # 💣 bomb_party_bot  
 > *hexakosioihexekontahexaphobia🗣️🔥💯*
 
-A Bomb Party bot and bot manager built in Python with Selenium.
+A (kinda) advanced Bomb Party bot and Bot Manager built in Python with Selenium.
 
 ---
 
@@ -51,19 +51,22 @@ DISCLAIMER: Only change the ones you understand, otherwise some weird behavior m
 Example:
 
 ```
-selectMode:short
-cyberbullying:True
-maxOffset:1.2
-rate:0.13
-burstType:True
-burstRate:0.055
-burstChance:0.17
-randomness:0.70
+selectMode:avg
+cyberbullying:False
+maxOffset:0
+rate:0.09
+burstType:False
+burstRate:0.04
+burstChance:0
+randomness:0.35
 mistakes:True
-mistakeChance:0.035
-mistakePause:0.25
+mistakeChance:0.35
+mistakePause:0.3
 franticType:True
-dynamicPauses:True
+dynamicPauses:False
+spam:True
+spamRate:0.01
+miniPause: 0.17
 ```
 
 | Setting | Description |
@@ -81,6 +84,9 @@ dynamicPauses:True
 | `mistakePause` | Delay when correcting a typo |
 | `franticType` | Type faster if answered wrong or if word is long |
 | `dynamicPauses` | Adjust typing delay based on word frequency |
+| `spam` | Spam type before answering long words to seem more realistic |
+| `spamRate` | Rate of spam typing |
+| `miniPause` | Realistic pause between spamming to model quick thinking |
 
 ---
 
