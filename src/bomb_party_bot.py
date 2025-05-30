@@ -3,58 +3,55 @@ from selenium.webdriver.chrome.service import Service as ChromeService
 from selenium.webdriver.chrome.options import Options as ChromeOptions
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
-from selenium.common.exceptions import TimeoutException,ElementNotInteractableException, StaleElementReferenceException, ElementClickInterceptedException, NoSuchFrameException, NoSuchElementException, InvalidElementStateException
+from selenium.common.exceptions import TimeoutException, ElementNotInteractableException, StaleElementReferenceException, ElementClickInterceptedException, WebDriverException, NoSuchFrameException, NoSuchElementException, InvalidElementStateException
 from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 import random, string
 import re
+import asyncio
 from time import sleep
 import logging
+import numpy as np
 
 
+class JoinRoomException(Exception):
+    def __init__(self):
+        super().__init__("Unable to join room")
 
+
+class SettingsException(Exception):
+    def __init__(self):
+        super().__init__(f"Cannot find all settings; one or more missing")
+
+
+class DisconnectException(Exception):
+    def __init__(self):
+        super().__init__()
+
+class FormatException(Exception):
+    def __init__(self):
+        super().__init__("Proxies should be in the format addr:port or addr:port:username:password")
+
+class EmptyDictionaryException(Exception):
+    def __init__(self):
+        super().__init__("Must provide dictionary")
+
+    
 class BPB():
     def __init__(self, dicts, logger, settings, proxy=None):
 
         self.console = logger
         self.dicts = dicts
         self.proxy = proxy
+        self.settings = settings
 
-        self.initDriver()
-
-        self.visibleCondition = lambda x: x.is_displayed()
-        self.clickableCondition = lambda x: x.is_displayed() and x.is_enabled()
-        self.presenceCondition = lambda x: EC.presence_of_element_located(x)
-        self.maxWait = 15
-
-        
+        self.maxWait = 2
 
 
-        self.ignoredExceptions = (AttributeError,TimeoutError, NoSuchFrameException, InvalidElementStateException, ElementNotInteractableException,ElementClickInterceptedException, StaleElementReferenceException,NoSuchElementException, NoSuchFrameException)
+        self.settings = self.parseSettings()
 
-        
-        
-        self.settings = self.parseSettings(settings)
-
-        self.selectMode = self.settings['selectMode']
-        self.cyberbullying = self.settings['cyberbullying']
-        self.maxOffset = self.settings['maxOffset']
-        self.rate = self.settings['rate']
-        self.burstType = self.settings['burstType']
-        self.burstRate = self.settings['burstRate']
-        self.burstChance = self.settings['burstChance']
-        self.randomness = self.settings['randomness']
-        self.mistakes = self.settings['mistakes']
-        self.mistakeChance = self.settings['mistakeChance']
-        self.mistakePause = self.settings['mistakePause']
-        self.franticType = self.settings['franticType']
-        self.dynamicPauses = self.settings['dynamicPauses']
-        self.spam = self.settings['spam']
-        self.spamRate = self.settings['spamRate']
-        self.miniPause = self.settings['miniPause']
-    
-    def initDriver(self):
         chrome_options = ChromeOptions()
+        chrome_options.page_load_strategy = 'eager'
         service = ChromeService()
         seleniumwire_options = {
             }
@@ -72,58 +69,41 @@ class BPB():
 
         self.console.info(f'initialized bot running @ {self.proxy}')
 
-    def parseSettings(self, settings):
-        settingsDict={}
-        for line in settings:
+    def parseSettings(self):
+        s={}
+
+        for line in self.settings:
             key, value = line.split(':', 1)
             if value.lower() == 'true':
-                settingsDict[key] = True
+                s[key] = True
             elif value.lower() == 'false':
-                settingsDict[key] = False
+                s[key] = False
             else:
                 try:
-                    settingsDict[key] = float(value)
+                    s[key] = float(value)
                 except ValueError:
-                    settingsDict[key] = value
+                    s[key] = value
                     pass
-        return settingsDict
-            
-    
-    def findSuffix(self, suffix):
-        lst = []
         try:
-            for wrd in self.dicts:
-                if suffix.lower() in wrd.lower():
-                    lst.append(wrd)
-            if lst:
-                lst.sort(key= lambda x: len(x))
-                return lst
-        except IndexError:
+            self.selectMode = s['selectMode']
+            self.cyberbullying = s['cyberbullying']
+            self.maxOffset = s['maxOffset']
+            self.rate = s['rate']
+            self.burstType = s['burstType']
+            self.burstRate = s['burstRate']
+            self.burstChance = s['burstChance']
+            self.randomness = s['randomness']
+            self.mistakes = s['mistakes']
+            self.mistakeChance = s['mistakeChance']
+            self.mistakePause = s['mistakePause']
+            self.franticType = s['franticType']
+            self.dynamicPauses = s['dynamicPauses']
+            self.spam = s['spam']
+            self.spamRate = s['spamRate']
+            self.miniPause = s['miniPause']
+        except KeyError:
             pass
-        return None        
-        
-
-    def locate(self, locator, lmd, switch = True, obj = None, all = False): #delayless is better
-        browser = self.driver
-        if obj:
-            browser = obj
-        by, string = locator
-        if switch:
-            self.updateFrame()
-
-        try:
-            out = browser.find_elements(by, string)
-            if out:
-                if not all:
-                    out = out[0]
-                    if lmd(out):
-                        return out
-                else:
-                    return out
-        except self.ignoredExceptions:
-            pass
-        return None
-    
+            raise SettingsException
 
     def joinRoom(self, roomCode, username = None):
         browser = self.driver
@@ -132,168 +112,244 @@ class BPB():
             if username:
                 textbox = WebDriverWait(browser,self.maxWait).until(EC.visibility_of_element_located((By.XPATH, '//input[@class = "styled nickname"]')))
 
-                textbox.send_keys(Keys.CONTROL + Keys.BACKSPACE)
-                sleep(0.1)
+                textbox.clear()
                 textbox.send_keys(username)
 
             submit = WebDriverWait(browser,self.maxWait).until(EC.element_to_be_clickable((By.XPATH, "/html/body/div[2]/div[3]/form/div[2]/button")))
             submit.click()
             WebDriverWait(browser,self.maxWait)
-        except self.ignoredExceptions:
+        except TimeoutException:
             pass
+            raise JoinRoomException
 
-
-    def checkDisconnect(self):
+    async def tryJoin(self):
         browser = self.driver
-        browser.switch_to.default_content()
-        if self.locate((By.XPATH, '//div[@class = "disconnected page"]'), lmd = self.visibleCondition, switch=False):
+        self.updateFrame()
+        try:
+            join = browser.find_element(By.XPATH, "//button[@class = 'styled joinRound']")
+            join.click()
+            self.console.debug(f"join success")
             return True
-        return False
-    
-    def tryJoin(self):
-        join = self.locate((By.XPATH, "//button[@class = 'styled joinRound']"), lmd = self.clickableCondition)
-        if join:
-            try:
-                join.click()
-                return True
-            except self.ignoredExceptions:
-                pass
+        except (NoSuchElementException, ElementClickInterceptedException, ElementNotInteractableException, StaleElementReferenceException):
+            pass
         return False
 
-    def recordPlayers(self):
+    async def updatePlayers(self):
         
         browser = self.driver
         browser.switch_to.default_content()
-        self.playerList = []
-        table = self.locate((By.XPATH, '//table[@class = "statsTable"]'),lmd=self.presenceCondition,switch=False)
-        if table:
-            entries = self.locate((By.XPATH, './/tr'), self.presenceCondition, switch=False, obj=table, all=True) 
-            if entries:
-                for player in entries:
-                    try:
-                        self.playerList.append(player)
-                        if player.get_attribute('class') == 'isDead':
-                            self.playerList.remove(player)
-                    except self.ignoredExceptions:
-                        self.console.debug("did not find attribute 'isDead' in player")
-                        continue
+        self.playerCt = 0
+        try:
+            entries = browser.find_element(By.XPATH, '//table[@class = "statsTable"]').find_elements(By.XPATH, './/tr')
+            self.playerCt = len([player for player in entries if player.get_attribute('class') != 'isDead'])
+        except (NoSuchElementException, StaleElementReferenceException):
+            pass
+        
 
+    def getWordStat(self):
+        browser = self.driver
+        browser.switch_to.default_content()
+        try:
+            string = browser.find_element(By.XPATH, '//table[@class = "statsTable"]//tr[@class = "self"]//td[@class = "words"]').text
+            if string != '':
+                return int(string)
+            self.console.debug(f'grabbed {string} used words from statsTable')
+        except (NoSuchElementException, StaleElementReferenceException):
+            pass
+        return self.expectedWords
 
     def updateFrame(self):
         browser = self.driver
         browser.switch_to.default_content()
-        frame = self.locate((By.XPATH, "//iframe[contains(@src, 'bombparty')]"), lmd= self.presenceCondition, switch=False)
-        if frame:
-            try:
-                browser.switch_to.frame(frame)
-            except self.ignoredExceptions:
-                self.console.debug("unable to switch to iframe")
-                pass
+        try:
+            frame = browser.find_element(By.XPATH, "//iframe[contains(@src, 'bombparty')]")
+            browser.switch_to.frame(frame)
+        except (NoSuchElementException, ElementNotInteractableException, NoSuchFrameException, WebDriverException, InvalidElementStateException, StaleElementReferenceException):
+            pass
+    async def checkDC(self):
+        browser = self.driver
+        browser.switch_to.default_content()
+        try:
+            if browser.find_element(By.XPATH, '//div[@class = "disconnected page"]').is_displayed():
+                raise DisconnectException
+            if browser.find_element(By.XPATH, "//div[@class = 'loading page']").is_displayed():
+                raise DisconnectException
+            elif browser.find_element(By.XPATH, "//body[@class ='neterror']").is_displayed():
+                raise DisconnectException
+        except (NoSuchElementException, StaleElementReferenceException):
+            pass
+    async def selfTurn(self): ##not solving double answer issue
+        browser = self.driver
+        self.updateFrame()
+        try:
+            if browser.find_element(By.XPATH, '//div[@class = "selfTurn"]').is_displayed():
+                return True
+        except (NoSuchElementException, StaleElementReferenceException):
+            pass
+        return False
 
-    def updateLoop(self):
-        if self.checkDisconnect():
-            return False
+    def updateBonusAlphabet(self):
         
-        self.recordPlayers()
+        browser = self.driver
+        self.updateFrame()
 
-        if self.tryJoin():
-            self.dicts = self.dicts+self.replace
-            self.replace = []
-        return True
+        try:
+            stg = ''
+            entries = browser.find_element(By.XPATH, '//div[@class = "bonusAlphabetField"]').find_elements(By.XPATH, './/div[@class = "letterField"]//input')
+            for index, letter in enumerate(entries):
+                times = int(letter.get_attribute("value"))
+                stg += string.ascii_lowercase[index]*times
+            self.alphabet = list(stg)
+            self.console.debug(f'reset alphabet: {self.alphabet}')
+        except (NoSuchElementException, StaleElementReferenceException, ValueError, TypeError):
+            self.alphabet = string.ascii_lowercase
+            self.console.debug(f'Unable to grab bonus words. Reset alphabet: {self.alphabet}')
+            pass
+        
+        
 
+    async def botLoop(self):
+        toggle = False ##needed because selfTurn is visible at start
+        while True:
+            await asyncio.create_task(self.checkDC())#make thread? add threading to all eventually
+            await asyncio.create_task(self.updatePlayers())
+            join = await asyncio.create_task(self.tryJoin())
+            turn = await asyncio.create_task(self.selfTurn())
+
+            if join:
+                toggle = True
+                self.used = []
+                self.mult = 0
+                self.expectedWords = 0
+                self.franticToggle = False
+                self.spamToggle = False
+                self.updateBonusAlphabet()
+                self.console.info("Round ended. Resetting all variables.")
+
+            if toggle and turn:
+                if len(self.alphabet) < 1:
+                    self.updateBonusAlphabet()
+                self.processes()
+                
+## fix double answering
     
-    def botLoop(self):
-        self.replace = []
-        self.mult = 1
-        self.frantic = False
-        self.spamToggle = False
-        prevSyll = None
-        lmb = None
-        while self.updateLoop():
-            textbox = self.locate((By.XPATH, '//form//input[@maxlength = "30"]'), lmd = self.clickableCondition)
-            syllable = self.locate((By.XPATH, "//div[@class = 'syllable']"), lmd = self.visibleCondition)
+    def processes(self): #split into smaller processes
+        browser = self.driver
+        try:
+            self.updateFrame()
+            textbox = browser.find_element(By.XPATH, '//form//input[@maxlength = "30"]')
+            syllable = browser.find_element(By.XPATH, "//div[@class = 'syllable']").text
+            textbox.send_keys(Keys.ENTER)
+            
+            lst = self.dicts[syllable.lower()]
+            # if not len(lst) >= 1:
+            #     with open("unknowns.txt","a") as file:
+            #         file.write(syllable.lower()+"\n")
 
-            if textbox and syllable:
-                try:
-                    textbox.clear()
-                    syllable = syllable.text
+            lst = list(set(lst) - set(self.used))
+            
+            
 
-                    if prevSyll == syllable:
-                        self.frantic = True
+            if lst and len(lst) > 0:
+                if self.selectMode == 'long':
+                    ans = lst[len(lst)-1]
 
-                    lst = self.findSuffix(syllable)
-                    
-                    
-                    ans = "/suicide"
-                    if lst:
-                        if self.selectMode == 'long' or (self.selectMode == 'smart' and len(lst[len(lst)-1])>20):
-                            ans = lst[len(lst)-1]
-                            self.frantic = True
-                            self.spamToggle = True
-                        elif self.selectMode == 'short' or self.selectMode == 'smart':
-                            ans = lst[0]
-                        elif self.selectMode == 'avg':
-                            ans = lst[int((len(lst)-1)/2)]
-    
+                elif self.selectMode == 'short' :
+                    ans = lst[0]
+                elif self.selectMode == 'avg':
+                    ans = lst[int((len(lst)-1)/2)]
 
-                        if self.dynamicPauses:
-                            self.mult = len(lst)/len(self.dicts) #how frequent it is
-                        self.replace.append(ans)
-                        self.dicts.remove(ans)
-                        self.console.info(f"found answer {ans} to syllable {syllable}")
+                elif self.selectMode == 'smart':
+                    ans = lst[int((len(lst)-1)/2)]
+                    if len(lst[len(lst)-1])>20:
+                        ans = lst[len(lst)-1]
+                        self.console.info(f"long {ans} found")
 
-                    lmb = lambda x: self.simType(textbox, x)
+                elif self.selectMode == 'regen':
+                    ans = max(lst, key= lambda word: len(list(set(word) & set(self.alphabet))))
+                    self.console.info(f"highword {ans} found")
+            else:
+                ans = "/suicide"
+            
+            if len(ans) > 20:
+                self.franticToggle = True
+                self.spamToggle = True
 
-                    if self.cyberbullying and len(self.playerList) == 3:##including table head
-                        lmb = lambda x: textbox.send_keys(x)##if you wanna get hackusated
+            if self.dynamicPauses:
+                self.mult = len(lst)/len(self.dicts) #how frequent it is
 
-                    lmb(ans+Keys.ENTER)
-                    sleep(0.1)
-                    
-                    self.frantic = False
-                    self.spamToggle = False
-                    prevSyll = syllable
-                except self.ignoredExceptions as e:
-                    pass
+            self.used.append(ans)
+            self.console.info(f"found answer {ans} to syllable {syllable}")
+            
+
+            if self.cyberbullying and self.playerCt == 3:##including table head
+                lmb = lambda x: textbox.send_keys(x)##if you wanna get hackusated
+            else:
+                lmb = lambda x: self.simType(textbox, x)
+            lmb(ans)
+            textbox.send_keys(Keys.ENTER)
+
+            
+            
+            actual = self.getWordStat()
+
+            self.expectedWords += 1
+
+            if self.expectedWords != actual:
+                self.franticToggle = True
+                self.spamToggle = False
+                self.expectedWords = actual
+
+            else:
+                self.franticToggle = False
+                self.spamToggle = False
+
+                self.alphabet = (np.array(self.alphabet) - np.array(list(ans))).tolist()
+                self.console.debug('remaining:' + str(self.alphabet))
+
+        except (NoSuchElementException, ElementNotInteractableException, InvalidElementStateException, AttributeError, StaleElementReferenceException):
+            pass
 
     def simType(self, obj, txt):
         
         ratesList = []
         rand = lambda x: x*(1+random.uniform(-1, 1)*self.randomness)
         
-        
+        txt = list(txt)
 
-        for letter in txt:
+        for index, letter in enumerate(txt):
             if self.mistakes and (random.uniform(0, 1) <= self.mistakeChance):
-                txt += random.choice(string.ascii_lowercase)
-                ratesList.append(rand(self.mistakePause))
-                txt += Keys.BACKSPACE
+                txt.insert(index+1, random.choice(string.ascii_lowercase))
+                ratesList.append(self.mistakePause)
+                txt.insert(index+2, Keys.BACKSPACE)
                 ratesList.append(0)
 
-            if self.franticType and self.frantic:
-                ratesList.append(rand(self.burstRate))
+            if self.franticType and self.franticToggle:
+                ratesList.append(self.burstRate)
 
             elif self.burstType and(random.random() <= self.burstChance):
-                ratesList.append(rand(self.burstRate))
+                ratesList.append(self.burstRate)
             else:
                 ratesList.append(rand(self.rate))
                 
 
         if self.spam and self.spamToggle:
             length = random.randint(10,21)
-            spam = ''.join([random.choice(string.ascii_lowercase) for i in range(0,length)])
+            spam = [random.choice(string.ascii_lowercase) for i in range(0,length)]
             rates = [rand(self.spamRate) for i in range(0,length)]
-            txt = ''+spam+Keys.ENTER+''+txt
-            ratesList = [self.miniPause]+rates+[0]+[self.miniPause]+ratesList
+            txt = spam + [Keys.ENTER,''] + txt
+            ratesList = rates+ [0,self.miniPause]+ratesList
         else:
             wait = self.maxOffset-(self.maxOffset*self.mult)
-            sleep(wait)
+            if wait > 0:
+                sleep(wait)
             
 
         for letter, delay in list(zip(txt, ratesList)):
             sleep(delay)
             if letter != '':
                 obj.send_keys(letter)
+            
 
         
     def __del__(self):
@@ -316,7 +372,8 @@ class BotManager():
         self.settingsFile = settingsFile
         self.proxyFile = proxyFile
         self.genConsoles()
-        self.loadAll()
+        self.loadProxies()
+        self.loadDicts()
         
 
     def genConsoles(self):
@@ -340,42 +397,68 @@ class BotManager():
         self.console.addHandler(ch)
         logger_root.addHandler(fh)
 
-    def loadAll(self):
-        self.dicts = []
+    def loadProxies(self):
         
         settingsRegex = r"^\w+(\s*)\:(\s*)(\w+)(\.\w+)?"
         proxyRegex = r"^((\d{1,3}\.){3}(\d{1,3})|\w+\.\w+(\.\w+)?):(\d{1,5})(:.+:.+)?"
-        plaintextRegex = r"^\w+(\-\w+)?$"
-        urlRegex = r"^((https|http)\:\/\/)((\w+\.\w+\.\w+)|(\w+\.\w+))((\/.+)+)?"
+        
 
-        self.settings = self.parseFromFile(self.settingsFile, settingsRegex) 
+        self.settings = self.parseFromFile(self.settingsFile, settingsRegex)
+        self.console.info(f"loaded all settings")
 
         self.proxyList = self.parseFromFile(self.proxyFile, proxyRegex)
 
         self.console.info(f"loaded {len(self.proxyList)} proxies from {self.proxyFile}")
-        
-        dictUrls = self.parseFromFile(self.dictFile, urlRegex)
 
+        if not self.proxyList:
+            self.proxyList = [None]
+        if not self.username:
+            self.username = None
+        
+    def loadDicts(self):
+        plaintextRegex = r"^\w+(\-\w+)?$"
+        urlRegex = r"^((https|http)\:\/\/)((\w+\.\w+\.\w+)|(\w+\.\w+))((\/.+)+)?"
+        dictUrls = self.parseFromFile(self.dictFile, urlRegex)
+        dicts = []
         if dictUrls:
             self.console.info(f"loading {len(dictUrls)} dictionaries from urls")
-            self.dicts += self.loadUrls(dictUrls)
+            dicts += self.loadUrls(dictUrls)
 
         
         dictPlainText = [x.lower() for x in self.parseFromFile(self.dictFile, plaintextRegex)]
 
         if dictPlainText:
             self.console.info(f"loading {len(dictPlainText)} entries from plaintext")
-            self.dicts += dictPlainText
+            dicts += dictPlainText
 
-        self.dicts = list(set(self.dicts))
+        
+        if not dicts or len(dicts) == 0:
+            raise EmptyDictionaryException
+        
+        dicts = list(set(dicts))
 
-        self.console.info(f"loaded {len(self.dicts)} words from {self.dictFile}")
+        self.console.info(f"loaded {len(dicts)} words from {self.dictFile}")
 
-        if not self.proxyList:
-            self.proxyList = [None]
-        if not self.username:
-            self.username = None
+        self.hsmp = {}
 
+        for letter1 in string.ascii_lowercase:
+            k1 = letter1
+            value = [wrd for wrd in dicts if k1 in wrd.lower()]
+            self.hsmp[k1] = value
+            for letter2 in string.ascii_lowercase:
+                k2 = k1 + letter2
+                value = [wrd for wrd in self.hsmp[k1] if k2 in wrd.lower()]
+                self.hsmp[k2] = value
+                for letter3 in string.ascii_lowercase:
+                    k3 = k2+letter3
+                    value = [wrd for wrd in self.hsmp[k2] if k3 in wrd.lower()]
+                    self.hsmp[k3] = value
+        self.console.info(f"finished mapping all {len(self.hsmp)} (key,value) pairs")
+
+        # for k, v in self.hsmp.items():
+        #     if len(v) == 0:
+        #         with open("unknowns.txt", "a") as file:
+        #             file.write(k+"\n")
 
     def loadUrls(self, dictUrls):
         service = ChromeService()
@@ -389,42 +472,36 @@ class BotManager():
                 browser.get(url)
                 WebDriverWait(browser, 5)
             except (ConnectionResetError,ConnectionAbortedError,ConnectionError,ConnectionRefusedError) as e:
-                self.console.info(f'Cannot get url {url} because of Exception {e}')
+                self.console.error(f'Cannot get url {url} because of Exception {e}')
                 pass
             content = browser.find_element(By.XPATH, '//pre')
-            if content:
-                dicts += content.text.lower().split('\n')
+            dicts += content.text.lower().split('\n')
 
         return dicts
 
-    def botInit(self, proxy = None):
-
-        if proxy:
-            proxy = self.formatProxy(proxy)
-
-        bot = BPB(dicts=self.dicts, proxy=proxy, settings=self.settings, logger=self.botconsole)
-        return bot
         
-    
-    
-    def persistLoop(self):
+
+    async def persistLoop(self):
         proxyNo = 0
 
 
         thresh = 2
         retries = 0
-        while proxyNo < len(self.proxyList):
-
+        for proxy in self.proxyList:
+            
+            proxy = self.formatProxy(proxy)
             retries = 0
             while not retries > thresh:
                 try:
-                    bot = self.botInit(self.proxyList[proxyNo])
+                    bot = BPB(dicts=self.hsmp, proxy=proxy, settings=self.settings, logger=self.botconsole)
                     bot.joinRoom(roomCode=self.roomCode, username=self.username)
-                    bot.botLoop()
+                    await asyncio.create_task(bot.botLoop())
+                    
+                except DisconnectException:
                     self.console.info(f'Bot #{proxyNo} @ {self.proxyList[proxyNo]} disconnected successfully')
                     retries = 0
                 except Exception as e:
-                    self.console.debug(f"Exception {e} in bot #{proxyNo} @ {self.proxyList[proxyNo]}")
+                    self.console.debug(f"Exception {e} in bot #{proxyNo} @ {self.proxyList[proxyNo]}", exc_info=True)
                 retries += 1
             
             
@@ -435,19 +512,15 @@ class BotManager():
     def parseFromFile(self, filename, ex):
 
         lst = []
-        try:
-            with open(filename, 'r') as file:
-                out = file.readlines()
-            
-            for x in out:
-                if re.match(ex,x):
-                    lst.append(re.sub(r"\s+", "", x))
-            return lst
-    
-        except FileNotFoundError:
-            pass
-            self.console.error(f'cannot find file {filename} !')
-        return None
+        
+        with open(filename, 'r') as file:
+            out = file.readlines()
+        
+        for x in out:
+            if re.match(ex,x):
+                lst.append(re.sub(r"\s+", "", x))
+        return lst
+
 
     
     def formatProxy(self, proxy):
@@ -462,11 +535,10 @@ class BotManager():
             addr, port = split[0], split[1]
             fProxy = f"https://{addr}:{port}"
         else:
-            self.console.error("proxy format not recognized!")
+            raise FormatException
         return fProxy
         
 if __name__ == "__main__" :
-
     proxies = 'proxies.config' ##adjust to autorecognize
     settings = 'settings.config'
     dictionaries = 'dictionaries.txt'
@@ -480,4 +552,5 @@ if __name__ == "__main__" :
         name = None
 
     manager = BotManager(dictFile=dictionaries, roomCode=link, proxyFile=proxies, username=name, settingsFile=settings)
-    manager.persistLoop()
+
+    asyncio.run(manager.persistLoop())
