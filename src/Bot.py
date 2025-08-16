@@ -29,6 +29,36 @@ UPDATE_INTERVALS = {
         'join' : 10
     }
 
+MISTAKE_MAP = {
+    'q': ['w', 'a', 's'],
+    'w': ['q', 'e', 'a', 's', 'd'],
+    'e': ['w', 'r', 's', 'd', 'f'],
+    'r': ['e', 't', 'd', 'f', 'g'],
+    't': ['r', 'y', 'f', 'g', 'h'],
+    'y': ['t', 'u', 'g', 'h', 'j'],
+    'u': ['y', 'i', 'h', 'j', 'k'],
+    'i': ['u', 'o', 'j', 'k', 'l'],
+    'o': ['i', 'p', 'k', 'l'],
+    'p': ['o', 'l'],
+
+    'a': ['q', 'w', 's', 'z', 'x'],
+    's': ['q', 'w', 'e', 'a', 'd', 'z', 'x', 'c'],
+    'd': ['w', 'e', 'r', 's', 'f', 'x', 'c', 'v'],
+    'f': ['e', 'r', 't', 'd', 'g', 'c', 'v', 'b'],
+    'g': ['r', 't', 'y', 'f', 'h', 'v', 'b', 'n'],
+    'h': ['t', 'y', 'u', 'g', 'j', 'b', 'n', 'm'],
+    'j': ['y', 'u', 'i', 'h', 'k', 'n', 'm'],
+    'k': ['u', 'i', 'o', 'j', 'l', 'm'],
+    'l': ['i', 'o', 'p', 'k'],
+
+    'z': ['a', 's', 'x'],
+    'x': ['a', 's', 'd', 'z', 'c'],
+    'c': ['s', 'd', 'f', 'x', 'v'],
+    'v': ['d', 'f', 'g', 'c', 'b'],
+    'b': ['f', 'g', 'h', 'v', 'n'],
+    'n': ['g', 'h', 'j', 'b', 'm'],
+    'm': ['h', 'j', 'k', 'n']
+}
 
 
 class DisconnectException(Exception):
@@ -586,7 +616,7 @@ class Bot():
                 else:
                     avgLen = round((len(min(ansSet, key= len))+len(max(ansSet, key=len)))/2)
                     ans = min(ansSet, key = lambda word: abs(len(word)-avgLen))
-                    
+
                 tr = rate
                 if st:
                     tr += sr
@@ -627,8 +657,8 @@ class Bot():
 
             #add mistake (char and delay)
             if self.mistakes and (random.random() <= self.mistakeChance):
-
-                txt.insert(index+1, random.choice(ascii_lowercase))
+                    
+                txt.insert(index+1, random.choice(MISTAKE_MAP.get(letter)))
                 ratesList.append(self.mistakePause)
 
                 txt.insert(index+2, Keys.BACKSPACE)
