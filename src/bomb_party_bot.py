@@ -11,10 +11,7 @@ if __name__ == "__main__" :
     defunct = join(config,'defunct.config')
     if exists(config) and exists(proxies) and exists(settings) and exists(dictionaries) and exists(defunct):
         
-        
 
-        
-        
         try:
             link = str(input("paste code: ")).upper()
             name = str(input("username: "))
@@ -34,7 +31,8 @@ if __name__ == "__main__" :
             print("Session cancelled")
         except Exception as e:
             print(f"Exception occurred {e}")
-
+    else:
+        print("Some config files not found!")
 
         
     
