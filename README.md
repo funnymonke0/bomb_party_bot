@@ -81,8 +81,8 @@ useDefunct:True
 | :------ | :----------- |
 | `selectMode` | `'smart'`, `'short'`, `'avg'`, `'regen'`, or `'long'` — the bot prioritizes words according to the selected mode |
 | `cyberbullying` | Instant type if only one player remains |
-| `defaultWait` | default delay before typing if dynamic type is not selected |
-| `minWait` | minimum delay before typing if dynamic type is selected |
+| `defaultWait` | Default delay before typing if dynamic type is not selected |
+| `minWait` | Minimum delay before typing if dynamic type is selected |
 | `rate` | Base typing speed (seconds per character) |
 | `burstType` | Enable fast “burst” typing |
 | `burstRate` | Typing speed during bursts |
@@ -92,13 +92,13 @@ useDefunct:True
 | `mistakeChance` | Chance of typo per character |
 | `mistakePause` | Delay when fixing a typo |
 | `franticType` | Type faster after mistakes or with long words |
-| `franticRate` | typing speed during frantic |
+| `franticRate` | Typing speed during frantic |
 | `dynamicPauses` | Adjust typing delay by word frequency and length of word |
-| `scaleFactor` | internal variable used in dynamic pause function |
+| `scaleFactor` | Internal variable used in dynamic pause function |
 | `spamType` | Spam type before long answers |
-| `spamRate` | typing speed during spam |
-| `miniPause` | short pause after spam or mistake correction |
-| `useDefunct` | ignores used words saved in defunct.config |
+| `spamRate` | Typing speed during spam |
+| `miniPause` | Short pause after spam or mistake correction |
+| `useDefunct` | Ignores used words saved in defunct.config |
 
 ---
 
@@ -147,6 +147,12 @@ The bot will ignore words in the defunct.config file.
 
 ## 🏃 Usage
 
+Navigate to the src folder:
+
+```bash
+cd src
+```
+
 Run the bot:
 
 ```bash
@@ -162,7 +168,7 @@ The Bot Manager will then:
 
 - Load your configs  
 - Load proxies & dictionaries  
-- Spawn and manage the bot  
+- Spawn and manage the bot (Bot.py)  
 - Reconnect automatically if banned/disconnected  
 
 ---
