@@ -12,16 +12,18 @@ if __name__ == "__main__" :
         
         
 
-        link = str(input("paste code: ")).upper()
-        name = str(input("username: "))
-
-        if re.match(link, r'^[a-zA-Z]{4}$'):
-            print('ERROR: Must input valid room code !')
-            quit()
-        if len(name) < 1:
-            name = None
+        
         
         try:
+            link = str(input("paste code: ")).upper()
+            name = str(input("username: "))
+
+            if re.match(link, r'^[a-zA-Z]{4}$'):
+                print('ERROR: Must input valid room code !')
+                quit()
+            if len(name) < 1:
+                name = None
+                
             manager = BotManager(dictFile=dictionaries, roomCode=link, proxyFile=proxies, username=name, settingsFile=settings, defunctFile = defunct)
 
             asyncio.run(manager.persistLoop())

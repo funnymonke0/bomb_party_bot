@@ -203,7 +203,8 @@ class BotManager():
         settingsParsed = [
             s['selectMode'],
             s['cyberbullying'],
-            s['maxOffset'],
+            s['defaultWait'],
+            s['minWait'],
             s['rate'],
             s['burstType'],
             s['burstRate'],
