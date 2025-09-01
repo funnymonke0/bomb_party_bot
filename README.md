@@ -1,22 +1,23 @@
 # 💣 bomb_party_bot  
 > *hexakosioihexekontahexaphobia🗣️🔥💯*
 
-A (kinda) advanced Bomb Party bot and Bot Manager built in Python with Selenium.
+A (kinda) advanced Bomb Party bot and Bot Manager built in Python with Selenium.  
+Designed to reconnect automatically, cycle proxies, and mimic realistic human typing.
 
 ---
 
 ## 🚀 Features
 
 - 🤖 **Bot Manager**  
-  Handles bot persistence, automatic reconnection, and proxy rotation.
-- 📖 **Customizable Dictionary**  
-  Load your own wordlists (plain text or URLs).
+  Handles bot persistence, auto-reconnect, and proxy rotation.
+- 📖 **Custom Dictionary**  
+  Load your own wordlists (plaintext or URLs).
 - 🛡️ **Proxy Support**  
-  Optional Rotating or static proxy support to counter IP bans. Auto-rejoin lobbies after bans.
-- 🛠️ **Dynamic Typing Simulation**  
+  Optional rotating or static proxy support to counter IP bans.
+- 🛠️ **Human-Like Typing**  
   Adjustable typing rates, mistake generation, burst typing, and smart delays to mimic human behavior.
-- ⚙️ **Custom Bot Settings**  
-  Fine-tune everything from typing randomness to mistake rates with easy configuration files.
+- ⚙️ **Easy Configuration**  
+  Fine-tune settings with simple config files.
 
 ---
 
@@ -35,7 +36,7 @@ A (kinda) advanced Bomb Party bot and Bot Manager built in Python with Selenium.
 git clone https://github.com/funnymonke0/bomb_party_bot.git
 cd bomb_party_bot
 
-# 2. Install the requirements
+# 2. Install requirements
 pip install -r requirements.txt
 ```
 
@@ -43,78 +44,87 @@ pip install -r requirements.txt
 
 ## ⚙️ Configuration
 
-### Settings
+### Settings (`settings.config`)
 
 Settings are loaded from `settings.config` and can be customized. 
-DISCLAIMER: Only change the ones you understand, otherwise some weird behavior might happen.
+DISCLAIMER: Only change the ones you understand, otherwise some weird behavior might happen. Settings should stay in the order they appear.
 
 Example:
 
 ```
-selectMode:avg
+selectMode:regen
 cyberbullying:False
-maxOffset:0
-rate:0.09
-burstType:False
-burstRate:0.04
-burstChance:0
-randomness:0.35
+defaultWait:1.5
+minWait:0.8
+rate:0.08
+burstType:True
+burstRate:0.05
+burstChance:0.07
+randomness:0.3
 mistakes:True
-mistakeChance:0.35
-mistakePause:0.3
+mistakeChance:0.05
+mistakePause:0.5
 franticType:True
-dynamicPauses:False
-spam:True
-spamRate:0.01
-miniPause: 0.17
+franticRate:0.06
+dynamicPauses:True
+scaleFactor:0.02
+spamType:True
+spamRate:0.015
+miniPause: 0.2
+useDefunct:True
 ```
 
 | Setting | Description |
 | :------ | :----------- |
-| `selectMode` | `'smart'`, `'short'`, `'avg'`, or `'long'` — how the bot picks answers |
-| `cyberbullying` | Instant type if 1 player is remaining |
-| `maxOffset` | Max delay before typing (simulates thinking before typing) |
+| `selectMode` | `'smart'`, `'short'`, `'avg'`, `'regen'`, or `'long'` — the bot prioritizes words according to the selected mode |
+| `cyberbullying` | Instant type if only one player remains |
+| `defaultWait` | default delay before typing if dynamic type is not selected |
+| `minWait` | minimum delay before typing if dynamic type is selected |
 | `rate` | Base typing speed (seconds per character) |
-| `burstType` | Enable fast "burst" typing spurts |
-| `burstRate` | Rate during bursts |
-| `burstChance` | Chance of burst happening per character |
-| `randomness` | Percent variance of typing rate |
+| `burstType` | Enable fast “burst” typing |
+| `burstRate` | Typing speed during bursts |
+| `burstChance` | Chance of burst per character |
+| `randomness` | Variance in typing rate (percentage aaaas decimal) |
 | `mistakes` | Enable typo simulation |
-| `mistakeChance` | Chance per character of mistake |
-| `mistakePause` | Delay when correcting a typo |
-| `franticType` | Type faster if answered wrong or if word is long |
-| `dynamicPauses` | Adjust typing delay based on word frequency |
-| `spam` | Spam type before answering long words to seem more realistic |
-| `spamRate` | Rate of spam typing |
-| `miniPause` | Realistic pause between spamming to model quick thinking |
+| `mistakeChance` | Chance of typo per character |
+| `mistakePause` | Delay when fixing a typo |
+| `franticType` | Type faster after mistakes or with long words |
+| `franticRate` | typing speed during frantic |
+| `dynamicPauses` | Adjust typing delay by word frequency and length of word |
+| `scaleFactor` | internal variable used in dynamic pause function |
+| `spamType` | Spam type before long answers |
+| `spamRate` | typing speed during spam |
+| `miniPause` | short pause after spam or mistake correction |
+| `useDefunct` | ignores used words saved in defunct.config |
 
 ---
 
-### Proxies
+### Proxies (`proxies.config`)
 
-Proxy format for `proxies.config` (with or without auth):
+Format:
 
 ```
 ip:port:user:password
 ip:port
 ```
 
+Both authenticated and unauthenticated proxies are supported.
+
 ---
 
-### Dictionaries
+### Dictionaries (`dictionaries.config`)
 
-Add a combination of wordlists via URLs or plain words in `dictionaries.txt`.  
+Add word sources by URL or directly as plaintext words.
+
 Example URLs:
 
 ```
 https://raw.githubusercontent.com/YoungsterGlenn/bpDictionaryStatistics/master/dictionary.txt
 https://norvig.com/ngrams/sowpods.txt
 https://norvig.com/ngrams/enable1.txt
-https://pastebin.com/raw/UegdKLq8
-...
 ```
 
-Plaintext:
+Example words:
 
 ```
 hyperventilate
@@ -124,33 +134,39 @@ xylophone
 
 ---
 
+### Defunct Words (`defunct.config`)
+
+Set the useDefunct flag in settings.config to enable saving and loading incorrect words.
+
+The bot will ignore words in the defunct.config file.
+
+---
+
 ## 🏃 Usage
 
-After setting up your configs, run:
+Run the bot:
 
 ```bash
 python3 bomb_party_bot.py
 ```
 
-You’ll be prompted to:
+You’ll be prompted for:
 
-- Enter a **Room Code** (e.g., `ABCD`)
-- Enter a **Username** (or leave blank for a random one)
+- **Room Code** (e.g. `ABCD`)  
+- **Username** (leave blank for random or type your own)
 
-The Bot Manager will:
+The Bot Manager will then:
 
-- Load dictionaries
-- Load proxies
-- Spawn a bot
-- Persist across disconnects and bans
-- Cycle proxies if needed
+- Load your configs  
+- Load proxies & dictionaries  
+- Spawn and manage the bot  
+- Reconnect automatically if banned/disconnected  
 
 ---
 
 ## 🙏 Credits
 
-- JKLM.fun for making Bomb Party
-- Open wordlists
-- Spring Break
-- That one Youtube video
-- Everyone who got mad and ragequit because of this bot 💀
+- [JKLM.fun](https://jklm.fun) for Bomb Party  
+- Open source wordlists  
+- Summer break  
+- hexakosioihexekontahexaphobia 
