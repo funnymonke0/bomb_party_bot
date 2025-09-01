@@ -1,5 +1,5 @@
 .venv/
-bomb_party_bot/
+bomb_party_bot_env/
 __pycache__/
 log/
 testscripts/
