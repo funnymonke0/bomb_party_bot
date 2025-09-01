@@ -30,7 +30,6 @@ class BotManager():
     def __init__(self, dictFile : str, roomCode : str, settingsFile : str, proxyFile : str, defunctFile : str, username : str = None, ):
         
         
-        
         self.roomCode = roomCode
         self.username = username
 
@@ -55,8 +54,9 @@ class BotManager():
         ch = logging.StreamHandler()
         ch.setLevel(logging.DEBUG)
 
-        os.makedirs("log",exist_ok=True)
-        fh = logging.FileHandler(os.path.join('log','BotManager.log'),"w")
+        logdir = os.path.join("..", "log")
+        os.makedirs(logdir, exist_ok=True)
+        fh = logging.FileHandler(os.path.join(logdir,'BotManager.log'),"w")
         fh.setLevel(logging.DEBUG)
 
         formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')

@@ -3,7 +3,8 @@ import re
 from os.path import exists, join
 from BotManager import BotManager
 if __name__ == "__main__" :
-    config = "config"
+
+    config = join("..","config")
     proxies = join(config, 'proxies.config') ##adjust to autorecognize
     settings = join(config,'settings.config')
     dictionaries = join(config,'dictionaries.config')
@@ -32,7 +33,7 @@ if __name__ == "__main__" :
         except asyncio.exceptions.CancelledError:
             print("Session cancelled")
         except Exception as e:
-            print(f"Exception occurred")
+            print(f"Exception occurred {e}")
 
 
         
