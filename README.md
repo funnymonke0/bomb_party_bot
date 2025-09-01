@@ -34,9 +34,15 @@ Designed to reconnect automatically, cycle proxies, and mimic realistic human ty
 ```bash
 # 1. Clone this repository
 git clone https://github.com/funnymonke0/bomb_party_bot.git
-cd bomb_party_bot
+```
 
-# 2. Install requirements
+Alternatively, go to releases and download the compressed source code, then extract it to your desired file location.
+
+```bash
+# 2. navigate to the project folder
+cd path_to_folder
+
+# 3. Install requirements
 pip install -r requirements.txt
 ```
 
