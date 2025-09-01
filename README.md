@@ -47,7 +47,10 @@ pip install -r requirements.txt
 ### Settings (`settings.config`)
 
 Settings are loaded from `settings.config` and can be customized. 
-DISCLAIMER: Only change the ones you understand, otherwise some weird behavior might happen. Settings should stay in the order they appear.
+
+DISCLAIMER: Only change the ones you understand, otherwise some weird behavior might happen. 
+
+Settings should stay in the order they appear.
 
 Example:
 
@@ -169,4 +172,4 @@ The Bot Manager will then:
 - [JKLM.fun](https://jklm.fun) for Bomb Party  
 - Open source wordlists  
 - Summer break  
-- hexakosioihexekontahexaphobia 
+- hexakosioihexekontahexaphobia  
