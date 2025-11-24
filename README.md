@@ -1,131 +1,111 @@
-# 💣 bomb_party_bot  
+# 💣 Bomb Party Bot  
 > *hexakosioihexekontahexaphobia🗣️🔥💯*
 
 A (kinda) advanced Bomb Party bot and Bot Manager built in Python with Selenium.  
-Designed to reconnect automatically, cycle proxies, and mimic realistic human typing.
+Handles auto-reconnects, proxy rotation, human-like typing, and bonus-letter strategy.
 
 ---
 
 ## 🚀 Features
 
 - 🤖 **Bot Manager**  
-  Handles bot persistence, auto-reconnect, and proxy rotation.
-- 📖 **Custom Dictionary**  
-  Load your own wordlists (plaintext or URLs).
+  Handles bot persistence, auto-reconnect, and proxy rotation. Tracks lives and adjusts behavior dynamically.
+
+- 📖 **Custom & Multi-Source Dictionaries**  
+  Load your own wordlists via plaintext or URLs. Supports multiple sources simultaneously.
+
 - 🛡️ **Proxy Support**  
-  Optional rotating or static proxy support to counter IP bans.
+  Supports static and authenticated proxies with automatic fallback if a proxy fails.
+
 - 🛠️ **Human-Like Typing**  
-  Adjustable typing rates, mistake generation, burst typing, and smart delays to mimic human behavior.
-- ⚙️ **Easy Configuration**  
-  Fine-tune settings with simple config files.
+  - Dynamic typing delays based on word length, frequency, and typing randomness  
+  - Burst typing, frantic typing (when low on lives or after mistakes), and typo simulation  
+  - Spam typing for long answers or after losing lives  
+
+- ⚙️ **Fine-Grained Settings**  
+  Configure detailed behavior for typing, word selection, and bonus-letter strategy.  
+
+- 🧠 **Intelligent Word Selection**  
+  Modes include:
+  - `'smart'`, `'short'`, `'average'`, `'regen'`, `'long'`, `'common'`, `'realistic'`  
+  - Special strategies like `sneakyRegen`, `regenIfNeeded`, and stockpiling bonus letters  
+
+- 🧩 **Configurable Mistakes**  
+  Simulates typos with `mistakeChance` and adjacent-key selection via `MISTAKE_MAP`.
 
 ---
 
 ## 🛠️ Built With
 
-- Python 🐍
-- Selenium WebDriver
-- Selenium Wire (for proxy)
+- Python 🐍  
+- Selenium WebDriver  
+- Selenium Wire (for proxy)  
+- wordfreq (for frequency-based typing)
 
 ---
 
 ## 🧩 Installation
 
 ```bash
-# 1. Clone this repository
+# Clone the repo
 git clone https://github.com/funnymonke0/bomb_party_bot.git
-```
 
-Alternatively, go to releases and download the compressed source code, then extract it to your desired file location.
+# Navigate to project folder
+cd bomb_party_bot
 
-```bash
-# 2. navigate to the project folder
-cd path_to_folder
-
-# 3. Install requirements
+# Install dependencies
 pip install -r requirements.txt
 ```
 
 ---
 
-## ⚙️ Configuration
+## ⚙️ Detailed Settings (`settings.config`)
 
-### Settings (`settings.config`)
+All settings are loaded from `settings.config`. Change only what you understand.
 
-Settings are loaded from `settings.config` and can be customized. 
-
-DISCLAIMER: Only change the ones you understand, otherwise some weird behavior might happen. 
-
-Settings should stay in the order they appear.
-
-Example:
-
+```text
+selectMode:               # word selection mode: smart/short/average/regen/long/common/realistic
+regenIfNeeded:            # trigger regen mode on last life
+sneakyRegen:              # prioritize less common letters when under max lives
+timeConstraint:           # pick shortest word if typing time is tight
+stockpile:                # conserve bonus letters
+greedLong:                # prioritize long words when stockpiling
+dynamicRate:              # adjust typing speed per letter
+cyberbullying:            # auto-type if <3 players
+burstType:                # enable burst typing
+mistakes:                 # enable simulated typos
+dynamicPauses:            # adjust typing delay based on word length/frequency
+spamType:                 # spam typing after long answers or mistakes
+saveInvalid:              # save invalid words to defunct file
+defaultWait:              # base wait time before typing
+minWait:                  # minimum wait time
+rate:                     # base typing speed per character
+burstRate:                # speed during bursts
+burstChance:              # chance of burst per character
+rateJiggle:               # typing randomness multiplier
+mistakeChance:            # chance of a typo per character
+mistakePause:             # delay for correcting a typo
+spamRate:                 # speed for spam typing
+miniPause:                # short pause after spam/mistakes
+jiggle:                   # extra randomness for dynamic pauses
 ```
-selectMode:regen
-cyberbullying:False
-defaultWait:1.5
-minWait:0.8
-rate:0.08
-burstType:True
-burstRate:0.05
-burstChance:0.07
-randomness:0.3
-mistakes:True
-mistakeChance:0.05
-mistakePause:0.5
-franticType:True
-franticRate:0.06
-dynamicPauses:True
-scaleFactor:0.02
-spamType:True
-spamRate:0.015
-miniPause: 0.2
-useDefunct:True
-```
-
-| Setting | Description |
-| :------ | :----------- |
-| `selectMode` | `'smart'`, `'short'`, `'avg'`, `'regen'`, or `'long'` — the bot prioritizes words according to the selected mode |
-| `cyberbullying` | Instant type if only one player remains |
-| `defaultWait` | Default delay before typing if dynamic type is not selected |
-| `minWait` | Minimum delay before typing if dynamic type is selected |
-| `rate` | Base typing speed (seconds per character) |
-| `burstType` | Enable fast “burst” typing |
-| `burstRate` | Typing speed during bursts |
-| `burstChance` | Chance of burst per character |
-| `randomness` | Variance in typing rate (percentage aaaas decimal) |
-| `mistakes` | Enable typo simulation |
-| `mistakeChance` | Chance of typo per character |
-| `mistakePause` | Delay when fixing a typo |
-| `franticType` | Type faster after mistakes or with long words |
-| `franticRate` | Typing speed during frantic |
-| `dynamicPauses` | Adjust typing delay by word frequency and length of word |
-| `scaleFactor` | Internal variable used in dynamic pause function |
-| `spamType` | Spam type before long answers |
-| `spamRate` | Typing speed during spam |
-| `miniPause` | Short pause after spam or mistake correction |
-| `useDefunct` | Ignores used words saved in defunct.config |
 
 ---
 
-### Proxies (`proxies.config`)
-
-Format:
+## 📖 Proxies (`proxies.config`)
 
 ```
 ip:port:user:password
 ip:port
 ```
 
-Both authenticated and unauthenticated proxies are supported.
+Supports authenticated and unauthenticated proxies.
 
 ---
 
-### Dictionaries (`dictionaries.config`)
+## 📖 Dictionaries (`dictionaries.config`)
 
-Add word sources by URL or directly as plaintext words.
-
-Example URLs:
+- Add word sources by URL:
 
 ```
 https://raw.githubusercontent.com/YoungsterGlenn/bpDictionaryStatistics/master/dictionary.txt
@@ -133,7 +113,7 @@ https://norvig.com/ngrams/sowpods.txt
 https://norvig.com/ngrams/enable1.txt
 ```
 
-Example words:
+- Or add individual words:
 
 ```
 hyperventilate
@@ -143,39 +123,60 @@ xylophone
 
 ---
 
-### Defunct Words (`defunct.config`)
+## 📖 Invalid Words (`invalid.config`)
 
-Set the useDefunct flag in settings.config to enable saving and loading incorrect words.
-
-The bot will ignore words in the defunct.config file.
+- Words the bot has already used incorrectly are stored here if `saveInvalid` is enabled.  
+- Bot avoids using these words again.
 
 ---
 
 ## 🏃 Usage
 
-Navigate to the src folder:
-
 ```bash
 cd src
-```
-
-Run the bot:
-
-```bash
 python3 bomb_party_bot.py
 ```
 
 You’ll be prompted for:
 
-- **Room Code** (e.g. `ABCD`)  
-- **Username** (leave blank for random or type your own)
+- **Room Code** (e.g., `ABCD`)  
+- **Username** (leave blank for random)
 
-The Bot Manager will then:
+The Bot Manager will:
 
-- Load your configs  
-- Load proxies & dictionaries  
-- Spawn and manage the bot (Bot.py)  
-- Reconnect automatically if banned/disconnected  
+- Load your settings, proxies, and dictionaries  
+- Spawn and manage the bot  
+- Reconnect automatically if disconnected  
+- Handle bonus letters, typing, mistakes, and spam automatically  
+
+---
+
+## ⚡ Quickstart (Simplified)
+
+1. Clone repo and install dependencies:
+
+```bash
+git clone https://github.com/funnymonke0/bomb_party_bot.git
+cd bomb_party_bot
+pip install -r requirements.txt
+```
+
+2. Configure your proxies (optional) in `proxies.config`.
+
+3. Add dictionaries in `dictionaries.config`. Defaults are safe.
+
+4. (Optional) Adjust typing and bot behavior in `settings.config`. Defaults are safe.
+
+5. Run the bot:
+
+```bash
+cd src
+python3 bomb_party_bot.py
+```
+
+6. Enter your room code and username (or leave blank for random).
+
+The bot will automatically handle typing, mistakes, bursts, spam, bonus letters, and reconnections.  
 
 ---
 
