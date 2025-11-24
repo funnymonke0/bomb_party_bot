@@ -1,30 +1,37 @@
-from seleniumwire import webdriver
-from selenium.webdriver.chrome.service import Service as ChromeService
-from selenium.webdriver.chrome.options import Options as ChromeOptions
-from selenium.webdriver.common.by import By
-from selenium.webdriver.common.keys import Keys
-from selenium.common.exceptions import TimeoutException, ElementNotInteractableException, StaleElementReferenceException, ElementClickInterceptedException, WebDriverException, NoSuchFrameException, NoSuchElementException, InvalidElementStateException
-from selenium.webdriver.support.wait import WebDriverWait
 
-from selenium.webdriver.support import expected_conditions as EC
-from math import log
-import asyncio
-from logging import Logger
+from src.Client import Client
+from logging import getLogger, DEBUG
+from wordfreq import word_frequency, zipf_frequency
+from collections import Counter
+
 
 import random
 from string import ascii_lowercase
-from re import findall as regex_findall
-# from traceback import format_exc as format_traceback
-from time import sleep as blocking_sleep
+from time import sleep
+from selenium.webdriver.common.keys import Keys
 
 
-
+LOCATORS = {
+    "nickname_input": '//input[@class = "styled nickname"]',
+    "submit_button": "//button[@class = 'styled']",
+    "bombparty_iframe": "//iframe[contains(@src, 'bombparty')]",
+    "disconnect_page": '//div[@class = "disconnected page"]',
+    "neterror_page": "//body[@class = 'neterror']",
+    "bonus_alphabet": '//div[@class="bonusAlphabetField"]//div[@class="letterField"]//input',
+    "min_turn_duration": '//div[@class = "setting rule minTurnDuration"]//div[@class = "field range"]//input[@type="number" and @min = "1" and @max = "10"]',
+    "start_lives": "//input[@class = 'starting']",
+    "max_lives": '//input[@class="max" and @type="number" and @min="1" and @max="10"]',
+    "join_round_button": "//button[@class = 'styled joinRound']",
+    "self_turn": '//div[@class = "selfTurn"]',
+    "syllable": "//div[@class = 'syllable']",
+    "textbox": '//form//input[@maxlength = "30"]',
+    "stats_table_rows": "//table[@class='statsTable']//tr",
+    "self_lives": "//table[@class='statsTable']//tr[contains(@class, 'self')]//td[@class='lives']"
+}
 
 MAX_WAIT = 5
 
 UPDATE_INTERVALS = {
-        'element' : 0.05,
-        'turn' : 0.1,
         'disconnect' : 30,
         'join' : 10
     }
@@ -60,612 +67,285 @@ MISTAKE_MAP = {
     'm': ['n', 'j', 'k']
 }
 
-class DisconnectException(Exception):
-    def __init__(self):
-        super().__init__()
-
-
-def safeExec(func):#decorater
-
-    def wrapper(*args, **kwargs):
-        try:    
-            obj = func(*args, **kwargs)
-            if obj is not None:
-                return obj
-            return True
-        
-        except (WebDriverException, NoSuchElementException, StaleElementReferenceException, InvalidElementStateException, ElementNotInteractableException, ElementClickInterceptedException) as e:
-            # self.console.warning(f"safeWrapper caught {type(e).__name__}: {e}")
-            return False
-    return wrapper
 
 
 class Bot():
-    def __init__(self, dicts: dict, logger : Logger, settings : dict, defunctFile:str, proxy : str =None):
+    def __init__(self, dicts: dict, settings : dict, invalid : set, proxy : str = ''):
 
-        self.console = logger
+        self.console = getLogger('MANAGER-CONSOLE.BOT-CONSOLE')
+        self.console.setLevel(DEBUG)
 
 
         self.dicts = dicts 
-        self.defunctFile = defunctFile 
 
-        self.used = set()
-        self.unusable = set()
-        self.alphabet = []
-        self.original = []
 
-        self.ans = ""
-        self.timeUsed = 0
-        self.playerCt = 0 
-        self.wordCt = 0
 
-        self.expectedWords = 0
+        self.invalid = invalid #invalid words (to be written to invalid file)
+        self.bonusAlphabet = [] #temp bonus self.bonusAlphabet
         
-        self.franticToggle = False
+
+        self.timeUsed = 0 #time used this turn
+        
         self.spamToggle = False
 
-        self.iFrame = None 
         
-        self.textbox = None 
-        self.syllable = "" 
-
-
-        self.promptTime = 5
+        self.promptTime = 5 
         self.startLives = 2
         self.maxLives = 3
-        self.currentLives = 2
+        self.currentLives = 2 
 
-        self.prevLW = 0
-        self.prevLL = 0
+
 
 
         ## list unpacking. do this for convenient use cuz we dont want to have to get the variables from the settings list in each method
         [
             self.selectMode,
+            self.regenIfNeeded,
+            self.sneakyRegen,
+            self.timeConstraint,
+            self.stockpile,
+            self.greedLong,
+            self.dynamicRate,
             self.cyberbullying,
-            self.defaultWait,
-            self.minWait, 
-            self.rate,
             self.burstType,
+            self.mistakes,
+            self.dynamicPauses,
+            self.spamType,
+            self.saveInvalid,
+            self.defaultWait,
+            self.minWait,
+            self.rate,
             self.burstRate,
             self.burstChance,
-            self.randomness,
-            self.mistakes,
-            self.mistakeChance, 
+            self.rateJiggle,
+            self.mistakeChance,
             self.mistakePause,
-            self.franticType,
-            self.franticRate,
-            self.dynamicPauses,
-            self.scaleFactor,
-            self.spamType,
             self.spamRate,
             self.miniPause,
-            self.useDefunct
-        ] = settings
+            self.jiggle
+        ] = list(settings.values())
+
+        self.client = Client(proxy=proxy)
 
 
-        chrome_options = ChromeOptions()
-        chrome_options.page_load_strategy = 'eager'
-        service = ChromeService()
-        seleniumwire_options = {
-            }
-
-        if proxy:
-            seleniumwire_options ['proxy'] = {
-                'https': proxy,
-                'http': proxy,
-                'verify_ssl': False,
-                'no_proxy': 'localhost,127.0.0.1'
-                }
-        else:
-            proxy = 'localhost'
-        self.driver = webdriver.Chrome(service=service, options=chrome_options, seleniumwire_options=seleniumwire_options)
-
-        self.console.info(f'initialized bot running @ {proxy}')
-
-
-
-    def joinRoom(self, roomCode : str, username : str): ## join the room and fill in the username + submit.
-        browser = self.driver
-        console = self.console
-        self.console.info('joining room')
-        browser.get("https://jklm.fun/"+roomCode)
-        browser.switch_to.default_content()
         
-        try:
-            if username is not None and len(username) > 0:
-                textbox = WebDriverWait(browser,MAX_WAIT).until(EC.visibility_of_element_located((By.XPATH, '//input[@class = "styled nickname"]')))
 
-                textbox.clear()
-                textbox.send_keys(username)
-            
-            submit = WebDriverWait(browser,MAX_WAIT).until(EC.element_to_be_clickable((By.XPATH, "//button[@class = 'styled']")))
-            submit.click()
+    def joinRoom(self, roomCode: str, username: str = '') -> bool:
+        return self.client.joinRoom(roomCode=roomCode,username=username)
+       
 
-            WebDriverWait(browser,MAX_WAIT)
-            
-        except TimeoutException:
-            console.info('failed to join room')
-            return False
+    def main_loop(self):
+        originalAlphabet = [] #original bonus self.bonusAlphabet
+        originalBurstChance = self.burstChance
+        used = set() #used words this session
+        used.update(self.invalid) #add invalid words to used so they are not used again
         
-        console.info('joined room')
-        return True
-
-
-
-    def loadDefunct(self): ## loads the non-working words at the start of threadStart. Purely for saving unusables to file.
-        console = self.console
-        fn = self.defunctFile
-        try:
-            with open(fn, 'r') as file:
-                self.unusable.update(file.readlines())
-            console.info(f'loaded unusable word list from {fn}. Contains {len(self.unusable)} words')
-        except (FileNotFoundError, FileExistsError):
-            console.info(f"{fn} could not be loaded")
-            self.useDefunct = False
-
-
-
-    async def backgroundLoop(self, logic, wait): 
         while True:
+            try:
+                if self.client.disconnect_check():
+                    break
 
-            logic()
-
-            await asyncio.sleep(wait)
-            
-
-    
-    def disconnectProc(self): ##raises disconnect to delete bot if banned. loop logic.
-
-        browser = self.driver
-        console = self.console
-
-        @safeExec
-        def ban():
-            browser.switch_to.default_content()
-            dc = browser.find_element(By.XPATH, '//div[@class = "disconnected page"]')
-            if dc.is_displayed(): ##banned
-                console.info('Bot disconnected due to ban')
-                raise DisconnectException
-        @safeExec
-        def neterr():
-            browser.switch_to.default_content()
-            neterr = browser.find_element(By.XPATH, "//body[@class = 'neterror']")
-            if neterr.is_displayed(): ##neterr
-                console.info('Bot disconnected due to neterr')
-                raise DisconnectException
-            
-        console.info('scanning for disconnection')
-        ban()
-        neterr()
-
-
-
-    def joinProc(self):#joins room and performs processes associated with start of round. loop logic
-        browser = self.driver
-        console = self.console
-
-        #code inside joinlogic
-        @safeExec
-        def bonusAlphabet(): 
-            self.original = list('abcdefghijklmnopqrstuvwy')
-            self.switchIFrame()
-            entries = browser.find_elements(By.XPATH, '//div[@class="bonusAlphabetField"]//div[@class="letterField"]//input')
-            strAlph = ''
-            for index, letter in enumerate(entries):
-                times = letter.get_property("value")
-                if times.isdecimal():
-                    times = int(times)
-                    strAlph += ascii_lowercase[index]*times
-            if len(strAlph) > 0:
-                console.info(f'bonus alphabet updated. {strAlph}')
-                self.original = list(strAlph)
-            else:
-                console.info('bonus alphabet not updated. defaulting')
-
-
-        @safeExec
-        def promptTime():
-            self.switchIFrame()
-            rawElemVal = browser.find_element(By.XPATH, '//div[@class = "setting rule minTurnDuration"]//div[@class = "field range"]//input[@type="number" and @min = "1" and @max = "10"]').get_property('value')
-            console.info(rawElemVal)
-            if rawElemVal.isdecimal():
-                self.promptTime = int(rawElemVal)
-                console.info(f'promptTime updated. {self.promptTime}')
-            else:
-                console.info('promptTime not updated')
-
-
-        @safeExec
-        def startLives():
-            self.switchIFrame()
-            rawElemVal = browser.find_element(By.XPATH, "//input[@class = 'starting']").get_property("value")
-            console.info(rawElemVal)
-            if rawElemVal.isdecimal():
-                self.startLives = int(rawElemVal)
-                console.info(f"starting lives updated. {self.startLives}")
-            else:
-                console.info("starting lives not updated")
-
-
-        @safeExec
-        def maxLives():
-            self.switchIFrame()
-            rawElemVal = browser.find_element(By.XPATH, '//input[@class="max" and @type="number" and @min="1" and @max="10"]').get_property("value")
-            console.info(rawElemVal)
-            if rawElemVal.isdecimal():
-                self.maxLives = int(rawElemVal)
-                console.info(f"max lives updated. {self.maxLives}")
-            else:
-                console.info("max lives not updated")
-
-
-        #actual logic
-        @safeExec
-        def joinLogic():
-            console.info('scanning for round join')
-            self.switchIFrame()
-            join = browser.find_element(By.XPATH, "//button[@class = 'styled joinRound']")
-
-            if join.is_displayed(): #simpler than using player count
-                console.info('joining round')
-                join.click()
-                bonusAlphabet()
-                promptTime()
-                startLives()
-                maxLives()
-
-                self.used = set()
-                self.used.update(self.unusable)
-                self.expectedWords = 0
-                self.wordCt = 0
-                self.franticToggle = False
-                self.spamToggle = False
-                self.currentLives = self.startLives
-
-        joinLogic()
-
-
-
-    async def mainLoop(self):
-        console = self.console
-        browser = self.driver
-        alphabet = self.alphabet
-
-        @safeExec
-        def turnLogic(): #finds if its our turn
-            self.switchIFrame()
-            turn = browser.find_element(By.XPATH, '//div[@class = "selfTurn"]')
-            if turn.is_displayed():
-                return True
-            return False
-        
-
-        @safeExec
-        def updateElements(): ## find syllable and textbox. 
-            self.switchIFrame()
-            syllable = browser.find_element(By.XPATH, "//div[@class = 'syllable']")
-            textbox = browser.find_element(By.XPATH, '//form//input[@maxlength = "30"]')
-            if syllable.is_displayed() and textbox.is_enabled():
-                syllable = syllable.get_property("textContent").lower()
-                if syllable.isalpha() and len(syllable) > 0:
-                    self.syllable = syllable
-                    self.textbox = textbox
-                    return True
-            return False
-    
-
-        @safeExec
-        def safeTyper(input):
-            textbox = self.textbox
-            self.switchIFrame()
-            if type(input) is str:
-                textbox.send_keys(input)
-
-            elif type(input) is zip:
-                syll = self.syllable
-                for letter, delay in input:
-                    updateElements() #continuously updates while typing so if syll changes it resets
-                    if self.syllable != syll:
-                        self.console.info("new syll detected, cancelling type")
-                        break
-
-                    if letter != '':
-                        textbox.send_keys(letter)
-                    self.timeUsed += delay
-                    blocking_sleep(delay)
+                if self.client.try_join_round():
+                    originalAlphabet = self.client.get_bonus_alphabet()
+                    self.promptTime = self.client.get_prompt_time()
+                    self.startLives = self.client.get_start_lives()
+                    self.currentLives = self.startLives
+                    self.maxLives = self.client.get_max_lives()
+                    self.client.clear_life_trackers()
                     
-            textbox.send_keys(Keys.ENTER)
+                    used = set()
+                    used.update(self.invalid)
 
-
-        @safeExec
-        def statsTableUpdate():
-
-            @safeExec
-            def updatePlayers():
-                browser.switch_to.default_content()
-                entries = browser.find_elements(By.XPATH, "//table[@class='statsTable']//tr")
-                if len(entries) > 1:
-                    self.playerCt = len([player for player in entries if player.get_property('class') != 'isDead'])-1 ## -1 for the header
-                    console.info(f'updated. {self.playerCt} players alive')
-            
-            @safeExec
-            def updateWordStat():
-                browser.switch_to.default_content()
-                rawElemVal = browser.find_element(By.XPATH, "//table[@class='statsTable']//tr[contains(@class, 'self')]//td[@class='words']").get_property("textContent")
-                if rawElemVal.isdigit():
-                    self.wordCt = int(rawElemVal)
-                    console.info(f"used words updated. {self.wordCt} words used")
-                else:
-                    console.info("used words not updated")
-                    self.wordCt = self.expectedWords
-
-            @safeExec
-            def updateCurrentLives():
-                browser.switch_to.default_content()
-                rawElemVal = browser.find_element(By.XPATH, "//table[@class='statsTable']//tr[contains(@class, 'self')]//td[@class='lives']").get_property("textContent")
-                self.console.info(rawElemVal)
-                nums = [int(n) for n in regex_findall(r"[-+]?\d+", rawElemVal)]
-                
-                if nums is not None and len(nums) == 2:
-                    self.currentLives = self.currentLives + (nums[0]-self.prevLW) + (nums[1]-self.prevLL) #abs change from last turn
-                    self.prevLW, self.prevLL = nums 
-                    console.info(f"current lives updated. {self.currentLives}")
-                else:
-                    console.info("current lives not updated")
-
-            updatePlayers()
-            updateWordStat()
-            updateCurrentLives()
-
-        while True:
-            if turnLogic():
-                console.info('turn started')
-
-                if updateElements():
-                    self.textbox.clear()
-                    ##find
-                    dicts = self.dicts
-                    syll = self.syllable
-                
-                    ansSet = dicts[syll] #set
-                    
-                    ansSet = ansSet - self.used
-                    if ansSet and len(ansSet) > 0:
-                        self.strategy(ansSet)
-                        console.info(f"found answer {self.ans} to syllable {syll}")
-                    else:
-                        # with open("unknowns.txt","a") as file:
-                        #     file.write(syllable.lower()+"\n")
-                        self.ans = '/suicide'
-                        console.info("no valid ans found")
-
-                    #answer
-                    ans = self.ans
-
-                    if self.cyberbullying and self.playerCt == 2:
-                        safeTyper(ans)
-                    else:
-                        typeAns = self.formatSimType(ans)
-                        syllFreq = 0
-
-                        if not self.timeUsed > 0: #initial wait
-                            wait = self.minWait 
-                            if self.dynamicPauses:
-                                lenAns = len(ans)
-                                syllFreq = len(ansSet)/len(dicts)
-                                func = self.scaleFactor*lenAns*(1-log(syllFreq)) #scary big function for time scaling
-                                wait = max(wait, func) #never lower than min
-                            else:
-                                wait = self.defaultWait
-
-                            await asyncio.sleep(wait)
-                            self.timeUsed += wait
-
-                        if self.spamType and len(ans) >= 20: #if word long
-                            self.spamToggle = True
-
-                        if self.spamToggle:
-                            console.info('spam on')
-                            spam = self.formatSpam()
-                            safeTyper(spam) 
-                            await asyncio.sleep(self.miniPause)
-
-                        safeTyper(typeAns)
-
-                    #post
-                    self.used.add(ans)
-                    self.expectedWords += 1
                     self.franticToggle = False
                     self.spamToggle = False
 
-                    prevLives = self.currentLives
-                    statsTableUpdate()
-                    currentLives = self.currentLives 
-                    wrong = self.wordCt != self.expectedWords
 
+                if self.client.get_self_turn(): 
+                    #get answer
+                    syll = self.client.get_syllable()
+                    discontinuity = False
 
-                    if (currentLives == 1 or wrong) and self.franticType: ##if you are on the verge of dying or answered wrong
-                        self.franticToggle = True
-                        console.info('frantic on')
-
-                    if currentLives < prevLives and self.spamType:#if life lost this round, spam next round
-                        self.spamToggle = True
-                        console.info('spam on')
-
-                        
-                    if wrong:
-                        self.expectedWords = self.wordCt
-                        self.unusable.add(ans)
+                    ans = self.eval(syll, used)
+                    if ans == "/suicide":
+                        self.console.info(f"could not find answer for syllable: {syll}")
                     else:
-                        self.timeUsed = 0
-
-                        [alphabet.remove(letter) for letter in set(ans) if letter in alphabet]
-                        console.info(f"remaining {alphabet} after pruning")
-                        if len(alphabet) < 1:
-                            alphabet = self.original.copy()
-                            console.info(f"{alphabet} after regen reset")
-
-            await asyncio.sleep(UPDATE_INTERVALS.get("turn"))
-
-    
-
-    def switchIFrame(self): ## tool. switch to the bombparty iframe. must be called before any other interaction in the iframe.
-        browser = self.driver
-        console = self.console
-        browser.switch_to.default_content()
-        while True:
-            try:
-
-                if self.iFrame is not None:
-                    browser.switch_to.frame(self.iFrame)
-                    return
-            except (WebDriverException, NoSuchElementException, StaleElementReferenceException, InvalidElementStateException, ElementNotInteractableException):
-                console.info(f"Failed to switch to iframe. refinding")
-
-            self.iFrame = browser.find_element(By.XPATH, "//iframe[contains(@src, 'bombparty')]")
-    
-            
-
-    async def start(self): #mmm
-        self.console.info('Bot started')
-        if self.useDefunct:
-            self.loadDefunct()
-
-        try:
-            async with asyncio.TaskGroup() as tg:
-                tg.create_task(self.backgroundLoop(self.disconnectProc, UPDATE_INTERVALS.get('disconnect')))
-                tg.create_task(self.backgroundLoop(self.joinProc, UPDATE_INTERVALS.get('join')))
-                tg.create_task(self.mainLoop())
-            
-        except* KeyboardInterrupt:
-            self.console.info('Session interrupted by user')
-
-        except* DisconnectException:
-            self.console.info('Bot disconnected gracefully due to ban or neterr')
-
-        except* Exception as e:
-            self.console.error(f'Exception caught with traceback: {e}.', exc_info=True)
-
-
-
-    def strategy(self, ansSet:set): #eval
-        ans = self.ans
-        rate = self.rate
-        st = self.spamToggle
-        alph = self.alphabet
-        mode = self.selectMode
-        cl = self.currentLives
-        sr = self.spamRate
-        pt = self.promptTime
-        tu = self.timeUsed
-        console = self.console
-
-        if mode == 'long':
-            ans = max(ansSet, key=len)
-
-        elif mode == 'short' :
-            ans = min(ansSet, key= len)
-
-        elif mode == 'avg':
-            if cl > 1:
-                avgLen = round((len(min(ansSet, key= len))+len(max(ansSet, key=len)))/2)
-                ans = min(ansSet, key = lambda word: abs(len(word)-avgLen)) #minimize difference from the averageLen
-            else:
-                console.info('life constraint; using shortest')
-                ans = min(ansSet, key= len)
-
-        elif mode == 'smart':
-            if cl > 1:
-                ans = max(ansSet, key=len)
-                if not len(ans) >= 20:
-                    if cl < self.maxLives:
-                        ans = max(ansSet, key= lambda word: len(set(word) & set(alph)))
-                    else:
-                        avgLen = round((len(min(ansSet, key= len))+len(max(ansSet, key=len)))/2)
-                        ans = min(ansSet, key = lambda word: abs(len(word)-avgLen))
-
-                tr = rate
-                if st:
-                    tr += sr
-
-                if len(ans)*(tr) > pt-tu:
-                    console.info('time constraint; using shortest')
-                    ans = min(ansSet, key= len)
-            else:
-                console.info('life constraint; using shortest')
-                ans = min(ansSet, key= len)
-
-        elif mode == 'regen':
-            if cl > 1:
-                if cl < self.maxLives:
-                    ans = max(ansSet, key= lambda word: len(set(word) & set(alph)))
-                else:
-                    avgLen = round((len(min(ansSet, key= len))+len(max(ansSet, key=len)))/2)
-                    ans = min(ansSet, key = lambda word: abs(len(word)-avgLen))
-
-                tr = rate
-                if st:
-                    tr += sr
+                        self.console.info(f"found answer {ans} for syllable {syll}")
                     
-                if len(ans)*(tr) >= pt-tu:
-                    console.info('time constraint; using shortest')
-                    ans = min(ansSet, key= len)
-            else:
-                console.info('life constraint; using shortest')
-                ans = min(ansSet, key= len)
 
-        self.ans = ans
+                    if self.cyberbullying and self.client.get_players() < 3 and (not self.client.safe_typer(ans) or self.client.get_syllable() != syll): #checks if cyberbullying is active, then performs safetyper and/or detects discont.
+                        discontinuity = True
+                    else:
+                        #waiting logic
+
+                        wait = self.defaultWait
+
+                        if self.dynamicPauses:
+                            func = lambda w: min(
+                                max(0, 
+                                    self.promptTime-self.timeUsed if self.dynamicRate else self.promptTime-self.timeUsed-(self.rate)*(1+self.rateJiggle/3**0.5)*len(ans)), #capped at remaining time or remaining time - time taken to type if not dynamicRate
+                                (self.minWait + self.burstRate*len(w) + 0.5*self.promptTime*((max(0, 7 - zipf_frequency(w,"en")))/6)**1.5) * (1 + random.choice((-1, 1))*random.uniform(0, self.jiggle))) 
+                            wait = func(ans)
+
+                        sleep(wait)
+                        self.timeUsed += wait
+                        
+
+                        if self.spamType and len(ans) >= 20 or self.spamToggle:
+                            self.console.info('spam on')
+                            spam = self.formatSpam()
+                            if not self.client.safe_typer(spam):
+                                discontinuity = True
+                            else:
+                                sleep(self.miniPause)
+                                self.timeUsed+=self.miniPause
+                            self.timeUsed+=self.spamRate*len(spam)
+                        
+
+                        if self.dynamicRate:
+                            self.rate = min(self.burstRate, (self.promptTime-self.timeUsed)/((1 + self.rateJiggle / (3**0.5))*len(ans))) #margin of error for each letter is accounted for
+
+                        if self.client.get_syllable() == syll:
+                            if not self.client.safe_typer(self.formatSimType(ans)):
+                                discontinuity = True 
+                        else:
+                            discontinuity = True
+                        
+                    
+                    #change flags and update used words
+                    if not discontinuity:
+                        used.add(ans)
+
+                        self.burstChance = originalBurstChance
+                        self.spamToggle = False
+
+                        lifeChange = self.client.get_life_change() 
+                        self.currentLives += lifeChange
+
+                        wrong = bool(self.client.get_syllable() != syll)
+
+                        if (self.currentLives == 1 or wrong): ##if you are on the verge of dying or answered wrong
+                            self.burstChance = min(1.0, originalBurstChance* 2)
+                            self.console.info('frantic on')
+
+                        if lifeChange < 0 and self.spamType:#if life lost this round, spam next round
+                            self.spamToggle = True
+                            self.console.info('spam on')
+
+                        if wrong: #if incorrect, add to invalid list
+                            self.invalid.add(ans)
+                        else:
+                            self.timeUsed = 0 #only reset timeUsed if correct
+                            #if correct, prune bonus alphabet for letters in used answer
+                            self.bonusAlphabet = list((Counter(self.bonusAlphabet) - Counter(ans)).elements())
+                            self.console.info(f"remaining {self.bonusAlphabet} after pruning")
+
+                            if len(self.bonusAlphabet) < 1: #no need to add to currentLives, since that happens automatically
+                                self.bonusAlphabet = originalAlphabet.copy()
+                                self.console.info(f"{self.bonusAlphabet} after regen reset")
+            except KeyboardInterrupt:
+                self.console.info("User aborted Bot")
+                break
+
+
+
+    def eval(self, syll:str, used:set): #eval
+        ans = '/suicide'
+        alph = self.bonusAlphabet
+        mode = self.selectMode
+        ansSet = self.dicts[syll].copy() #set
+        ansSet -= used
+
+        if ansSet and len(ansSet) < 1:
+            return ans
+
+        long = lambda: max(ansSet, key=len)
+        short = lambda: min(ansSet, key=len)
+        avgLen = round((len(short())+len(long()))/2)
+        avg = lambda: min(ansSet, key = lambda word: abs(len(word)-avgLen))#minimize difference from the averageLen
+        common= lambda: max(ansSet, key=lambda word: word_frequency(word, "en"))
+        regen = lambda: max(ansSet, key= lambda word: len(set(word) & set(alph))) #maximum shared letters
+        regenSpec = lambda num: max(ansSet, key= lambda word: (len(set(word) & set(alph))<=num,len(set(word) & set(alph))))#returns the one that will give the most number of shared letters possible without going over the threshold
+        sneakyRegenSpec = lambda num: max(ansSet, key= lambda word: (len(set(word) & set(alph))<=num,zipf_frequency(word,"en")+len(set(word) & set(alph))))
+        realistic = lambda: max(ansSet, key= lambda word:zipf_frequency(word,"en")+len(set(word) & set(alph))) #maximum shared letters while also accounting for regen
 
         
+        if self.timeConstraint and ((len(ans)*self.rate if not self.dynamicRate else len(ans)*self.rate*(1 + self.jiggle / (3**0.5))) > self.promptTime-self.timeUsed):
+            self.console.info('time constraint; using shortest')
+            ans = short()
 
-    def formatSpam(self):
+        elif self.regenIfNeeded and self.currentLives == 1 and self.maxLives != 1:
+            ans = regen()
 
+        elif self.sneakyRegen and self.currentLives < self.maxLives:
+            ans = realistic()
+
+        elif self.stockpile and self.maxLives != 1:
+            if len(alph)>1:
+                if self.sneakyRegen:
+                    ans = sneakyRegenSpec(len(alph)-1)
+                else:
+                    ans = regenSpec(len(alph)-1)
+            elif alph[0] not in syll:
+                temp = {word for word in ansSet if alph[0] not in word} #its possible in niche circumstances that no solve exists that doesnt include a certain letter, even if it isnt required by the syll
+                ansSet = temp if len(temp)>0 else ansSet #probably a terrible way to do it but oh well
+            
+        elif mode == 'long':
+            ans = long()
+
+        elif mode == 'short':
+            ans = short()
+
+        elif mode == "average":
+            ans = avg()
+        
+        elif mode == 'regen':
+            ans = regen()
+        
+        elif mode == "common":
+            ans = common()
+        
+        elif mode == "realistic":
+            ans = realistic()
+        else:
+            ans = random.choice(ansSet)
+
+        return ans
+        
+
+
+    def formatSpam(self) -> list:
         length = random.randint(7,15)
-        
         txt = [random.choice(ascii_lowercase) for i in range(0,length)] #needed so that it does the choice each time
         ratesList = [self.spamRate for i in range(0,length)]
+        return list(zip(txt, ratesList))
 
-        return zip(txt, ratesList)
 
-    
 
-    def formatSimType(self, txt : str): ##tool
-        rand = lambda x: x*(1+random.choice((-1, 1))*random.uniform(0, self.randomness))
+    def formatSimType(self, txt : str) -> list: ##tool
+        rand = lambda x: x*(1+random.choice((-1, 1))*random.uniform(0, self.rateJiggle))
         ratesList = []
         txtList = []
-
+    
         for letter in txt:
             #add mistake (char and delay)
             if self.mistakes and (random.random() <= self.mistakeChance) and letter in MISTAKE_MAP.keys(): #think about having mistakechance scale with typespeed
-                mistakechars = MISTAKE_MAP.get(letter)
+                mistakechars = MISTAKE_MAP[letter]
 
                 txtList.append(random.choice(mistakechars))
                 ratesList.append(self.mistakePause)
+                self.timeUsed+=self.mistakePause
 
                 txtList.append(Keys.BACKSPACE)
                 ratesList.append(self.miniPause) 
-
-
+                self.timeUsed+=self.miniPause
             txtList.append(letter)
+
             #add delay
-            if self.franticToggle: 
-                ratesList.append(self.franticRate)
-            elif self.burstType and (random.random() <= self.burstChance):
+            if self.burstType and (random.random() <= self.burstChance) and not self.dynamicRate:
                 ratesList.append(self.burstRate)
+                self.timeUsed += self.burstRate
             else:
                 ratesList.append(rand(self.rate))
+                self.timeUsed+=self.rate
 
-        return zip(txtList, ratesList)
-
-
-
-    def __del__(self):
-
-        if self.useDefunct:
-            with open(self.defunctFile, 'w') as file:
-                file.writelines('\n'.join(self.unusable) + '\n')
-
-            self.console.info('added unusable words to defunct list')
-
-        self.console.info("POOF! Bot cleaned up.")
+        return list(zip(txtList, ratesList))
