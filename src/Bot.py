@@ -4,10 +4,10 @@ from logging import getLogger, DEBUG
 from wordfreq import word_frequency, zipf_frequency
 from collections import Counter
 
-
+import math
 import random
 from string import ascii_lowercase
-from time import sleep
+from time import sleep, time
 from selenium.webdriver.common.keys import Keys
 
 
@@ -70,247 +70,224 @@ MISTAKE_MAP = {
 
 
 class Bot():
-    def __init__(self, dicts: dict, settings : dict, invalid : set, proxy : str = ''):
+    def __init__(self, dicts: dict, settings : dict, invalid : set = {}, proxy : str = ''):
 
         self.console = getLogger('MANAGER-CONSOLE.BOT-CONSOLE')
         self.console.setLevel(DEBUG)
 
 
         self.dicts = dicts 
+        self.invalid = invalid 
 
-
-
-        self.invalid = invalid #invalid words (to be written to invalid file)
         self.bonusAlphabet = [] #temp bonus self.bonusAlphabet
         
-
-        self.timeUsed = 0 #time used this turn
-        
-        self.spamToggle = False
-
-        
+       
         self.promptTime = 5 
         self.startLives = 2
         self.maxLives = 3
         self.currentLives = 2 
 
-
-
-
         ## list unpacking. do this for convenient use cuz we dont want to have to get the variables from the settings list in each method
         [
             self.selectMode,
+
             self.regenIfNeeded,
             self.sneakyRegen,
-            self.timeConstraint,
             self.stockpile,
             self.greedLong,
-            self.dynamicRate,
+            self.timeConstraint,
             self.cyberbullying,
-            self.burstType,
             self.mistakes,
-            self.dynamicPauses,
+            self.burstType,
             self.spamType,
-            self.saveInvalid,
-            self.defaultWait,
+            self.dynamicRate,
+            self.dynamicPauses,
+            self.dynamicMistakes,
+
             self.minWait,
-            self.rate,
-            self.burstRate,
-            self.burstChance,
-            self.rateJiggle,
-            self.mistakeChance,
+            self.maxWait,
             self.mistakePause,
-            self.spamRate,
             self.miniPause,
-            self.jiggle
+            minWpm,
+            maxWpm,
+            spamWpm,
+            self.burstChance,
+            self.minMistakeChance,
+            self.maxMistakeChance,
+            self.spamChance,
+            self.jitterPercent
         ] = list(settings.values())
+
+        self.minRate = 5/minWpm
+        self.maxRate = 5/maxWpm
+        self.spamRate = 5/spamWpm
+        self.applyJitter = lambda x: x*(1+random.uniform(-self.jitterPercent, self.jitterPercent))
+
+        self.isCorrect = True #reset stopwatch at the start
+        self.start = 0 #start time
+        self.timeUsed = lambda: time()-self.start
+        self.syllable = ''
+
+        self.originalAlphabet = [] #original bonus self.bonusAlphabet
+        self.used = set() #used words this session
+        self.used.update(self.invalid) #add invalid words to used so they are not used again
 
         self.client = Client(proxy=proxy)
 
 
-        
+    def joinRoom(self, roomCode: str, username: str = '') -> bool: return self.client.joinRoom(roomCode=roomCode,username=username)
 
-    def joinRoom(self, roomCode: str, username: str = '') -> bool:
-        return self.client.joinRoom(roomCode=roomCode,username=username)
+    def close(self): self.client.close()
        
 
     def main_loop(self):
-        originalAlphabet = [] #original bonus self.bonusAlphabet
-        originalBurstChance = self.burstChance
-        used = set() #used words this session
-        used.update(self.invalid) #add invalid words to used so they are not used again
         
+        
+
         while True:
             try:
-                if self.client.disconnect_check():
+                if self.client.disconnect_check() or self.client.neterr_check():
                     break
 
-                if self.client.try_join_round():
-                    originalAlphabet = self.client.get_bonus_alphabet()
+                if self.client.try_join_round(): #needs to be constant trying to click join because otherwise it will not have another indicator as to when to reset initial conditions
+                    self.originalAlphabet = self.client.get_bonus_alphabet()
                     self.promptTime = self.client.get_prompt_time()
                     self.startLives = self.client.get_start_lives()
                     self.currentLives = self.startLives
                     self.maxLives = self.client.get_max_lives()
                     self.client.clear_life_trackers()
                     
-                    used = set()
-                    used.update(self.invalid)
+                    self.used = set()
+                    self.used.update(self.invalid) #reset used
 
-                    self.franticToggle = False
-                    self.spamToggle = False
+                    self.isCorrect = True
 
 
+                
                 if self.client.get_self_turn(): 
-                    #get answer
-                    syll = self.client.get_syllable()
-                    discontinuity = False
-
-                    ans = self.eval(syll, used)
-                    if ans == "/suicide":
-                        self.console.info(f"could not find answer for syllable: {syll}")
-                    else:
-                        self.console.info(f"found answer {ans} for syllable {syll}")
+                    self.syllable = self.client.get_syllable()
+                    typed = False
+                    if self.isCorrect:
+                        self.start = time()
                     
 
-                    if self.cyberbullying and self.client.get_players() < 3 and (not self.client.safe_typer(ans) or self.client.get_syllable() != syll): #checks if cyberbullying is active, then performs safetyper and/or detects discont.
-                        discontinuity = True
+                    ansSet = self.dicts[self.syllable]
+                    ansSet -= self.used
+
+                    ans = '/suicide'
+                    if ansSet and len(ansSet) > 0:
+                        ans = self.eval(ansSet)
+
+                    self.console.info(f"found answer {ans} for syllable {self.syllable}" if ans != "/suicide" else f"could not find answer for syllable: {self.syllable}")
+                    
+                    
+                    if self.cyberbullying and self.client.get_players() < 3:
+                        if self.client.get_self_turn() and self.client.safe_typer(ans): 
+                            typed = True
+
                     else:
-                        #waiting logic
+                        wait = self.miniPause
 
-                        wait = self.defaultWait
+                        if self.isCorrect: #do normal wait if we were correct on our prev answer
+                            rt = lambda w: 581.39 + 467.81 / (1 + (2.718281828 ** (1.022 * (zipf_frequency(w) - 2.946)))) #tuff goony blud sigmoid regression function based on ELP data
+                            base_min, base_max = 581.39, 581.39 + 467.81
+                            func = lambda w: self.minWait + (rt(w) - base_min) * (self.maxWait - self.minWait) / (base_max - base_min) #linear interpolation of wait time based on word freq
 
-                        if self.dynamicPauses:
-                            func = lambda w: min(
-                                max(0, 
-                                    self.promptTime-self.timeUsed if self.dynamicRate else self.promptTime-self.timeUsed-(self.rate)*(1+self.rateJiggle/3**0.5)*len(ans)), #capped at remaining time or remaining time - time taken to type if not dynamicRate
-                                (self.minWait + self.burstRate*len(w) + 0.5*self.promptTime*((max(0, 7 - zipf_frequency(w,"en")))/6)**1.5) * (1 + random.choice((-1, 1))*random.uniform(0, self.jiggle))) 
-                            wait = func(ans)
-
-                        sleep(wait)
-                        self.timeUsed += wait
-                        
-
-                        if self.spamType and len(ans) >= 20 or self.spamToggle:
-                            self.console.info('spam on')
+                            wait = func(ans) if self.dynamicPauses else self.minWait
+                        elif (self.spamType and (len(ans) >= 20 or random.random()<=self.spamChance)): #wait minipause with a potential spam if was not correct
                             spam = self.formatSpam()
-                            if not self.client.safe_typer(spam):
-                                discontinuity = True
-                            else:
-                                sleep(self.miniPause)
-                                self.timeUsed+=self.miniPause
-                            self.timeUsed+=self.spamRate*len(spam)
-                        
+                            self.client.safe_typer(spam)
 
-                        if self.dynamicRate:
-                            self.rate = min(self.burstRate, (self.promptTime-self.timeUsed)/((1 + self.rateJiggle / (3**0.5))*len(ans))) #margin of error for each letter is accounted for
+                        if self.client.get_self_turn():
+                            sleep(wait)
+                        if self.client.get_self_turn() and self.client.safe_typer(self.formatSimType(ans)):
+                            typed = True
 
-                        if self.client.get_syllable() == syll:
-                            if not self.client.safe_typer(self.formatSimType(ans)):
-                                discontinuity = True 
-                        else:
-                            discontinuity = True
-                        
-                    
                     #change flags and update used words
-                    if not discontinuity:
-                        used.add(ans)
+                    self.isCorrect = False
+                    if typed:
+                        self.used.add(ans)
+                    typed = False
+                    if not self.client.get_self_turn():
+                        self.isCorrect = True #only reset stopwatch when no longer our turn
 
-                        self.burstChance = originalBurstChance
-                        self.spamToggle = False
-
-                        lifeChange = self.client.get_life_change() 
+                        lifeChange = self.client.get_life_change()
                         self.currentLives += lifeChange
 
-                        wrong = bool(self.client.get_syllable() != syll)
+                        
+                        #if correct, prune bonus alphabet for letters in used answer
+                        self.bonusAlphabet = list((Counter(self.bonusAlphabet) - Counter(ans)).elements())
+                        self.console.info(f"remaining {self.bonusAlphabet} after pruning")
 
-                        if (self.currentLives == 1 or wrong): ##if you are on the verge of dying or answered wrong
-                            self.burstChance = min(1.0, originalBurstChance* 2)
-                            self.console.info('frantic on')
-
-                        if lifeChange < 0 and self.spamType:#if life lost this round, spam next round
-                            self.spamToggle = True
-                            self.console.info('spam on')
-
-                        if wrong: #if incorrect, add to invalid list
-                            self.invalid.add(ans)
-                        else:
-                            self.timeUsed = 0 #only reset timeUsed if correct
-                            #if correct, prune bonus alphabet for letters in used answer
-                            self.bonusAlphabet = list((Counter(self.bonusAlphabet) - Counter(ans)).elements())
-                            self.console.info(f"remaining {self.bonusAlphabet} after pruning")
-
-                            if len(self.bonusAlphabet) < 1: #no need to add to currentLives, since that happens automatically
-                                self.bonusAlphabet = originalAlphabet.copy()
-                                self.console.info(f"{self.bonusAlphabet} after regen reset")
-            except KeyboardInterrupt:
-                self.console.info("User aborted Bot")
+                        if len(self.bonusAlphabet) < 1: #no need to add to currentLives, since that updates automatically
+                            self.bonusAlphabet = self.originalAlphabet.copy()
+                            self.console.info(f"{self.bonusAlphabet} after regen reset")
+                    
+                        
+            except Exception as e:
+                self.console.warning(f"unexpected exception: {e}")
                 break
+            
 
 
-
-    def eval(self, syll:str, used:set): #eval
-        ans = '/suicide'
+    def eval(self, ansSet:set): #eval
         alph = self.bonusAlphabet
         mode = self.selectMode
-        ansSet = self.dicts[syll].copy() #set
-        ansSet -= used
+        ans = ''
 
-        if ansSet and len(ansSet) < 1:
-            return ans
+        long = lambda aset: max(aset, key=len)
+        short = lambda aset: min(aset, key=len)
 
-        long = lambda: max(ansSet, key=len)
-        short = lambda: min(ansSet, key=len)
-        avgLen = round((len(short())+len(long()))/2)
-        avg = lambda: min(ansSet, key = lambda word: abs(len(word)-avgLen))#minimize difference from the averageLen
-        common= lambda: max(ansSet, key=lambda word: word_frequency(word, "en"))
-        regen = lambda: max(ansSet, key= lambda word: len(set(word) & set(alph))) #maximum shared letters
-        regenSpec = lambda num: max(ansSet, key= lambda word: (len(set(word) & set(alph))<=num,len(set(word) & set(alph))))#returns the one that will give the most number of shared letters possible without going over the threshold
-        sneakyRegenSpec = lambda num: max(ansSet, key= lambda word: (len(set(word) & set(alph))<=num,zipf_frequency(word,"en")+len(set(word) & set(alph))))
-        realistic = lambda: max(ansSet, key= lambda word:zipf_frequency(word,"en")+len(set(word) & set(alph))) #maximum shared letters while also accounting for regen
+        avg = lambda aset: min(aset, key = lambda w: abs(len(w)- round((len(short(ansSet))+len(long(ansSet)))/2) ))#minimize difference from the averageLen
+        common = lambda aset: max(aset, key=lambda w: word_frequency(w, "en"))
 
-        
-        if self.timeConstraint and ((len(ans)*self.rate if not self.dynamicRate else len(ans)*self.rate*(1 + self.jiggle / (3**0.5))) > self.promptTime-self.timeUsed):
-            self.console.info('time constraint; using shortest')
-            ans = short()
+        regen = lambda aset: max(aset, key= lambda w: shared_letters[w]) #maximum shared letters
+        sneaky = lambda aset: max(aset, key= lambda w: zipf_frequency(w,"en")+shared_letters[w]) #maximum shared letters while also accounting for regen
+
+        shared_letters = {w: len(set(w) & set(alph)) for w in ansSet}
+        specificWrapper = lambda func, aset, num: func({w for w in aset if shared_letters[w]<=num} or aset) # passes a pruned list where the shared words do not exceed num
+
+        if (self.timeConstraint and self.timeUsed()>=self.promptTime) or not self.isCorrect:
+            ans = short(ansSet)
 
         elif self.regenIfNeeded and self.currentLives == 1 and self.maxLives != 1:
-            ans = regen()
+            ans = regen(ansSet)
 
         elif self.sneakyRegen and self.currentLives < self.maxLives:
-            ans = realistic()
+            ans = sneaky(ansSet)
 
         elif self.stockpile and self.maxLives != 1:
             if len(alph)>1:
                 if self.sneakyRegen:
-                    ans = sneakyRegenSpec(len(alph)-1)
+                    ans = specificWrapper(sneaky, ansSet, len(alph)-1)
                 else:
-                    ans = regenSpec(len(alph)-1)
-            elif alph[0] not in syll:
-                temp = {word for word in ansSet if alph[0] not in word} #its possible in niche circumstances that no solve exists that doesnt include a certain letter, even if it isnt required by the syll
-                ansSet = temp if len(temp)>0 else ansSet #probably a terrible way to do it but oh well
-            
+                    ans = specificWrapper(regen, ansSet, len(alph)-1)  
+            else:
+                ansSet = {w for w in ansSet if alph[0] not in w} or ansSet
+
+        if ans and len(ans) > 0: pass
         elif mode == 'long':
-            ans = long()
+            ans =  long(ansSet)
 
         elif mode == 'short':
-            ans = short()
+            ans =  short(ansSet)
 
         elif mode == "average":
-            ans = avg()
+            ans =  avg(ansSet)
         
         elif mode == 'regen':
-            ans = regen()
+            ans =  regen(ansSet)
         
         elif mode == "common":
-            ans = common()
+            ans =  common(ansSet)
         
-        elif mode == "realistic":
-            ans = realistic()
+        elif mode == "sneaky":
+            ans =  sneaky(ansSet)
         else:
-            ans = random.choice(ansSet)
-
-        return ans
+            ans =  random.choice(ansSet)
         
+        return ans
+
 
 
     def formatSpam(self) -> list:
@@ -322,30 +299,49 @@ class Bot():
 
 
     def formatSimType(self, txt : str) -> list: ##tool
-        rand = lambda x: x*(1+random.choice((-1, 1))*random.uniform(0, self.rateJiggle))
+        
         ratesList = []
         txtList = []
+        burst_counter = 0
     
-        for letter in txt:
-            #add mistake (char and delay)
-            if self.mistakes and (random.random() <= self.mistakeChance) and letter in MISTAKE_MAP.keys(): #think about having mistakechance scale with typespeed
-                mistakechars = MISTAKE_MAP[letter]
-
-                txtList.append(random.choice(mistakechars))
-                ratesList.append(self.mistakePause)
-                self.timeUsed+=self.mistakePause
-
-                txtList.append(Keys.BACKSPACE)
-                ratesList.append(self.miniPause) 
-                self.timeUsed+=self.miniPause
+        for letter in txt:        
             txtList.append(letter)
 
+            current_rate = 0
             #add delay
-            if self.burstType and (random.random() <= self.burstChance) and not self.dynamicRate:
-                ratesList.append(self.burstRate)
-                self.timeUsed += self.burstRate
+            if self.dynamicRate:
+                current_rate = max(1,(self.timeUsed()+sum(ratesList))/self.promptTime)*self.maxRate
+
+            elif ((self.burstType and random.random() <= self.burstChance) or burst_counter > 0):
+                current_rate = self.maxRate
+                if burst_counter > 0:
+                    burst_counter-=1
+                else:
+                    burst_counter += random.choice((1,1,1,1,2,2,3))
+                
             else:
-                ratesList.append(rand(self.rate))
-                self.timeUsed+=self.rate
+                current_rate = self.minRate
+
+            ratesList.append(self.applyJitter(current_rate))
+
+            mistake_chance = self.minMistakeChance
+            if self.dynamicMistakes:
+                mistake_chance = self.minMistakeChance + (self.maxMistakeChance - self.minMistakeChance) * (max(current_rate, self.minRate) - self.minRate) / (self.maxRate - self.minRate)
+
+            #add mistake (char and delay)
+            if self.mistakes and (random.random() <= mistake_chance) and letter in MISTAKE_MAP.keys(): 
+                mistakechars = MISTAKE_MAP[letter]
+                mistakeLen = random.choice((1,1,1,1,2,2,3)) #good tuff diddy blud implementation
+
+                for i in range(mistakeLen):
+                    txtList.append(random.choice(mistakechars))
+                    ratesList.append(self.applyJitter(current_rate))
+
+                txtList.append('')
+                ratesList.append(self.applyJitter(self.mistakePause))
+
+                for i in range(mistakeLen):
+                    txtList.append(Keys.BACKSPACE)
+                    ratesList.append(self.applyJitter(self.maxRate)) #spam backspace
 
         return list(zip(txtList, ratesList))

@@ -120,7 +120,7 @@ class Client():
             submit = WebDriverWait(self.driver,MAX_WAIT).until(EC.element_to_be_clickable((By.XPATH, LOCATORS["submit_button"])))
             submit.click()
         
-            if self.disconnect_check(): 
+            if self.disconnect_check() or self.neterr_check(): 
                 self.console.warning('unable to connect to room')
                 return False
             self.console.info('joined room')
@@ -161,7 +161,7 @@ class Client():
 
                         sleep(delay)
 
-                textbox.send_keys(Keys.ENTER)
+                textbox.send_keys(Keys.ENTER)     
                 return True
         except: pass
         return False
@@ -324,22 +324,21 @@ class Client():
 # ---- Utility page operations -----------------------------------------
 
     def disconnect_check(self): ##raises disconnect to delete bot if banned.
-        retries = 2
         try:
             if self.driver.find_element(By.XPATH, LOCATORS["disconnect_page"]).is_displayed(): #is disconnected
                 try:
                     reason = self.driver.find_element(By.XPATH, LOCATORS["reason"])
                     message = self.get_str_val(reason).lower()
-                    if "banned" in message or "error" in message or "403" in message:
+                    if "banned" in message:
                         self.console.info(f'Bot disconnected due to ban or error. Reason: {message}') ##banned
                         return True
             
-                except: ###could not find reason, retrying refresh to see if it was temporary\
-                    self.driver.refresh()
-                    retries -=1
-                    if retries > 0:
-                        sleep(MAX_WAIT)
-                        self.disconnect_check()
+                except: ###could not find reason, retrying refresh to see if it was temporary
+                    pass
+                self.driver.refresh()
+                self.console.info(f'refreshing to see if disconnect is temporary')
+                sleep(MAX_WAIT)
+                self.disconnect_check()
         except: pass
         return False
     
@@ -354,3 +353,6 @@ class Client():
                     return True
         except: pass
         return False
+
+    def close(self):
+        self.driver.quit()

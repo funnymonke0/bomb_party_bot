@@ -16,8 +16,8 @@ from datetime import datetime
 from src.Bot import Bot
 
 
-PLAINTEXT_REGEX = r"^\w+(\-\w+)?$"
-URL_REGEX = r"^((https|http)\:\/\/)((\w+\.\w+\.\w+)|(\w+\.\w+))((\/.+)+)?"
+PLAINTEXT_REGEX = r"\b'?([A-Za-z]+(?:[-'][A-Za-z]+)*)'?\b"
+URL_REGEX = r"https?:\/\/[A-Za-z0-9.-]+(?:\/[A-Za-z0-9._~\-\/]+)*"
 SETTINGS_REGEX = r"^\w+(\s*)\:(\s*)(\w+)(\.\w+)?"
 PROXY_REGEX = r"^((\d{1,3}\.){3}(\d{1,3})|\w+\.\w+(\.\w+)?):(\d{1,5})(:.+:.+)?"
 ROTATE_RETRY_THRESH = 5
@@ -70,8 +70,6 @@ class BotManager():
 
         if invalidFile:
             self.loadInvalid(invalidFile)
-        else:
-            self.settings["saveInvalid"] = False
 
 #____ Load functions _____________________________________________
 
@@ -103,12 +101,10 @@ class BotManager():
     def loadInvalid(self, fn): ## loads the non-working words at the start
         self.console = self.console
         try:
-            with open(fn, 'r') as file:
-                self.invalid.update(file.readlines())
+            self.invalid = {x.lower() for x in self.findInFile(fn, PLAINTEXT_REGEX)}
             self.console.info(f'loaded invalid word list from {fn}. Contains {len(self.invalid)} words')
         except FileNotFoundError:
-            self.console.warning(f"{fn} could not be loaded because it does not exist. not saving invalid")
-            self.settings["saveInvalid"] = False
+            self.console.warning(f"{fn} could not be loaded because it does not exist")
 
 
     def loadDicts(self, dictFile):#init proc
@@ -152,11 +148,9 @@ class BotManager():
                             rotateRetries = 0
 
                             bot.main_loop()
+                            bot.close()
                             self.console.info(f'Bot session with proxy {proxy} ended gracefully')
                             
-                            if self.settings["saveInvalid"]:
-                                self.invalid.update(bot.invalid)
-                                self.saveInvalid()
                         else:
                             rotateRetries +=1
                         sleep(2)
@@ -167,11 +161,9 @@ class BotManager():
                     if bot.joinRoom(roomCode=self.roomCode, username=self.username):
 
                         bot.main_loop()
+                        bot.close()
                         self.console.info(f'Bot session with proxy {proxy} ended gracefully')
 
-                        if self.settings["saveInvalid"]:
-                            self.invalid.update(bot.invalid)
-                            self.saveInvalid()
                 sleep(2)
                 self.console.info(f"using next proxy in the list")
         except KeyboardInterrupt:
@@ -269,14 +261,3 @@ class BotManager():
             browser.quit()
 
         return dicts
-    
-
-
-    def saveInvalid(self):
-        if self.invalidFile and len(self.invalidFile) > 0:
-            try:
-                with open(self.invalidFile, 'w') as file:
-                    file.writelines('\n'.join(self.invalid) + '\n')
-                self.console.info('added invalid words to invalid list')
-            except FileNotFoundError:
-                self.console.warning(f"could not save to file {self.invalidFile}")
