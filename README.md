@@ -64,30 +64,33 @@ pip install -r requirements.txt
 All settings are loaded from `settings.config`. Change only what you understand.
 
 ```text
-selectMode:               # word selection mode: smart/short/average/regen/long/common/realistic
-regenIfNeeded:            # trigger regen mode on last life
-sneakyRegen:              # prioritize less common letters when under max lives
-timeConstraint:           # pick shortest word if typing time is tight
-stockpile:                # conserve bonus letters
-greedLong:                # prioritize long words when stockpiling
-dynamicRate:              # adjust typing speed per letter
-cyberbullying:            # auto-type if <3 players
-burstType:                # enable burst typing
-mistakes:                 # enable simulated typos
-dynamicPauses:            # adjust typing delay based on word length/frequency
-spamType:                 # spam typing after long answers or mistakes
-saveInvalid:              # save invalid words to defunct file
-defaultWait:              # base wait time before typing
-minWait:                  # minimum wait time
-rate:                     # base typing speed per character
-burstRate:                # speed during bursts
-burstChance:              # chance of burst per character
-rateJiggle:               # typing randomness multiplier
-mistakeChance:            # chance of a typo per character
-mistakePause:             # delay for correcting a typo
-spamRate:                 # speed for spam typing
-miniPause:                # short pause after spam/mistakes
-jiggle:                   # extra randomness for dynamic pauses
+selectMode:common
+
+regenIfNeeded:True
+sneakyRegen:True
+stockpile:False
+greedLong:False
+timeConstraint:True
+cyberbullying:False
+mistakes:True
+burstType:True
+spamType:True
+dynamicRate:False
+dynamicPauses:True
+dynamicMistakes:True
+
+minWait:1.0
+maxWait:3.2
+mistakePause:0.100
+miniPause: 0.330
+minWpm:70
+maxWpm:120
+spamWpm:1000
+burstChance:0.50
+minMistakeChance:0.01
+maxMistakeChance:0.15
+spamChance:0.10
+jitterPercent: 0.50
 ```
 
 ---
