@@ -1,50 +1,47 @@
-# 💣 Bomb Party Bot  
-> *hexakosioihexekontahexaphobia🗣️🔥💯*
+# Bomb Party Bot  
+> *hexakosioihexekontahexaphobia*
 
-A (kinda) advanced Bomb Party bot and Bot Manager built in Python with Selenium.  
+A (kinda) advanced Bomb Party training bot and Bot Manager built in Python with Selenium.  
 Handles auto-reconnects, proxy rotation, human-like typing, and bonus-letter strategy.
 
 ---
 
-## 🚀 Features
+## Features
 
-- 🤖 **Bot Manager**  
+- **Bot Manager**  
   Handles bot persistence, auto-reconnect, and proxy rotation. Tracks lives and adjusts behavior dynamically.
 
-- 📖 **Custom & Multi-Source Dictionaries**  
+- **Custom & Multi-Source Dictionaries**  
   Load your own wordlists via plaintext or URLs. Supports multiple sources simultaneously.
 
-- 🛡️ **Proxy Support**  
-  Supports static and authenticated proxies with automatic fallback if a proxy fails.
+- **Proxy Support**  
+  Supports static and authenticated proxies.
 
-- 🛠️ **Human-Like Typing**  
+   **Human-Like Typing**  
   - Dynamic typing delays based on word length, frequency, and typing randomness  
   - Burst typing, frantic typing (when low on lives or after mistakes), and typo simulation  
   - Spam typing for long answers or after losing lives  
 
-- ⚙️ **Fine-Grained Settings**  
-  Configure detailed behavior for typing, word selection, and bonus-letter strategy.  
-
-- 🧠 **Intelligent Word Selection**  
+- **Word Selection Options**  
   Modes include:
   - `'smart'`, `'short'`, `'average'`, `'regen'`, `'long'`, `'common'`, `'realistic'`  
   - Special strategies like `sneakyRegen`, `regenIfNeeded`, and stockpiling bonus letters  
 
-- 🧩 **Configurable Mistakes**  
+- **Configurable Mistakes**  
   Simulates typos with `mistakeChance` and adjacent-key selection via `MISTAKE_MAP`.
 
 ---
 
-## 🛠️ Built With
+## Tech Stack
 
-- Python 🐍  
+- Python  
 - Selenium WebDriver  
 - Selenium Wire (for proxy)  
 - wordfreq (for frequency-based typing)
 
 ---
 
-## 🧩 Installation
+## Installation
 
 ```bash
 # Clone the repo
@@ -59,7 +56,7 @@ pip install -r requirements.txt
 
 ---
 
-## ⚙️ Detailed Settings (`settings.config`)
+## Settings (`settings.config`)
 
 All settings are loaded from `settings.config`. Change only what you understand.
 
@@ -95,7 +92,7 @@ jitterPercent: 0.50
 
 ---
 
-## 📖 Proxies (`proxies.config`)
+## Proxies (`proxies.config`)
 
 ```
 ip:port:user:password
@@ -106,7 +103,7 @@ Supports authenticated and unauthenticated proxies.
 
 ---
 
-## 📖 Dictionaries (`dictionaries.config`)
+## Dictionaries (`dictionaries.config`)
 
 - Add word sources by URL:
 
@@ -126,14 +123,14 @@ xylophone
 
 ---
 
-## 📖 Invalid Words (`invalid.config`)
+## Invalid Words (`invalid.config`)
 
 - Words the bot has already used incorrectly are stored here if `saveInvalid` is enabled.  
 - Bot avoids using these words again.
 
 ---
 
-## 🏃 Usage
+## Usage
 
 ```bash
 cd src
@@ -154,7 +151,7 @@ The Bot Manager will:
 
 ---
 
-## ⚡ Quickstart (Simplified)
+## Quickstart (Simplified)
 
 1. Clone repo and install dependencies:
 
@@ -183,9 +180,8 @@ The bot will automatically handle typing, mistakes, bursts, spam, bonus letters,
 
 ---
 
-## 🙏 Credits
+## Improvements
 
-- [JKLM.fun](https://jklm.fun) for Bomb Party  
-- Open source wordlists  
-- Summer break  
-- hexakosioihexekontahexaphobia  
+- Smarter configuration
+- Turn it into an actual app with something like Flask
+- Host a bot using Github Actions to stay constantly online
