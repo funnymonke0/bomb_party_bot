@@ -5,3 +5,4 @@ log/
 testscripts/
 backup.py/
 config/proxies.config/
+.idea/
