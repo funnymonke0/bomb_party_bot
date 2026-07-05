@@ -64,8 +64,8 @@ def get_str_val(elem:WebElement) -> str:
 class Client:
     def __init__(self, proxy : str =''):
 
-        self.prevLW = 0 #internal for tracking life changes
-        self.prevLL = 0 #internal for tracking life changes 
+        self.prev_lw = 0 #internal for tracking life changes
+        self.prev_ll = 0 #internal for tracking life changes 
 
         self.console = getLogger('MANAGER-CONSOLE.BOT-CONSOLE.CLIENT-CONSOLE')
         self.console.setLevel(DEBUG)
@@ -275,8 +275,8 @@ class Client:
 
 
     def clear_life_trackers(self) -> None:
-        self.prevLW = 0
-        self.prevLL = 0
+        self.prev_lw = 0
+        self.prev_ll = 0
 
 
 
@@ -301,8 +301,8 @@ class Client:
             if plaintext != '':
                 nums = [int(n) for n in findall(r"[-+]?\d+", plaintext)] #extract numbers from text
                 if len(nums) == 2:
-                    life_change = (nums[0] - self.prevLW) + (nums[1] - self.prevLL)
-                    self.prevLW, self.prevLL = nums
+                    life_change = (nums[0] - self.prev_lw) + (nums[1] - self.prev_ll)
+                    self.prev_lw, self.prev_ll = nums
                     self.console.info(f"Life change updated. {life_change}")
                     return life_change
         except: self.console.warning("Life changes not found; defaulting")
