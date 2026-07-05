@@ -3,6 +3,6 @@ bomb_party_bot_env/
 __pycache__/
 log/
 testscripts/
-backup.py/
-config/proxies.config/
+backup.py
 .idea/
+config/proxies.config
