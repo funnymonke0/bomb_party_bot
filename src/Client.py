@@ -43,8 +43,25 @@ UPDATE_INTERVALS: dict[str, float] = {
     }
 
 
+def get_int_val(elem:WebElement) -> int:
+    try:
+        plaintext = str(elem.get_property("value"))# type: ignore
+        if plaintext and len(plaintext) > 0 and plaintext.isdecimal():
+            return int(plaintext)
+    except: pass
+    return 0
 
-class Client():
+
+def get_str_val(elem:WebElement) -> str:
+    try:
+        plaintext = str(elem.get_property("textContent"))# type: ignore
+        if plaintext and len(plaintext) > 0:
+            return plaintext
+    except: pass
+    return ''
+
+
+class Client:
     def __init__(self, proxy : str =''):
 
         self.prevLW = 0 #internal for tracking life changes
@@ -105,11 +122,11 @@ class Client():
 
 
 
-    def joinRoom(self, roomCode : str, username : str) -> bool: ## join the room and fill in the username + submit.
+    def join_room(self, room_code : str, username : str) -> bool: ## join the room and fill in the username + submit.
 
         try:
-            self.console.info('joining room: '+roomCode)
-            self.driver.get("https://jklm.fun/"+roomCode)
+            self.console.info('joining room: ' + room_code)
+            self.driver.get("https://jklm.fun/" + room_code)
             self.driver.switch_to.default_content()
 
             if len(username) > 0:
@@ -127,7 +144,7 @@ class Client():
             self.console.info('joined room')
             return True
         except:
-            self.console.warning("some joinRoom elements not found or interactable")
+            self.console.warning("some join_room elements not found or interactable")
             return False
         
 
@@ -182,34 +199,16 @@ class Client():
 
 # getters
 
-    def get_int_val(self, elem:WebElement) -> int:
-        try:
-            plaintext = str(elem.get_property("value"))# type: ignore
-            if plaintext and len(plaintext) > 0 and plaintext.isdecimal():
-                return int(plaintext)
-        except: pass
-        return 0
-    
-
-
-    def get_str_val(self, elem:WebElement) -> str:
-        try:
-            plaintext = str(elem.get_property("textContent"))# type: ignore
-            if plaintext and len(plaintext) > 0:
-                return plaintext
-        except: pass
-        return ''
-
-# page parsers
+    # page parsers
     def get_bonus_alphabet(self) -> list[str]:
             alphabet_string = ''
             try:
                 with self.in_frame(LOCATORS["bombparty_iframe"]):
                     entries = self.driver.find_elements(By.XPATH, LOCATORS["bonus_alphabet"])
                     for index, letter in enumerate(entries):
-                        numVal = self.get_int_val(letter)
-                        if numVal > 0:
-                            alphabet_string += ascii_lowercase[index] * numVal
+                        num_val = get_int_val(letter)
+                        if num_val > 0:
+                            alphabet_string += ascii_lowercase[index] * num_val
 
                 if len(alphabet_string) > 0:
                     self.console.info(f'bonus alphabet updated. {alphabet_string}')
@@ -238,11 +237,11 @@ class Client():
                 elem = self.driver.find_element(By.XPATH, LOCATORS["min_turn_duration"])
 
                 
-                numVal = self.get_int_val(elem)
-                if numVal > 0:
-                    self.console.info(f'promptTime updated. {numVal}')
-                    return numVal
-        except: self.console.warning('promptTime not found; defaulting')
+                num_val = get_int_val(elem)
+                if num_val > 0:
+                    self.console.info(f'prompt_time updated. {num_val}')
+                    return num_val
+        except: self.console.warning('prompt_time not found; defaulting')
         return 5 ##defaults can be changed later.
     
 
@@ -252,12 +251,12 @@ class Client():
             with self.in_frame(LOCATORS["bombparty_iframe"]):
                 elem = self.driver.find_element(By.XPATH, LOCATORS["start_lives"])
 
-                numVal = self.get_int_val(elem)
-                if numVal > 0:
-                    self.console.info(f'startLives updated. {numVal}')
-                    return numVal
+                num_val = get_int_val(elem)
+                if num_val > 0:
+                    self.console.info(f'start_lives updated. {num_val}')
+                    return num_val
                     
-        except: self.console.warning('startLives not found; defaulting')
+        except: self.console.warning('start_lives not found; defaulting')
         return 2##defaults can be changed later.
 
 
@@ -266,11 +265,11 @@ class Client():
         try:
             with self.in_frame(LOCATORS["bombparty_iframe"]):
                 elem = self.driver.find_element(By.XPATH, LOCATORS["max_lives"])
-                numVal = self.get_int_val(elem)
-                if numVal > 0:
-                    self.console.info(f'maxLives updated. {numVal}')
-                    return numVal
-        except: self.console.warning('maxLives not found; defaulting')
+                num_val = get_int_val(elem)
+                if num_val > 0:
+                    self.console.info(f'max_lives updated. {num_val}')
+                    return num_val
+        except: self.console.warning('max_lives not found; defaulting')
         return 3##defaults can be changed later.
     
 
@@ -286,9 +285,9 @@ class Client():
                 self.driver.switch_to.default_content()
                 entries = self.driver.find_elements(By.XPATH, LOCATORS["stats_table_rows"])
                 if entries and len(entries) > 1:
-                    playerCt = len([player for player in entries if str(player.get_property('class')) != 'isDead']) - 1  # type: ignore | -1 for header
-                    self.console.info(f'updated. {playerCt} players alive')
-                    return playerCt
+                    player_ct = len([player for player in entries if str(player.get_property('class')) != 'isDead']) - 1  # type: ignore | -1 for header
+                    self.console.info(f'updated. {player_ct} players alive')
+                    return player_ct
             except:self.console.warning('player count not found; defaulting')
             return 3##defaults can be changed later.
 
@@ -298,14 +297,14 @@ class Client():
         try:
             self.driver.switch_to.default_content()
             elem = self.driver.find_element(By.XPATH, LOCATORS["self_lives"])
-            plaintext = self.get_str_val(elem)
+            plaintext = get_str_val(elem)
             if plaintext != '':
                 nums = [int(n) for n in findall(r"[-+]?\d+", plaintext)] #extract numbers from text
                 if len(nums) == 2:
-                    lifeChange = (nums[0] - self.prevLW) + (nums[1] - self.prevLL)
+                    life_change = (nums[0] - self.prevLW) + (nums[1] - self.prevLL)
                     self.prevLW, self.prevLL = nums
-                    self.console.info(f"Life change updated. {lifeChange}")
-                    return lifeChange
+                    self.console.info(f"Life change updated. {life_change}")
+                    return life_change
         except: self.console.warning("Life changes not found; defaulting")
         return 0  ##defaults can be changed later.
         
@@ -317,7 +316,7 @@ class Client():
                 
                 syllable = self.driver.find_element(By.XPATH, LOCATORS["syllable"])
                 
-                plaintext = self.get_str_val(syllable)
+                plaintext = get_str_val(syllable)
                 return plaintext.lower()
         except: self.console.warning('syllable not found; defaulting')
         return ''
@@ -329,7 +328,7 @@ class Client():
             if self.driver.find_element(By.XPATH, LOCATORS["disconnect_page"]).is_displayed(): #is disconnected
                 try:
                     reason = self.driver.find_element(By.XPATH, LOCATORS["reason"])
-                    message = self.get_str_val(reason).lower()
+                    message = get_str_val(reason).lower()
                     if "banned" in message:
                         self.console.info(f'Bot disconnected due to ban or error. Reason: {message}') ##banned
                         return True

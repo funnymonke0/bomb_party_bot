@@ -16,9 +16,9 @@ if __name__ == "__main__" :
         if re.match(link, r'^[a-zA-Z]{4}$'):
             print('ERROR: Must input valid room code !')
         else:
-            manager = BotManager(dictFile=dictionaries, roomCode=link, proxyFile=proxies, username=name, settingsFile=settings, invalidFile = invalid)
+            manager = BotManager(dict_file=dictionaries, room_code=link, proxy_file=proxies, username=name, settings_file=settings, invalid_file=invalid)
 
-            manager.persistLoop()
+            manager.persist_loop()
 
     else:
         print("Some config files not found!")
