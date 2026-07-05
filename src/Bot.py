@@ -1,10 +1,11 @@
 
+from collections.abc import Callable
+
 from src.Client import Client
 from logging import getLogger, DEBUG
 from wordfreq import word_frequency, zipf_frequency
 from collections import Counter
 
-import math
 import random
 from string import ascii_lowercase
 from time import sleep, time
@@ -70,7 +71,7 @@ MISTAKE_MAP = {
 
 
 class Bot():
-    def __init__(self, dicts: dict, settings : dict, invalid : set = {}, proxy : str = ''):
+    def __init__(self, dicts: dict[str, set[str]], settings : dict[str, object], invalid : set[str] = set(), proxy : str = ''):
 
         self.console = getLogger('MANAGER-CONSOLE.BOT-CONSOLE')
         self.console.setLevel(DEBUG)
@@ -88,7 +89,7 @@ class Bot():
         self.currentLives = 2 
 
         ## list unpacking. do this for convenient use cuz we dont want to have to get the variables from the settings list in each method
-        [
+        [# type: ignore
             self.selectMode,
 
             self.regenIfNeeded,
@@ -118,10 +119,10 @@ class Bot():
             self.jitterPercent
         ] = list(settings.values())
 
-        self.minRate = 5/minWpm
-        self.maxRate = 5/maxWpm
-        self.spamRate = 5/spamWpm
-        self.applyJitter = lambda x: x*(1+random.uniform(-self.jitterPercent, self.jitterPercent))
+        self.minRate = 5/minWpm # type: ignore
+        self.maxRate = 5/maxWpm # type: ignore
+        self.spamRate = 5/spamWpm # type: ignore
+        self.applyJitter: Callable[[float], float] = lambda x: float(x*(1+random.uniform(-self.jitterPercent, self.jitterPercent)))# type: ignore
 
         self.isCorrect = True #reset stopwatch at the start
         self.start = 0 #start time
@@ -129,7 +130,7 @@ class Bot():
         self.syllable = ''
 
         self.originalAlphabet = [] #original bonus self.bonusAlphabet
-        self.used = set() #used words this session
+        self.used = set[str]() #used words this session
         self.used.update(self.invalid) #add invalid words to used so they are not used again
 
         self.client = Client(proxy=proxy)
@@ -157,7 +158,7 @@ class Bot():
                     self.maxLives = self.client.get_max_lives()
                     self.client.clear_life_trackers()
                     
-                    self.used = set()
+                    self.used = set[str]()
                     self.used.update(self.invalid) #reset used
 
                     self.isCorrect = True
@@ -181,20 +182,20 @@ class Bot():
                     self.console.info(f"found answer {ans} for syllable {self.syllable}" if ans != "/suicide" else f"could not find answer for syllable: {self.syllable}")
                     
                     
-                    if self.cyberbullying and self.client.get_players() < 3:
+                    if bool(self.cyberbullying) and self.client.get_players() < 3:# type: ignore
                         if self.client.get_self_turn() and self.client.safe_typer(ans): 
                             typed = True
 
                     else:
-                        wait = self.miniPause
+                        wait = float(self.miniPause)# type: ignore
 
                         if self.isCorrect: #do normal wait if we were correct on our prev answer
-                            rt = lambda w: 581.39 + 467.81 / (1 + (2.718281828 ** (1.022 * (zipf_frequency(w) - 2.946)))) #tuff goony blud sigmoid regression function based on ELP data
+                            rt: Callable[[str], float] = lambda w: float(581.39 + 467.81 / (1 + (2.718281828 ** (1.022 * (zipf_frequency(w, 'en') - 2.946))))) # type: ignore | tuff goony blud sigmoid regression function based on ELP data
                             base_min, base_max = 581.39, 581.39 + 467.81
-                            func = lambda w: self.minWait + (rt(w) - base_min) * (self.maxWait - self.minWait) / (base_max - base_min) #linear interpolation of wait time based on word freq
+                            func: Callable[[str], float] = lambda w: float(self.minWait + (rt(w) - base_min) * (self.maxWait - self.minWait) / (base_max - base_min)) # type: ignore | linear interpolation of wait time based on word freq
 
-                            wait = func(ans) if self.dynamicPauses else self.minWait
-                        elif (self.spamType and (len(ans) >= 20 or random.random()<=self.spamChance)): #wait minipause with a potential spam if was not correct
+                            wait = func(ans) if bool(self.dynamicPauses) else float(self.minWait)# type: ignore
+                        elif (bool(self.spamType) and (len(ans) >= 20 or random.random()<=float(self.spamChance))): # type: ignore | wait minipause with a potential spam if was not correct
                             spam = self.formatSpam()
                             self.client.safe_typer(spam)
 
@@ -230,42 +231,42 @@ class Bot():
             
 
 
-    def eval(self, ansSet:set): #eval
+    def eval(self, ansSet:set[str]) -> str: #eval
         alph = self.bonusAlphabet
-        mode = self.selectMode
+        mode = str(self.selectMode)# type: ignore
         ans = ''
 
-        long = lambda aset: max(aset, key=len)
-        short = lambda aset: min(aset, key=len)
+        long: Callable[[set[str]], str] = lambda aset: max(aset, key=len)
+        short: Callable[[set[str]], str] = lambda aset: min(aset, key=len)
 
-        avg = lambda aset: min(aset, key = lambda w: abs(len(w)- round((len(short(ansSet))+len(long(ansSet)))/2) ))#minimize difference from the averageLen
-        common = lambda aset: max(aset, key=lambda w: word_frequency(w, "en"))
+        avg: Callable[[set[str]], str] = lambda aset: min(aset, key = lambda w: abs(len(w)- round((len(short(ansSet))+len(long(ansSet)))/2) ))# type: ignore | minimize difference from the averageLen
+        common: Callable[[set[str]], str] = lambda aset: max(aset, key=lambda w: word_frequency(w, "en"))
 
-        regen = lambda aset: max(aset, key= lambda w: shared_letters[w]) #maximum shared letters
-        sneaky = lambda aset: max(aset, key= lambda w: zipf_frequency(w,"en")+shared_letters[w]) #maximum shared letters while also accounting for regen
+        regen: Callable[[set[str]], str] = lambda aset: max(aset, key= lambda w: shared_letters[w]) #maximum shared letters
+        sneaky: Callable[[set[str]], str] = lambda aset: max(aset, key= lambda w: zipf_frequency(w,"en")+shared_letters[w]) #maximum shared letters while also accounting for regen
 
         shared_letters = {w: len(set(w) & set(alph)) for w in ansSet}
-        specificWrapper = lambda func, aset, num: func({w for w in aset if shared_letters[w]<=num} or aset) # passes a pruned list where the shared words do not exceed num
+        specificWrapper: Callable[[Callable[[set[str]], str], set[str], int], str] = lambda func, aset, num: func({w for w in aset if shared_letters[w]<=num} or aset) # passes a pruned list where the shared words do not exceed num
 
-        if (self.timeConstraint and self.timeUsed()>=self.promptTime) or not self.isCorrect:
+        if (bool(self.timeConstraint) and self.timeUsed()>=self.promptTime) or not self.isCorrect:# type: ignore
             ans = short(ansSet)
 
-        elif self.regenIfNeeded and self.currentLives == 1 and self.maxLives != 1:
+        elif bool(self.regenIfNeeded) and self.currentLives == 1 and self.maxLives != 1:# type: ignore
             ans = regen(ansSet)
 
-        elif self.sneakyRegen and self.currentLives < self.maxLives:
+        elif bool(self.sneakyRegen) and self.currentLives < self.maxLives:# type: ignore
             ans = sneaky(ansSet)
 
-        elif self.stockpile and self.maxLives != 1:
+        elif bool(self.stockpile) and self.maxLives != 1:# type: ignore
             if len(alph)>1:
-                if self.sneakyRegen:
+                if bool(self.sneakyRegen):# type: ignore
                     ans = specificWrapper(sneaky, ansSet, len(alph)-1)
                 else:
                     ans = specificWrapper(regen, ansSet, len(alph)-1)  
             else:
                 ansSet = {w for w in ansSet if alph[0] not in w} or ansSet
 
-        if ans and len(ans) > 0: pass
+        if ans and len(ans) > 0: pass# type: ignore
         elif mode == 'long':
             ans =  long(ansSet)
 
@@ -284,24 +285,24 @@ class Bot():
         elif mode == "sneaky":
             ans =  sneaky(ansSet)
         else:
-            ans =  random.choice(ansSet)
+            ans =  random.choice(list(ansSet))
         
-        return ans
+        return str(ans)
 
 
 
-    def formatSpam(self) -> list:
+    def formatSpam(self) -> list[tuple[str, float]]:
         length = random.randint(7,15)
-        txt = [random.choice(ascii_lowercase) for i in range(0,length)] #needed so that it does the choice each time
-        ratesList = [self.spamRate for i in range(0,length)]
+        txt = [random.choice(ascii_lowercase) for i in range(0,length)] # type: ignore | needed so that it does the choice each time
+        ratesList = [float(self.spamRate) for i in range(0,length)]# type: ignore
         return list(zip(txt, ratesList))
 
 
 
-    def formatSimType(self, txt : str) -> list: ##tool
+    def formatSimType(self, txt : str) -> list[tuple[str, float]]: ##tool
         
-        ratesList = []
-        txtList = []
+        ratesList = list[float]()
+        txtList = list[str]()
         burst_counter = 0
     
         for letter in txt:        
@@ -309,39 +310,39 @@ class Bot():
 
             current_rate = 0
             #add delay
-            if self.dynamicRate:
-                current_rate = max(1,(self.timeUsed()+sum(ratesList))/self.promptTime)*self.maxRate
+            if bool(self.dynamicRate):# type: ignore
+                current_rate = float(max(1,(self.timeUsed()+sum(ratesList))/self.promptTime)*self.maxRate)# type: ignore
 
-            elif ((self.burstType and random.random() <= self.burstChance) or burst_counter > 0):
-                current_rate = self.maxRate
+            elif ((bool(self.burstType) and random.random() <= float(self.burstChance)) or burst_counter > 0):# type: ignore
+                current_rate = float(self.maxRate)# type: ignore
                 if burst_counter > 0:
                     burst_counter-=1
                 else:
                     burst_counter += random.choice((1,1,1,1,2,2,3))
                 
             else:
-                current_rate = self.minRate
+                current_rate = float(self.minRate)# type: ignore
 
             ratesList.append(self.applyJitter(current_rate))
 
-            mistake_chance = self.minMistakeChance
-            if self.dynamicMistakes:
-                mistake_chance = self.minMistakeChance + (self.maxMistakeChance - self.minMistakeChance) * (max(current_rate, self.minRate) - self.minRate) / (self.maxRate - self.minRate)
+            mistake_chance = float(self.minMistakeChance)# type: ignore
+            if bool(self.dynamicMistakes):# type: ignore
+                mistake_chance = float(self.minMistakeChance + (self.maxMistakeChance - self.minMistakeChance) * (max(current_rate, self.minRate) - self.minRate) / (self.maxRate - self.minRate))# type: ignore
 
             #add mistake (char and delay)
-            if self.mistakes and (random.random() <= mistake_chance) and letter in MISTAKE_MAP.keys(): 
+            if bool(self.mistakes) and (random.random() <= mistake_chance) and letter in MISTAKE_MAP.keys(): # type: ignore
                 mistakechars = MISTAKE_MAP[letter]
                 mistakeLen = random.choice((1,1,1,1,2,2,3)) #good tuff diddy blud implementation
 
-                for i in range(mistakeLen):
+                for i in range(mistakeLen):# type: ignore
                     txtList.append(random.choice(mistakechars))
                     ratesList.append(self.applyJitter(current_rate))
 
                 txtList.append('')
-                ratesList.append(self.applyJitter(self.mistakePause))
+                ratesList.append(self.applyJitter(float(self.mistakePause)))# type: ignore
 
-                for i in range(mistakeLen):
+                for i in range(mistakeLen):# type: ignore
                     txtList.append(Keys.BACKSPACE)
-                    ratesList.append(self.applyJitter(self.maxRate)) #spam backspace
+                    ratesList.append(self.applyJitter(float(self.maxRate))) # type: ignore | spam backspace
 
         return list(zip(txtList, ratesList))

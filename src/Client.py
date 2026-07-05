@@ -1,10 +1,12 @@
-from seleniumwire import webdriver
+from selenium import webdriver
 from selenium.webdriver.chrome.service import Service as ChromeService
 from selenium.webdriver.chrome.options import Options as ChromeOptions
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
+from selenium.webdriver.remote.webelement import WebElement
+from selenium.webdriver.common.proxy import Proxy, ProxyType
 from contextlib import contextmanager
 from logging import getLogger,DEBUG
 
@@ -13,7 +15,7 @@ from re import findall
 from time import sleep
 
 
-LOCATORS = {
+LOCATORS: dict[str, str] = {
     "nickname_input": '//input[@class = "styled nickname"]',
     "submit_button": "//button[@class = 'styled']",
     "bombparty_iframe": "//iframe[contains(@src, 'bombparty')]",
@@ -34,7 +36,7 @@ LOCATORS = {
 
 MAX_WAIT = 5
 
-UPDATE_INTERVALS = {
+UPDATE_INTERVALS: dict[str, float] = {
         'turn' : 0.1,
         'disconnect' : 30,
         'join' : 10
@@ -74,6 +76,8 @@ class Client():
         chrome_options.add_argument('--no-default-browser-check')
         chrome_options.add_argument('--ignore-certificate-errors')
         chrome_options.add_argument('--guest')
+        chrome_options.add_argument("--ignore-certificate-errors")
+        chrome_options.add_argument("--allow-insecure-localhost")
 
         chrome_options.add_argument(
             'user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64)'
@@ -85,24 +89,21 @@ class Client():
         
         chrome_options.page_load_strategy = 'eager'
         service = ChromeService()
-        seleniumwire_options = {
-            }
 
         if len(proxy) > 0:
-            seleniumwire_options ['proxy'] = {
-                'https': proxy,
-                'http': proxy,
-                'verify_ssl': False,
-                'no_proxy': 'localhost,127.0.0.1'
-                }
+            prox_option = Proxy()
+            prox_option.proxy_type = ProxyType.MANUAL # type: ignore
+            prox_option.http_proxy = proxy
+            prox_option.ssl_proxy = proxy
+            chrome_options.proxy = prox_option
         else:
             proxy = 'localhost'
-        self.driver = webdriver.Chrome(service=service, options=chrome_options, seleniumwire_options=seleniumwire_options)
+        self.driver = webdriver.Chrome(service=service, options=chrome_options)
 
         self.console.info(f'initialized BombParty Client running @ {proxy}')
 
 
-# ---- High-level UI interactions --------------------------------------
+
 
     def joinRoom(self, roomCode : str, username : str) -> bool: ## join the room and fill in the username + submit.
 
@@ -131,9 +132,9 @@ class Client():
         
 
 
-# ---- Helper utilities -------------------------------------------------
+# Helper func
     @contextmanager
-    def in_frame(self, locator):
+    def in_frame(self, locator:str):
         ##Temporarily switch into an iframe, then switch back.
         try:
             self.driver.switch_to.frame(self.driver.find_element(By.XPATH, locator))
@@ -144,7 +145,7 @@ class Client():
 
 
         
-    def safe_typer(self, input_value) -> bool:
+    def safe_typer(self, input_value:str | list[tuple[str,float]]) -> bool:
         try:
             with self.in_frame(LOCATORS["bombparty_iframe"]):
                 textbox = self.driver.find_element(By.XPATH, LOCATORS["textbox"])
@@ -179,11 +180,11 @@ class Client():
         except: pass
         return False
 
-# ---- Simple getters / parsers -----------------------------------------
+# getters
 
-    def get_int_val(self, elem) -> int:
+    def get_int_val(self, elem:WebElement) -> int:
         try:
-            plaintext = elem.get_property("value")
+            plaintext = str(elem.get_property("value"))# type: ignore
             if plaintext and len(plaintext) > 0 and plaintext.isdecimal():
                 return int(plaintext)
         except: pass
@@ -191,16 +192,16 @@ class Client():
     
 
 
-    def get_str_val(self, elem) -> str:
+    def get_str_val(self, elem:WebElement) -> str:
         try:
-            plaintext = elem.get_property("textContent")
+            plaintext = str(elem.get_property("textContent"))# type: ignore
             if plaintext and len(plaintext) > 0:
                 return plaintext
         except: pass
         return ''
 
-# ---- Game-specific reads ---------------------------------------------
-    def get_bonus_alphabet(self) -> list:
+# page parsers
+    def get_bonus_alphabet(self) -> list[str]:
             alphabet_string = ''
             try:
                 with self.in_frame(LOCATORS["bombparty_iframe"]):
@@ -274,7 +275,7 @@ class Client():
     
 
 
-    def clear_life_trackers(self):
+    def clear_life_trackers(self) -> None:
         self.prevLW = 0
         self.prevLL = 0
 
@@ -284,8 +285,8 @@ class Client():
             try:
                 self.driver.switch_to.default_content()
                 entries = self.driver.find_elements(By.XPATH, LOCATORS["stats_table_rows"])
-                if entries and isinstance(entries, list) and len(entries) > 1:
-                    playerCt = len([player for player in entries if player.get_property('class') != 'isDead']) - 1  # -1 for header
+                if entries and len(entries) > 1:
+                    playerCt = len([player for player in entries if str(player.get_property('class')) != 'isDead']) - 1  # type: ignore | -1 for header
                     self.console.info(f'updated. {playerCt} players alive')
                     return playerCt
             except:self.console.warning('player count not found; defaulting')
@@ -321,9 +322,9 @@ class Client():
         except: self.console.warning('syllable not found; defaulting')
         return ''
     
-# ---- Utility page operations -----------------------------------------
+# page checks
 
-    def disconnect_check(self): ##raises disconnect to delete bot if banned.
+    def disconnect_check(self) -> bool: ##raises disconnect to delete bot if banned.
         try:
             if self.driver.find_element(By.XPATH, LOCATORS["disconnect_page"]).is_displayed(): #is disconnected
                 try:
@@ -344,7 +345,7 @@ class Client():
     
 
 
-    def neterr_check(self):
+    def neterr_check(self) -> bool:
         try:
             if self.driver.find_element(By.XPATH, LOCATORS["neterror_page"]).is_displayed(): ##neterr, retry refresh
                 self.driver.refresh()

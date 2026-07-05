@@ -1,8 +1,5 @@
-from seleniumwire import webdriver
-from selenium.webdriver.chrome.service import Service as ChromeService
-from selenium.webdriver.chrome.options import Options as ChromeOptions
-from selenium.webdriver.common.by import By
-from selenium.webdriver.support.wait import WebDriverWait
+import requests
+from bs4 import BeautifulSoup
 
 from string import ascii_lowercase
 from re import sub, match
@@ -42,7 +39,7 @@ class BotManager():
         
         self.roomCode = roomCode
         self.username = username
-        self.invalid = set()
+        self.invalid = set[str]()
         self.invalidFile = invalidFile
         
         self.console = logging.getLogger('MANAGER-CONSOLE')
@@ -73,12 +70,12 @@ class BotManager():
 
 #____ Load functions _____________________________________________
 
-    def loadSettings(self, settingsFile):#init proc
+    def loadSettings(self, settingsFile:str) -> None:#init proc
 
 
         settingsRaw = self.findInFile(settingsFile, SETTINGS_REGEX)
 
-        if settingsRaw is None or len(settingsRaw) < 1:
+        if len(settingsRaw) < 1:
             raise SettingsException
         
         self.settings = self.formatSettings(settingsRaw)
@@ -87,7 +84,7 @@ class BotManager():
 
 
 
-    def loadProxies(self, proxyFile):#init proc
+    def loadProxies(self, proxyFile:str) -> None:#init proc
 
         self.proxyList = self.findInFile(proxyFile, PROXY_REGEX)
 
@@ -98,7 +95,7 @@ class BotManager():
             self.console.info(f"loaded {len(self.proxyList)} proxies from {proxyFile}")
         
 
-    def loadInvalid(self, fn): ## loads the non-working words at the start
+    def loadInvalid(self, fn:str) -> None: ## loads the non-working words at the start
         self.console = self.console
         try:
             self.invalid = {x.lower() for x in self.findInFile(fn, PLAINTEXT_REGEX)}
@@ -107,10 +104,10 @@ class BotManager():
             self.console.warning(f"{fn} could not be loaded because it does not exist")
 
 
-    def loadDicts(self, dictFile):#init proc
+    def loadDicts(self, dictFile:str) -> None:#init proc
         console = self.console
 
-        dicts = set()
+        dicts = set[str]()
 
         dictUrls = self.findInFile(dictFile, URL_REGEX)
         console.info(f"loading {len(dictUrls)} dictionaries from urls in {dictFile}")
@@ -119,7 +116,7 @@ class BotManager():
         console.info(f"loading {len(dictPlainText)} entries from plaintext in {dictFile}")
         dicts.update(dictPlainText)
 
-        if dicts is None or len(dicts) < 1:
+        if len(dicts) < 1:
             raise DictionaryException
 
         console.info(f"loaded {len(dicts)} words from {dictFile}")
@@ -173,7 +170,7 @@ class BotManager():
         
 #____ Tool functions _____________________________________________
 
-    def findInFile(self, filename:str, ex:str) -> list: # returns a list of strings matching ex from filename ##tool
+    def findInFile(self, filename:str, ex:str) -> list[str]: # returns a list of strings matching ex from filename ##tool
         lst = []
         try:
             with open(filename, 'r') as file:
@@ -185,8 +182,8 @@ class BotManager():
 
 
 
-    def formatSettings(self, raw) -> dict: ##tool
-        s=dict()
+    def formatSettings(self, raw:list[str]) -> dict[str, object]: ##tool
+        s=dict[str, object]()
 
         for line in raw:
             if len(line) > 0:
@@ -206,8 +203,8 @@ class BotManager():
     
 
 
-    def formatDict(self, dicts) -> dict: ##tool
-        hsmp = dict()
+    def formatDict(self, dicts:set[str]) -> dict[str, set[str]]: ##tool
+        hsmp = dict[str, set[str]]()
         dicts = {wrd for wrd in dicts if 0<len(wrd)<21}
         for letter1 in ascii_lowercase:
             k1 = letter1
@@ -241,23 +238,17 @@ class BotManager():
     
 
 
-    def parseFromUrls(self, dictUrls:list) -> set: 
-        dicts = set()
+    def parseFromUrls(self, dictUrls:list[str]) -> set[str]: 
+        dicts = set[str]()
         if len(dictUrls) > 0:
-            service = ChromeService()
-            options = ChromeOptions()
-            options.add_argument('--headless=new')
-            options.page_load_strategy = 'eager'
-            browser = webdriver.Chrome(service=service, options=options)
-
             for url in dictUrls:
                 try:
-                    browser.get(url)
-                    WebDriverWait(browser, 5)
+                    response = requests.get(url)
+                    soup = BeautifulSoup(response.text, 'html.parser')
+                    content = str(soup.get_text(separator='\n', strip=True).lower().split('\n'))
+                    dicts.update(content)
                 except Exception as e:
                     self.console.warning(f'Cannot get url {url} because of Exception {e}')
-                content = browser.find_element(By.XPATH, '//pre').text.lower().strip().split('\n')
-                dicts.update(content)
-            browser.quit()
 
         return dicts
+
