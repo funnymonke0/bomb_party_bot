@@ -184,4 +184,4 @@ The bot will automatically handle typing, mistakes, bursts, spam, bonus letters,
 
 - Smarter configuration
 - Turn it into an actual app with something like Flask
-- Host a bot using Github Actions to stay constantly online
+- Host a bot using Github Actions to stay constantly online like a training room
