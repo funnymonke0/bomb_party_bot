@@ -32,7 +32,6 @@ class SettingsException(Exception):
     def __init__(self, message:str = "Settings load failed. Please provide settings"):
         super().__init__(message)
 
-
 def _format_dict(dicts:set[str]) -> dict[str, set[str]]: ##tool
     hsmp = dict[str, set[str]]()
     dicts = {wrd for wrd in dicts if 0<len(wrd)<21}
@@ -80,8 +79,9 @@ class BotManager:
         self.username = username
         self.invalid = set[str]()
         self.invalid_file = invalid_file
-        self.kill = False
-        
+        self.self_destruct = False
+        self.bot = None
+
         self.console = logging.getLogger('MANAGER-CONSOLE')
         self.console.setLevel(logging.DEBUG)
         ch = logging.StreamHandler()
@@ -207,11 +207,11 @@ class BotManager:
         # for mapping unknown syllables
 
 
-    def do_bot(self, proxy) -> bool:
-        bot = Bot(dicts=self.dict_map, proxy=proxy, settings=self.settings, invalid=self.invalid)
-        expected, continue_action = bot.join_room(room_code=self.room_code, username=self.username)
+    def do_bot(self, proxy) -> bool | None:
+        self.bot = Bot(dicts=self.dict_map, proxy=proxy, settings=self.settings, invalid=self.invalid)
+        expected, continue_action = self.bot.join_room(room_code=self.room_code, username=self.username)
         if continue_action:
-            if bot.main_loop(stop=lambda: self.kill):
+            if self.bot.main_loop() and not self.self_destruct:
                 self.console.info(f'Bot session with proxy {proxy} ended gracefully')
                 return True
             else:
@@ -226,13 +226,18 @@ class BotManager:
                 return False
 
 
+    def close(self):
+        self.console.info('closing botmanager')
+        self.self_destruct = True
+        if self.bot:
+            self.bot.close()
+        self.bot = None
 
 
 #mainloop
-    def persist_loop(self): 
+    def persist_loop(self) -> None:
         try:
             for proxy in self.proxy_list:
-
                 if 'rotate' in proxy.lower():
                     rotate_retries = 0
                     while rotate_retries < ROTATE_RETRY_THRESH: #this should only end when there are too many unexpected issues
@@ -240,21 +245,25 @@ class BotManager:
                         if graceful: #expected end or ban vs unexpected join-room error or bot exception
                             rotate_retries = 0
                         else:
+                            if self.self_destruct:
+                                return
                             rotate_retries +=1
                         sleep(2)
                         self.console.info(f"reloading bot using rotating proxy {proxy}")
 
                 else:
-                    self.do_bot(proxy)
+                    if not self.do_bot(proxy) and self.self_destruct:
+                        return
+
                 sleep(2)
                 self.console.info(f"using next proxy in the list")
-        except KeyboardInterrupt:
-            self.kill = True
+        except (KeyboardInterrupt, SystemExit):
+            self.console.info(f'Manager session ended gracefully')
         except Exception as e:
-            self.kill = True
-            self.console.error(f"Unexpected exception occurred: {e}")
+            self.console.error(f"Unexpected exception occurred, ending manager session: {e}")
 
-        self.console.info('Session ended. Goodbye!')
+        finally:
+            self.console.info('Session ended. Goodbye!') #kills self. I wish
         
 #tool
     def find_in_file(self, filename:str, ex:str) -> list[str]: # returns a list of strings matching ex from filename ##tool
@@ -284,3 +293,7 @@ class BotManager:
 
         return dicts
 
+
+    def __del__(self):
+        self.console.info("BotManager is deleted")
+        self.console.handlers = []

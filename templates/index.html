@@ -2,17 +2,16 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Simple Test Panel</title>
+    <title>Bomb Party Bot Control Panel</title>
 </head>
 <body>
-
-    <h1>Bot Test Panel</h1>
+    <div id="blockingOverlay" style="display: none;">Executing Action... Please Wait...</div>
+    <h1>Bomb Party Bot Control Panel</h1>
 
     <form id="testForm">
-        <label>Username: <input type="text" id="username" value="TestBot"></label><br><br>
+        <label>Username: <input type="text" id="username" placeholder="Enter your username (or leave blank for random)"></label><br><br>
         <label>Room Code: <input type="text" id="roomcode" required placeholder="Enter your room code (e.g., ABCD)"></label><br><br>
 
-        <!-- A quick sample of one of your 25 settings keys to verify it maps -->
         <label>Select Mode:
             <select id="selectMode">
                 <option value="long">Long</option>
@@ -24,11 +23,20 @@
             </select>
         </label><br><br>
 
-        <button type="submit">Launch Bot</button>
-    </form>
 
+        <button type="submit" id="launchBtn">Launch Bot</button>
+        <button type="button" id="stopBtn" style="display: none; background-color: red; color: white; padding: 10px; margin-left: 10px;">Stop Bot</button>
     <script>
-        // 1. Fetch current settings from the backend when the page loads
+        const overlay = document.getElementById('blockingOverlay');
+        const launchBtn = document.getElementById('launchBtn');
+        const stopBtn = document.getElementById('stopBtn');
+
+        //Start a persistent heartbeat loop to let Python know we are still here
+        setInterval(() => {
+            fetch('/api/heartbeat', { method: 'POST' }).catch(() => {});
+        }, 2000);
+
+        //Fetch current settings from the backend when the page loads
         window.addEventListener('DOMContentLoaded', async () => {
             try {
                 const response = await fetch('/api/settings');
@@ -44,11 +52,13 @@
             }
         });
 
-        // 2. Intercept form submission and send to your Flask server
+        //Intercept form submission and send to your Flask server
         document.getElementById('testForm').addEventListener('submit', async function(e) {
             e.preventDefault();
+            e.stopImmediatePropagation()
 
-            // Simple payload mapping exactly to your streamlined route expectations
+            launchBtn.style.display = 'none';
+            overlay.style.display = 'flex';
             const payload = {
                 username: document.getElementById('username').value,
                 roomcode: document.getElementById('roomcode').value,
@@ -90,9 +100,51 @@
                 });
 
                 const result = await response.json();
-                alert(result.message || "Error: " + result.error);
+                if (result.success) {
+                    // Update layout to state running configurations
+                    launchBtn.style.display = 'none';
+                    stopBtn.style.display = 'inline-block';
+                } else {
+                    alert("Error: " + result.error);
+                    launchBtn.style.display = 'inline-block';
+                    stopBtn.style.display = 'none';
+                }
             } catch (err) {
                 alert("Failed to connect to the backend server.");
+                launchBtn.style.display = 'inline-block';
+                stopBtn.style.display = 'none';
+            } finally {
+                // UNBLOCK UI: Release form interactions regardless of success state
+                overlay.style.display = 'none';
+            }
+        });
+
+        document.getElementById('stopBtn').addEventListener('click', async function() {
+            stopBtn.style.display = 'none';
+            overlay.style.display = 'flex';
+            try {
+                const response = await fetch('/api/stop', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' }
+                });
+
+                const result = await response.json();
+                if (result.success) {
+                    // Update layout to state stopped configurations
+                    launchBtn.style.display = 'inline-block';
+                    stopBtn.style.display = 'none';
+                } else {
+                    alert("Error: " + result.error);
+                    launchBtn.style.display = 'none';
+                    stopBtn.style.display = 'inline-block';
+                }
+            } catch (err) {
+                alert("Failed to connect to the backend server.");
+                launchBtn.style.display = 'inline-block';
+                stopBtn.style.display = 'none';
+            } finally {
+                // UNBLOCK UI: Release form interactions regardless of success state
+                overlay.style.display = 'none';
             }
         });
     </script>

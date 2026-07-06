@@ -77,6 +77,7 @@ class Bot:
             invalid = set()
         self.console = getLogger('MANAGER-CONSOLE.BOT-CONSOLE')
         self.console.setLevel(DEBUG)
+        self.self_destruct = False
 
 
         self.dicts = dicts 
@@ -140,13 +141,17 @@ class Bot:
 
     def join_room(self, room_code: str, username: str = '') -> tuple[bool,bool]: return self.client.join_room(room_code=room_code, username=username)
 
-    def close(self): self.client.close() #self close
-       
+    def close(self):
+        self.console.info('closing bot')
+        self.self_destruct = True
+        self.client.close()
+        self.client=None
 
-    def main_loop(self, stop = lambda: False) -> bool: #main loop. returns if it was graceful or not
+
+    def main_loop(self) -> bool: #main loop. returns if it was graceful or not
 
         try:
-            while not stop():
+            while not self.self_destruct: #main loop
                 if self.client.disconnect_check() or self.client.neterr_check():
                     break
 
@@ -225,20 +230,22 @@ class Bot:
                             self.bonus_alphabet = self.original_alphabet.copy()
                             self.console.info(f"{self.bonus_alphabet} after regen reset")
 
-
         except Exception as e:
             self.console.warning(f"unexpected exception: {e}")
-
-        finally:
             self.close()
+            return False
 
-        if stop():
+        if self.self_destruct:#this means close has already been called
             self.console.info("stop signal received, exiting main loop")
             return True
-
-        else:
+        else: #this means no exception, just disconnect
             self.console.info("disconnect or neterror detected, exiting main loop")
+            self.close()
             return False
+
+
+
+
 
 
             
@@ -359,3 +366,7 @@ class Bot:
                     rates_list.append(self.apply_jitter(float(self.max_rate))) # type: ignore | spam backspace
 
         return list(zip(txt_list, rates_list))
+
+    def __del__(self):
+        self.console.info("Bot is deleted")
+        self.console.handlers = []

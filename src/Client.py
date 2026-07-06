@@ -374,6 +374,7 @@ class Client:
         return False
 
     def close(self):
+        self.console.info('closing client')
         try:
             self.driver.quit()
             if self._mitm_proc is not None:
@@ -385,3 +386,8 @@ class Client:
                 self._mitm_proc = None
         except Exception as e:
             self.console.warning(f"Error during client close: {e}")
+
+
+    def __del__(self):
+        self.console.info("Client is deleted")
+        self.console.handlers = []
