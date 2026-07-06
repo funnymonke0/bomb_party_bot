@@ -24,7 +24,7 @@ Handles auto-reconnects, proxy rotation, human-like typing, and bonus-letter str
 
 - **Word Selection Options**  
   Modes include:
-  - `'smart'`, `'short'`, `'average'`, `'regen'`, `'long'`, `'common'`, `'realistic'`  
+  - `'sneaky'`, `'short'`, `'average'`, `'regen'`, `'long'`, `'common'`
   - Special strategies like `sneakyRegen`, `regenIfNeeded`, and stockpiling bonus letters  
 
 - **Configurable Mistakes**  
@@ -56,38 +56,41 @@ pip install -r requirements.txt
 
 ---
 
-## Settings (`settings.config`)
+## Settings (`settings.json`)
 
-All settings are loaded from `settings.config`. Change only what you understand.
+All settings are loaded from `settings.config`. Change only what you understand, make sure types and setting keys are correct as it will throw an exception otherwise.
 
 ```text
-selectMode:common
+{
+    "selectMode":"common",
 
-regenIfNeeded:True
-sneakyRegen:True
-stockpile:False
-greedLong:False
-timeConstraint:True
-cyberbullying:False
-mistakes:True
-burstType:True
-spamType:True
-dynamicRate:False
-dynamicPauses:True
-dynamicMistakes:True
+    "regenIfNeeded":true,
+    "sneakyRegen":true,
+    "stockpile":false,
+    "greedLong":false,
+    "timeConstraint":true,
+    "cyberbullying":false,
+    "mistakes":true,
+    "burstType":true,
+    "spamType":true,
+    "dynamicRate":false,
+    "dynamicPauses":true,
+    "dynamicMistakes":true,
 
-minWait:1.0
-maxWait:3.2
-mistakePause:0.100
-miniPause: 0.330
-minWpm:70
-maxWpm:120
-spamWpm:1000
-burstChance:0.50
-minMistakeChance:0.01
-maxMistakeChance:0.15
-spamChance:0.10
-jitterPercent: 0.50
+    "minWait":1.0,
+    "maxWait":3.2,
+    "mistakePause":0.100,
+    "miniPause": 0.330,
+    "minWpm":70,
+    "maxWpm":120,
+    "spamWpm":1000,
+    "burstChance":0.50,
+    "minMistakeChance":0.01,
+    "maxMistakeChance":0.15,
+    "spamChance":0.10,
+    "jitterPercent": 0.50
+}
+
 ```
 
 ---
@@ -125,7 +128,7 @@ xylophone
 
 ## Invalid Words (`invalid.config`)
 
-- Words the bot has already used incorrectly are stored here if `saveInvalid` is enabled.  
+- Words that are outdated can be stored here.
 - Bot avoids using these words again.
 
 ---
@@ -174,14 +177,11 @@ cd src
 python3 bomb_party_bot.py
 ```
 
-6. Enter your room code and username (or leave blank for random).
+6. Enter your room code and username (leave username blank for random).
 
 The bot will automatically handle typing, mistakes, bursts, spam, bonus letters, and reconnections.  
 
 ---
 
 ## Improvements
-
-- Smarter configuration
 - Turn it into an actual app with something like Flask
-- Host a bot using Github Actions to stay constantly online like a training room
