@@ -185,3 +185,4 @@ The bot will automatically handle typing, mistakes, bursts, spam, bonus letters,
 
 ## Improvements
 - Turn it into an actual app with something like Flask
+- track room codes
