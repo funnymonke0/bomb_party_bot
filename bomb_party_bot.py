@@ -5,7 +5,7 @@ if __name__ == "__main__" :
 
     config = "config"
     proxies = join(config, 'proxies.config') ##adjust to autorecognize?
-    settings = join(config,'settings.config')
+    settings = join(config,'settings.json')
     dictionaries = join(config,'dictionaries.config')
     invalid = join(config,'invalid.config')
     if exists(config) and exists(proxies) and exists(settings) and exists(dictionaries) and exists(invalid):

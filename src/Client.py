@@ -1,7 +1,6 @@
 from selenium import webdriver
 from selenium.webdriver.chrome.service import Service as ChromeService
 from selenium.webdriver.chrome.options import Options as ChromeOptions
-from selenium.webdriver.common.devtools.v149 import console
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.wait import WebDriverWait
@@ -71,7 +70,7 @@ def _free_port() -> int: #we host a local proxy to intercept traffic, so we need
 
 def _start_mitm(upstream_proxy: str, local_port: int) -> subprocess.Popen: # type: ignore | we listen on the local proxy port and then send from the upstream actual proxy
     stripped = upstream_proxy.removeprefix('https://')
-    userpswd, hostnameport = stripped.split('@')
+    userpswd, hostnameport = stripped.split('@') #fine to leave like this incase we need full https string later
     user, pswd = userpswd.split(':')
     hostname, port = hostnameport.split(':')
     cmd = [ #this is basically just a console command
@@ -167,7 +166,7 @@ class Client:
         self.driver = webdriver.Chrome(service=service, options=chrome_options)
         self.console.info(f'initialized BombParty Client running @ {proxy}')
 
-    def join_room(self, room_code: str, username: str) -> bool:
+    def join_room(self, room_code: str, username: str) -> tuple[bool,bool]: #this has 3 possible modes: bot is banned and cannot join (expected, don't continue), bot is not banned and cannot join (unexpected, don't continue), bot is not banned and can join (expected, continue)
         try:
             self.console.info('joining room: ' + room_code)
             self.driver.get("https://jklm.fun/" + room_code)
@@ -182,13 +181,13 @@ class Client:
             submit.click()
 
             if self.disconnect_check() or self.neterr_check():
-                self.console.warning('unable to connect to room')
-                return False
+                self.console.warning('banned')
+                return (True, False)
             self.console.info('joined room')
-            return True
-        except:
-            self.console.warning("some join_room elements not found or interactable")
-            return False
+            return (True, True)
+        except Exception as e:
+            self.console.warning(f"some join_room elements not found or interactable: {e}")
+            return (False, False)
 
 
 # Helper func
@@ -374,11 +373,14 @@ class Client:
         return False
 
     def close(self):
-        self.driver.quit()
-        if self._mitm_proc is not None:
-            self._mitm_proc.terminate()
-            try:
-                self._mitm_proc.wait(timeout=3)
-            except subprocess.TimeoutExpired:
-                self._mitm_proc.kill()
-            self._mitm_proc = None
+        try:
+            self.driver.quit()
+            if self._mitm_proc is not None:
+                self._mitm_proc.terminate()
+                try:
+                    self._mitm_proc.wait(timeout=3)
+                except subprocess.TimeoutExpired:
+                    self._mitm_proc.kill()
+                self._mitm_proc = None
+        except Exception as e:
+            self.console.warning(f"Error during client close: {e}")

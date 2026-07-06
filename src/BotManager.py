@@ -1,3 +1,5 @@
+from logging import fatal
+
 import requests
 from bs4 import BeautifulSoup
 
@@ -8,6 +10,7 @@ from os.path import join
 from os import makedirs
 from time import sleep
 from datetime import datetime
+import json
 
 
 from src.Bot import Bot
@@ -15,43 +18,22 @@ from src.Bot import Bot
 
 PLAINTEXT_REGEX = r"\b'?([A-Za-z]+(?:[-'][A-Za-z]+)*)'?\b"
 URL_REGEX = r"https?:\/\/[A-Za-z0-9.-]+(?:\/[A-Za-z0-9._~\-\/]+)*"
-SETTINGS_REGEX = r"^\w+(\s*)\:(\s*)(\w+)(\.\w+)?"
 PROXY_REGEX = r"^((\d{1,3}\.){3}(\d{1,3})|\w+\.\w+(\.\w+)?):(\d{1,5})(:.+:.+)?"
 ROTATE_RETRY_THRESH = 5
-
+MODES = ['long','short',"average",'regen',"common","sneaky"]
 
 
 
 
 class DictionaryException(Exception):
-    def __init__(self):
-        super().__init__("Dictionary load failed. Please provide dictionary")
+    def __init__(self, message:str = "Dictionary load failed. Please provide dictionary"):
+        super().__init__(message)
 class SettingsException(Exception):
-    def __init__(self):
-        super().__init__("Settings load failed. Please provide settings")
+    def __init__(self, message:str = "Settings load failed. Please provide settings"):
+        super().__init__(message)
 
 
-def format_settings(raw:list[str]) -> dict[str, object]: ##tool
-    s=dict[str, object]()
-
-    for line in raw:
-        if len(line) > 0:
-            key, value = line.split(':', 1)
-            if value.lower() == 'true':
-                s[key] = True
-            elif value.lower() == 'false':
-                s[key] = False
-            elif match(r"^\d+\.\d*$", value):
-                s[key] = float(value)
-            elif match(r"^\d+$|^\d+\.0+$",value):
-                s[key] = int(value)
-            else:
-                s[key] = value #string
-
-    return s
-
-
-def format_dict(dicts:set[str]) -> dict[str, set[str]]: ##tool
+def _format_dict(dicts:set[str]) -> dict[str, set[str]]: ##tool
     hsmp = dict[str, set[str]]()
     dicts = {wrd for wrd in dicts if 0<len(wrd)<21}
     for letter1 in ascii_lowercase:
@@ -69,13 +51,14 @@ def format_dict(dicts:set[str]) -> dict[str, set[str]]: ##tool
     return hsmp
 
 
-def format_proxy(proxy:str) -> str: ##Tool
-    split = proxy.split(':')
+def _format_proxy(proxy:str) -> str: ##Tool
     f_proxy = ''
+    split = proxy.split(':')
+
 
     if len(split) == 4:
         addr, port, user, pswd = split[0], split[1], split[2], split[3]
-        f_proxy = f"https://{user}:{pswd}@{addr}:{port}"
+        f_proxy = f"https://{user}:{pswd}@{addr}:{port}" #any issues will be handled by bot defaulting
 
     elif len(split) == 2:
         addr, port = split[0], split[1]
@@ -97,6 +80,7 @@ class BotManager:
         self.username = username
         self.invalid = set[str]()
         self.invalid_file = invalid_file
+        self.kill = False
         
         self.console = logging.getLogger('MANAGER-CONSOLE')
         self.console.setLevel(logging.DEBUG)
@@ -117,50 +101,87 @@ class BotManager:
         self.console.addHandler(ch)
         self.console.addHandler(fh)#botconsole inherits all this
 
-        self.load_settings(settings_file)
-        self.load_proxies(proxy_file)
-        self.load_dicts(dict_file)
+        self._load_settings(settings_file)
+        self._load_proxies(proxy_file)
+        self._load_dicts(dict_file)
 
         if invalid_file:
-            self.load_invalid(invalid_file)
+            self._load_invalid(invalid_file)
 
-#____ Load functions _____________________________________________
+#init funcs
 
-    def load_settings(self, settings_file:str) -> None:#init proc
+    def _load_settings(self, settings_file:str) -> None:#init proc
 
-
-        settings_raw = self.find_in_file(settings_file, SETTINGS_REGEX)
+        with open(settings_file, 'r') as f:
+            settings_raw = json.load(f)
 
         if len(settings_raw) < 1:
             raise SettingsException
-        
-        self.settings = format_settings(settings_raw)
-                
+
+        settings_raw["selectMode"] = str(settings_raw["selectMode"]).strip().lower()
+        try:
+            if not( #integrity check
+                settings_raw["selectMode"] in MODES
+                and isinstance(settings_raw["regenIfNeeded"], bool)
+                and isinstance(settings_raw["sneakyRegen"], bool)
+                and isinstance(settings_raw["stockpile"], bool)
+                and isinstance(settings_raw["greedLong"], bool)
+                and isinstance(settings_raw["timeConstraint"], bool)
+                and isinstance(settings_raw["cyberbullying"], bool)
+                and isinstance(settings_raw["mistakes"], bool)
+                and isinstance(settings_raw["burstType"], bool)
+                and isinstance(settings_raw["spamType"], bool)
+                and isinstance(settings_raw["dynamicRate"], bool)
+                and isinstance(settings_raw["dynamicPauses"], bool)
+                and isinstance(settings_raw["dynamicMistakes"], bool)
+                and isinstance(settings_raw["minWait"], (int, float))
+                and isinstance(settings_raw["maxWait"], (int, float))
+                and isinstance(settings_raw["mistakePause"], (int, float))
+                and isinstance(settings_raw["miniPause"], (int, float))
+                and isinstance(settings_raw["minWpm"], int)
+                and isinstance(settings_raw["maxWpm"], int)
+                and isinstance(settings_raw["spamWpm"], int)
+                and isinstance(settings_raw["burstChance"], (int,float))
+                and isinstance(settings_raw["minMistakeChance"], (int,float))
+                and isinstance(settings_raw["maxMistakeChance"], (int,float))
+                and isinstance(settings_raw["spamChance"], (int,float))
+                and isinstance(settings_raw["jitterPercent"], (int,float))
+                ):
+                raise SettingsException('Settings file contains invalid characters. Please check that all values are of the correct type and that no extra characters are present.')
+        except KeyError as e:
+            raise SettingsException(f"Settings file is missing required key: {e}")
+
+        self.settings = settings_raw
         self.console.info(f"loaded all {len(self.settings)} settings from {settings_file}")
 
 
 
-    def load_proxies(self, proxy_file:str) -> None:#init proc
+    def _load_proxies(self, proxy_file:str) -> None:#init proc
 
-        self.proxy_list = self.find_in_file(proxy_file, PROXY_REGEX)
+        proxy_list_raw = self.find_in_file(proxy_file, PROXY_REGEX)
+        #must be len > 0, element must be len > 0, format element must be len > 0
+        if len(proxy_list_raw) > 0 and any(proxy_list_raw): #checks if list is not empty and if any elements are not empty
+            proxy_list_raw = [_format_proxy(proxy) for proxy in proxy_list_raw if len(proxy) > 0] # formats all non-empty proxies
+            if len(proxy_list_raw) > 0 and any(proxy_list_raw):
+                proxy_list_raw = [f_proxy for f_proxy in proxy_list_raw if len(f_proxy) > 0] #removes any empty after format
+                if len(proxy_list_raw) > 0 and any(proxy_list_raw):
+                    self.proxy_list = proxy_list_raw
+                    self.console.info(f"loaded {len(self.proxy_list)} proxies from {proxy_file}")
+                    return
+        self.proxy_list = ['']  # use local IP
+        self.console.info("No proxies provided. Using local machine IP")  # not critical
 
-        if not self.proxy_list or len(self.proxy_list) < 1:
-            self.proxy_list = ['']#use local IP
-            self.console.info("No proxies provided. Using local machine IP")
-        else:
-            self.console.info(f"loaded {len(self.proxy_list)} proxies from {proxy_file}")
-        
 
-    def load_invalid(self, invalid_file:str) -> None: ## loads the non-working words at the start
+    def _load_invalid(self, invalid_file:str) -> None: ## loads the non-working words at the start
         self.console = self.console
         try:
             self.invalid = {x.lower() for x in self.find_in_file(invalid_file, PLAINTEXT_REGEX)}
             self.console.info(f'loaded invalid word list from {invalid_file}. Contains {len(self.invalid)} words')
         except FileNotFoundError:
-            self.console.warning(f"{invalid_file} could not be loaded because it does not exist")
+            self.console.warning(f"{invalid_file} could not be loaded because it does not exist") #not critical
 
 
-    def load_dicts(self, dict_file:str) -> None:#init proc
+    def _load_dicts(self, dict_file:str) -> None:#init proc
         console = self.console
 
         dicts = set[str]()
@@ -176,7 +197,7 @@ class BotManager:
             raise DictionaryException
 
         console.info(f"loaded {len(dicts)} words from {dict_file}")
-        self.dict_map = format_dict(dicts)
+        self.dict_map = _format_dict(dicts)
         console.info(f"finished mapping all {len(self.dict_map)} (key,value) pairs")
 
         # for k, v in self.dict_map.items():
@@ -185,58 +206,69 @@ class BotManager:
         #             file.write(k+"\n")
         # for mapping unknown syllables
 
-#____ Main functions _____________________________________________      
- 
+
+    def do_bot(self, proxy) -> bool:
+        bot = Bot(dicts=self.dict_map, proxy=proxy, settings=self.settings, invalid=self.invalid)
+        expected, continue_action = bot.join_room(room_code=self.room_code, username=self.username)
+        if continue_action:
+            if bot.main_loop(stop=lambda: self.kill):
+                self.console.info(f'Bot session with proxy {proxy} ended gracefully')
+                return True
+            else:
+                self.console.warning(f'Bot session with proxy {proxy} ended unexpectedly')
+                return False
+        else:
+            if expected:
+                self.console.warning(f'Bot session with proxy {proxy} was banned from the room')
+                return True
+            else:
+                self.console.warning(f'Bot session with proxy {proxy} could not join room')
+                return False
+
+
+
+
+#mainloop
     def persist_loop(self): 
         try:
             for proxy in self.proxy_list:
-                if len (proxy) > 0:
-                    proxy = format_proxy(proxy)
 
                 if 'rotate' in proxy.lower():
                     rotate_retries = 0
-                    while rotate_retries < ROTATE_RETRY_THRESH:
-                        bot = Bot(dicts=self.dict_map, proxy=proxy, settings=self.settings, invalid=self.invalid)
-                        if bot.join_room(room_code=self.room_code, username=self.username):
+                    while rotate_retries < ROTATE_RETRY_THRESH: #this should only end when there are too many unexpected issues
+                        graceful = self.do_bot(proxy)
+                        if graceful: #expected end or ban vs unexpected join-room error or bot exception
                             rotate_retries = 0
-
-                            bot.main_loop()
-                            bot.close()
-                            self.console.info(f'Bot session with proxy {proxy} ended gracefully')
-                            
                         else:
                             rotate_retries +=1
                         sleep(2)
                         self.console.info(f"reloading bot using rotating proxy {proxy}")
 
                 else:
-                    bot = Bot(dicts=self.dict_map, proxy=proxy, settings=self.settings, invalid=self.invalid)
-                    if bot.join_room(room_code=self.room_code, username=self.username):
-
-                        bot.main_loop()
-                        bot.close()
-                        self.console.info(f'Bot session with proxy {proxy} ended gracefully')
-
+                    self.do_bot(proxy)
                 sleep(2)
                 self.console.info(f"using next proxy in the list")
         except KeyboardInterrupt:
-            self.console.info("User aborted BotManager")
+            self.kill = True
+        except Exception as e:
+            self.kill = True
+            self.console.error(f"Unexpected exception occurred: {e}")
 
         self.console.info('Session ended. Goodbye!')
         
-#____ Tool functions _____________________________________________
-
+#tool
     def find_in_file(self, filename:str, ex:str) -> list[str]: # returns a list of strings matching ex from filename ##tool
-        lst = []
+        lst = ['']
         try:
             with open(filename, 'r') as file:
                 out = file.readlines()
-            lst = [sub(r'\s+', '', x) for x in out if match(ex,x)]
+            lst = [sub(r'\s+', '', x) for x in out if match(ex,x)] #removes all whitespace anywhere and matches
         except FileNotFoundError:
             self.console.warning(f"file {filename} not found")
         except Exception as e:
             self.console.warning(f"file {filename} could not be read because of Exception {e}")
         return lst
+
 
     def parse_from_urls(self, dict_urls:list[str]) -> set[str]:
         dicts = set[str]()
@@ -245,7 +277,7 @@ class BotManager:
                 try:
                     response = requests.get(url)
                     soup = BeautifulSoup(response.text, 'html.parser')
-                    content = str(soup.get_text(separator='\n', strip=True).lower().split('\n'))
+                    content = str(soup.get_text(separator='\n', strip=True).lower().split('\n')) #shouldnt have any whitespaces inside of words if from source so we dont need sub
                     dicts.update(content)
                 except Exception as e:
                     self.console.warning(f'Cannot get url {url} because of Exception {e}')

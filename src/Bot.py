@@ -138,19 +138,18 @@ class Bot:
         self.client = Client(proxy=proxy)
 
 
-    def join_room(self, room_code: str, username: str = '') -> bool: return self.client.join_room(room_code=room_code, username=username)
+    def join_room(self, room_code: str, username: str = '') -> tuple[bool,bool]: return self.client.join_room(room_code=room_code, username=username)
 
-    def close(self): self.client.close()
+    def close(self): self.client.close() #self close
        
 
-    def main_loop(self):
-        
-        
+    def main_loop(self, stop = lambda: False) -> bool: #main loop. returns if it was graceful or not
 
-        while True:
-            try:
+        try:
+            while not stop():
                 if self.client.disconnect_check() or self.client.neterr_check():
                     break
+
 
                 if self.client.try_join_round(): #needs to be constant trying to click join because otherwise it will not have another indicator as to when to reset initial conditions
                     self.original_alphabet = self.client.get_bonus_alphabet()
@@ -159,20 +158,20 @@ class Bot:
                     self.current_lives = self.start_lives
                     self.max_lives = self.client.get_max_lives()
                     self.client.clear_life_trackers()
-                    
+
                     self.used = set[str]()
                     self.used.update(self.invalid) #reset used
 
                     self.is_correct = True
 
 
-                
-                if self.client.get_self_turn(): 
+
+                if self.client.get_self_turn():
                     self.syllable = self.client.get_syllable()
                     typed = False
                     if self.is_correct:
                         self.start = time()
-                    
+
 
                     ans_set = self.dicts[self.syllable]
                     ans_set -= self.used
@@ -182,10 +181,10 @@ class Bot:
                         ans = self.eval(ans_set)
 
                     self.console.info(f"found answer {ans} for syllable {self.syllable}" if ans != "/suicide" else f"could not find answer for syllable: {self.syllable}")
-                    
-                    
+
+
                     if bool(self.cyberbullying) and self.client.get_players() < 3:# type: ignore
-                        if self.client.get_self_turn() and self.client.safe_typer(ans): 
+                        if self.client.get_self_turn() and self.client.safe_typer(ans):
                             typed = True
 
                     else:
@@ -216,7 +215,7 @@ class Bot:
                         life_change = self.client.get_life_change()
                         self.current_lives += life_change
 
-                        
+
                         #if correct, prune bonus alphabet for letters in used answer
                         self.bonus_alphabet = list((Counter(self.bonus_alphabet) - Counter(ans)).elements())
                         self.console.info(f"remaining {self.bonus_alphabet} after pruning")
@@ -224,11 +223,23 @@ class Bot:
                         if len(self.bonus_alphabet) < 1: #no need to add to current_lives, since that updates automatically
                             self.bonus_alphabet = self.original_alphabet.copy()
                             self.console.info(f"{self.bonus_alphabet} after regen reset")
-                    
-                        
-            except Exception as e:
-                self.console.warning(f"unexpected exception: {e}")
-                break
+
+
+        except Exception as e:
+            self.console.warning(f"unexpected exception: {e}")
+
+        finally:
+            self.close()
+
+        if stop():
+            self.console.info("stop signal received, exiting main loop")
+            return True
+
+        else:
+            self.console.info("disconnect or neterror detected, exiting main loop")
+            return False
+
+
             
 
 
