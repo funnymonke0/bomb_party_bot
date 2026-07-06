@@ -43,19 +43,20 @@ class BackendServer:
 
         if self.manager:
             try:
-                self.manager.close()  # Gracefully stop the existing bot manager
-                if self.bot_thread and self.bot_thread.is_alive():
-                    self.bot_thread.join(timeout=5)  # Wait for the thread to finish, with a timeout
-                if self.bot_thread.is_alive():
-                    return jsonify({"success": False, "error": "Error stopping bot: Thread did not terminate"}), 500
+                self.manager.close()  # Gracefully stop the existing bot manager (may be closed already)
             except Exception as e:
-                return jsonify({"success": False, "error": f"Error stopping bot: {str(e)}"}), 500
-            self.manager = None
-            self.bot_thread = None
-            import gc
-            gc.collect()
-            time.sleep(0.1)  # Give a moment for resources to be released
-            return jsonify({"success": True, "message": "Bot stopped."})
+                print(f"--> [WARNING] Error while closing bot manager: {e}")
+        if self.bot_thread and self.bot_thread.is_alive():
+            self.bot_thread.join(timeout=5)  # Wait for the thread to finish, with a timeout
+        if self.bot_thread and self.bot_thread.is_alive():
+            return jsonify({"success": False, "error": "Error stopping bot: Thread did not terminate"}), 500
+
+        self.manager = None
+        self.bot_thread = None
+        import gc
+        gc.collect()
+        time.sleep(0.1)  # Give a moment for resources to be released
+        return jsonify({"success": True, "message": "Bot stopped."})
         return jsonify({"success": False, "error": "No bot is currently running."}), 400
 
 
@@ -138,12 +139,13 @@ class BackendServer:
 
             if proxies and len(proxies) > 0:
                 with open(proxies_file, 'w', encoding='utf-8') as f:
-                    f.write('\n'.join(proxies)+'\n')
+                        f.write('\n'.join(proxies)+'\n')
                 print(f"--> [SUCCESS] proxies.config updated")
             else:
-                print(f"--> [WARNING] No proxies provided, skipping update and using defaults (none).")
+                print(f"--> [WARNING] No proxies provided, skipping update and using defaults (None).")
 
-
+            with open(invalid_file, 'r', encoding='utf-8') as f:
+                print(f.read().splitlines())
             # 4. Launch the bot in a separate thread to avoid blocking the Flask server
             self.manager = BotManager(dict_file=dictionaries_file, room_code=room_code, proxy_file=proxies_file, username=username, settings_file=settings_file, invalid_file=invalid_file)
             self.bot_thread = threading.Thread(target=self.manager.persist_loop, daemon=True)

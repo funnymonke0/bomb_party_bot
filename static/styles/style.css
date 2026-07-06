@@ -1,0 +1,164 @@
+
+:root {
+    /* Colors */
+    --color-bg: #efe9f3;
+    --color-surface: #f8f4fa;
+    --color-border: #ddd0e5;
+    --color-text: #5c4f66;
+    --color-text-muted: #a597ad;
+    --color-accent: #c3a8e0;
+    --color-accent-hover: #b391d6;
+    --color-danger: #e0aed0;
+    --color-danger-hover: #d494bf;
+
+    /* Layout */
+    --max-width: 640px;
+    --radius: 18px;
+    --spacing: 16px;
+
+    /* Typography */
+    --font-family: "SF Mono", "JetBrains Mono", "Fira Code", Consolas;
+    --font-size-base: 15px;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    padding: calc(var(--spacing) * 2) var(--spacing);
+    background: var(--color-bg);
+    color: var(--color-text);
+    font-family: var(--font-family), monospace;
+    font-size: var(--font-size-base);
+    line-height: 1.5;
+}
+
+h1 {
+    max-width: var(--max-width);
+    margin: 0 auto calc(var(--spacing) * 1.5);
+    font-size: 1.4rem;
+    font-weight: 600;
+}
+
+form {
+    max-width: var(--max-width);
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing);
+}
+
+fieldset {
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius);
+    background: var(--color-surface);
+    padding: var(--spacing);
+    margin: 0;
+}
+
+legend {
+    padding: 0 8px;
+    color: var(--color-accent);
+    font-weight: 600;
+    font-size: 0.9rem;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+}
+
+label {
+    display: block;
+    margin-bottom: 10px;
+    color: var(--color-text-muted);
+    font-size: 0.9rem;
+}
+
+label:last-child {
+    margin-bottom: 0;
+}
+
+/* Checkbox labels sit inline with their input instead of stacking */
+fieldset label:has(input[type="checkbox"]) {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: var(--color-text);
+}
+
+input[type="text"],
+input[type="number"],
+select,
+textarea {
+    width: 100%;
+    margin-top: 6px;
+    padding: 10px 14px;
+    background: var(--color-bg);
+    border: 1px solid var(--color-border);
+    border-radius: 12px;
+    color: var(--color-text);
+    font-family: inherit;
+    font-size: 0.9rem;
+}
+
+input[type="checkbox"] {
+    width: 16px;
+    height: 16px;
+    accent-color: var(--color-accent);
+}
+
+input[type="text"]:focus,
+input[type="number"]:focus,
+select:focus,
+textarea:focus {
+    outline: none;
+    border-color: var(--color-accent);
+}
+
+textarea {
+    font-family: "SF Mono", Consolas, monospace;
+    font-size: 0.85rem;
+}
+
+button {
+    padding: 10px 22px;
+    border: none;
+    border-radius: 999px;
+    font-size: 0.95rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.15s ease;
+}
+
+#launchBtn {
+    background: var(--color-accent);
+    color: #fff;
+}
+
+#launchBtn:hover {
+    background: var(--color-accent-hover);
+}
+
+#stopBtn {
+    background: var(--color-danger) !important;
+    color: #fff !important;
+    padding: 10px 22px !important;
+    margin-left: 0 !important;
+    border-radius: 999px !important;
+}
+
+#stopBtn:hover {
+    background: var(--color-danger-hover) !important;
+}
+
+#blockingOverlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(85, 82, 77, 0.35);
+    color: var(--color-text);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.1rem;
+    z-index: 100;
+}

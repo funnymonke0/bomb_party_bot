@@ -2,7 +2,7 @@
     "selectMode": "common",
     "regenIfNeeded": true,
     "sneakyRegen": true,
-    "stockpile": false,
+    "stockpile": true,
     "greedLong": false,
     "timeConstraint": true,
     "cyberbullying": false,

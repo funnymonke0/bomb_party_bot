@@ -1,4 +1,7 @@
+import time
+
 from selenium import webdriver
+from selenium.common import TimeoutException
 from selenium.webdriver.chrome.service import Service as ChromeService
 from selenium.webdriver.chrome.options import Options as ChromeOptions
 from selenium.webdriver.common.keys import Keys
@@ -354,11 +357,21 @@ class Client:
                         return True
                 except:
                     pass
+            counter = 0
+            failed = True
+            while counter < 3 and failed:
                 self.driver.refresh()
-                sleep(MAX_WAIT)
-                if self.driver.find_element(By.XPATH, LOCATORS["disconnect_page"]).is_displayed():
-                    self.console.info(f'Bot disconnected due to ban or error. Reason: unknown')
-                    return True
+                try:
+                    WebDriverWait(self.driver, MAX_WAIT).until(EC.visibility_of_element_located((By.XPATH, LOCATORS["disconnect_page"])))
+                except TimeoutException:
+                    failed = False
+                    break
+                time.sleep(0.2)
+                counter += 1
+
+            if failed:
+                self.console.info(f'Bot disconnected due to ban or error. Reason: unknown')
+                return True
         except: pass
         return False
 
@@ -367,9 +380,11 @@ class Client:
         try:
             if self.driver.find_element(By.XPATH, LOCATORS["neterror_page"]).is_displayed():
                 self.driver.refresh()
-                sleep(MAX_WAIT)
-                if self.driver.find_element(By.XPATH, LOCATORS["neterror_page"]).is_displayed():
+                try:
+                    WebDriverWait(self.driver, MAX_WAIT).until(EC.visibility_of_element_located((By.XPATH, LOCATORS["neterror_page"])))
                     return True
+                except TimeoutException:
+                    pass
         except: pass
         return False
 

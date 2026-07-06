@@ -3,153 +3,241 @@
 <head>
     <meta charset="UTF-8">
     <title>Bomb Party Bot Control Panel</title>
+    <link rel="stylesheet" href="../static/styles/style.css">
 </head>
 <body>
     <div id="blockingOverlay" style="display: none;">Executing Action... Please Wait...</div>
     <h1>Bomb Party Bot Control Panel</h1>
 
     <form id="testForm">
-        <label>Username: <input type="text" id="username" placeholder="Enter your username (or leave blank for random)"></label><br><br>
-        <label>Room Code: <input type="text" id="roomcode" required placeholder="Enter your room code (e.g., ABCD)"></label><br><br>
+        <fieldset>
+            <legend>Basics</legend>
+            <label>Username:
+                <input type="text" id="username" placeholder="Enter your username (or leave blank for random)">
+            </label><br><br>
 
-        <label>Select Mode:
-            <select id="selectMode">
-                <option value="long">Long</option>
-                <option value="short">Short</option>
-                <option value="sneaky">Sneaky</option>
-                <option value="regen">Regen</option>
-                <option value="average">Average</option>
-                <option value="common">Common</option>
-            </select>
-        </label><br><br>
+            <label>Room Code (required):
+                <input type="text" id="roomcode" required placeholder="Enter your room code (e.g., ABCD)">
+            </label><br><br>
 
+            <label>Select Mode:
+                <select id="selectMode">
+                    <option value="long">Long</option>
+                    <option value="short">Short</option>
+                    <option value="sneaky">Sneaky</option>
+                    <option value="regen">Regen</option>
+                    <option value="average">Average</option>
+                    <option value="common">Common</option>
+                </select>
+            </label>
+        </fieldset>
+        <br>
+
+        <fieldset>
+            <legend>Lists</legend>
+            <label>Invalid (one entry per line, optional, use internal defaults):<br>
+                <textarea id="invalid" rows="6" cols="50" style="resize: vertical; overflow-y: scroll;" placeholder="word1&#10;word2&#10;word3"></textarea>
+            </label><br><br>
+
+            <label>Dictionaries (one entry per line, optional, use internal defaults):<br>
+                <textarea id="dictionaries" rows="6" cols="50" style="resize: vertical; overflow-y: scroll;" placeholder="word1&#10;word2&#10;https://norvig.com/ngrams/sowpods.txt&#10;https://norvig.com/ngrams/enable1.txt"></textarea>
+            </label><br><br>
+
+            <label>Proxies (one entry per line, optional, defaults to None):<br>
+                <textarea id="proxies" rows="6" cols="50" style="resize: vertical; overflow-y: scroll;" placeholder="ip:port&#10;ip:port:username:password"></textarea>
+            </label>
+        </fieldset>
+        <br>
+
+        <fieldset>
+            <legend>Behavior Toggles</legend>
+            <label><input type="checkbox" id="regenIfNeeded" checked> Regen If Needed</label><br>
+            <label><input type="checkbox" id="sneakyRegen" checked> Sneaky Regen</label><br>
+            <label><input type="checkbox" id="stockpile"> Stockpile</label><br>
+            <label><input type="checkbox" id="greedLong"> Greed Long</label><br>
+            <label><input type="checkbox" id="timeConstraint" checked> Time Constraint</label><br>
+            <label><input type="checkbox" id="cyberbullying"> Cyberbullying</label><br>
+            <label><input type="checkbox" id="mistakes" checked> Mistakes</label><br>
+            <label><input type="checkbox" id="burstType" checked> Burst Type</label><br>
+            <label><input type="checkbox" id="spamType" checked> Spam Type</label><br>
+            <label><input type="checkbox" id="dynamicRate"> Dynamic Rate</label><br>
+            <label><input type="checkbox" id="dynamicPauses" checked> Dynamic Pauses</label><br>
+            <label><input type="checkbox" id="dynamicMistakes" checked> Dynamic Mistakes</label>
+        </fieldset>
+        <br>
+
+        <fieldset>
+            <legend>Timing</legend>
+            <label>Min Wait (s): <input type="number" id="minWait" step="0.1" value="1.0"></label><br><br>
+            <label>Max Wait (s): <input type="number" id="maxWait" step="0.1" value="3.2"></label><br><br>
+            <label>Mistake Pause (s): <input type="number" id="mistakePause" step="0.001" value="0.100"></label><br><br>
+            <label>Mini Pause (s): <input type="number" id="miniPause" step="0.001" value="0.330"></label><br><br>
+            <label>Min WPM: <input type="number" id="minWpm" step="1" value="70"></label><br><br>
+            <label>Max WPM: <input type="number" id="maxWpm" step="1" value="120"></label><br><br>
+            <label>Spam WPM: <input type="number" id="spamWpm" step="1" value="1000"></label>
+        </fieldset>
+        <br>
+
+        <fieldset>
+            <legend>Chances (0.0 - 1.0)</legend>
+            <label>Burst Chance: <input type="number" id="burstChance" step="0.01" min="0" max="1" value="0.50"></label><br><br>
+            <label>Min Mistake Chance: <input type="number" id="minMistakeChance" step="0.01" min="0" max="1" value="0.01"></label><br><br>
+            <label>Max Mistake Chance: <input type="number" id="maxMistakeChance" step="0.01" min="0" max="1" value="0.15"></label><br><br>
+            <label>Spam Chance: <input type="number" id="spamChance" step="0.01" min="0" max="1" value="0.10"></label><br><br>
+            <label>Jitter Percent: <input type="number" id="jitterPercent" step="0.01" min="0" max="1" value="0.50"></label>
+        </fieldset>
+        <br>
 
         <button type="submit" id="launchBtn">Launch Bot</button>
         <button type="button" id="stopBtn" style="display: none; background-color: red; color: white; padding: 10px; margin-left: 10px;">Stop Bot</button>
     </form>
 
-
     <script>
         const overlay = document.getElementById('blockingOverlay');
         const launchBtn = document.getElementById('launchBtn');
         const stopBtn = document.getElementById('stopBtn');
+        const form = document.getElementById('testForm');
 
-        //Start a persistent heartbeat loop to let Python know we are still here
+        // IDs of settings fields, grouped by how they should be read from the DOM.
+        const LIST_FIELDS = ['invalid', 'dictionaries', 'proxies'];
+        const CHECKBOX_FIELDS = [
+            'regenIfNeeded', 'sneakyRegen', 'stockpile', 'greedLong',
+            'timeConstraint', 'cyberbullying', 'mistakes', 'burstType',
+            'spamType', 'dynamicRate', 'dynamicPauses', 'dynamicMistakes'
+        ];
+        const NUMBER_FIELDS = [
+            'minWait', 'maxWait', 'mistakePause', 'miniPause',
+            'minWpm', 'maxWpm', 'spamWpm',
+            'burstChance', 'minMistakeChance', 'maxMistakeChance',
+            'spamChance', 'jitterPercent'
+        ];
+
+        //  UI state helpers
+
+        function setUiState({ running, busy }) {
+            overlay.style.display = busy ? 'flex' : 'none';
+            launchBtn.style.display = running ? 'none' : 'inline-block';
+            stopBtn.style.display = running ? 'inline-block' : 'none';
+        }
+
+        //  Payload building
+
+        function textareaToList(id) {
+            return document.getElementById(id).value
+                .split('\n')
+                .map(line => line.trim())
+                .filter(line => line.length > 0);
+        }
+
+        function buildPayload() {
+            const payload = {
+                username: document.getElementById('username').value,
+                roomcode: document.getElementById('roomcode').value,
+                selectMode: document.getElementById('selectMode').value
+            };
+
+            for (const id of LIST_FIELDS) {
+                payload[id] = textareaToList(id);
+            }
+            for (const id of CHECKBOX_FIELDS) {
+                payload[id] = document.getElementById(id).checked;
+            }
+            for (const id of NUMBER_FIELDS) {
+                payload[id] = parseFloat(document.getElementById(id).value);
+            }
+
+            return payload;
+        }
+
+        // Populate the form from a settings object (used on load).
+        function applySettings(settings) {
+            if (!settings) return;
+
+            if (settings.selectMode) document.getElementById('selectMode').value = settings.selectMode;
+            if (settings.username) document.getElementById('username').value = settings.username;
+            if (settings.roomcode) document.getElementById('roomcode').value = settings.roomcode;
+
+            for (const id of LIST_FIELDS) {
+                if (Array.isArray(settings[id])) {
+                    document.getElementById(id).value = settings[id].join('\n');
+                }
+            }
+            for (const id of CHECKBOX_FIELDS) {
+                if (typeof settings[id] === 'boolean') {
+                    document.getElementById(id).checked = settings[id];
+                }
+            }
+            for (const id of NUMBER_FIELDS) {
+                if (typeof settings[id] === 'number') {
+                    document.getElementById(id).value = settings[id];
+                }
+            }
+        }
+
+        //  Networking helper shared by launch/stop
+
+        async function callApi(endpoint) {
+            try {
+                const response = await fetch(endpoint, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: endpoint === '/api/launch' ? JSON.stringify(buildPayload()) : undefined
+                });
+                return await response.json();
+            } catch (err) {
+                return { success: false, error: 'Failed to connect to the backend server.' };
+            }
+        }
+
+        //  Heartbeat: lets the backend know the page is still open
+
         setInterval(() => {
             fetch('/api/heartbeat', { method: 'POST' }).catch(() => {});
         }, 2000);
 
-        //Fetch current settings from the backend when the page loads
+        //  Load saved settings on page load
+
         window.addEventListener('DOMContentLoaded', async () => {
             try {
                 const response = await fetch('/api/settings');
                 const settings = await response.json();
-
-                // If settings exist, auto-fill our basic inputs
-                if (settings) {
-                    if (settings.selectMode) document.getElementById('selectMode').value = settings.selectMode;
-                }
-                console.log("Settings successfully loaded into page.");
+                applySettings(settings);
             } catch (err) {
-                console.error("Could not load current settings:", err);
+                console.error('Could not load current settings:', err);
             }
         });
 
-        //Intercept form submission and send to your Flask server
-        document.getElementById('testForm').addEventListener('submit', async function(e) {
+        //Launch
+
+        form.addEventListener('submit', async function (e) {
             e.preventDefault();
-            launchBtn.style.display = 'none';
-            overlay.style.display = 'flex';
             e.stopImmediatePropagation();
-            const payload = {
-                username: document.getElementById('username').value,
-                roomcode: document.getElementById('roomcode').value,
-                invalid:[],
-                dictionaries:[],
-                proxies:[],
-                selectMode: document.getElementById('selectMode').value,
-                regenIfNeeded:true,
-                sneakyRegen:true,
-                stockpile:false,
-                greedLong:false,
-                timeConstraint:true,
-                cyberbullying:false,
-                mistakes:true,
-                burstType:true,
-                spamType:true,
-                dynamicRate:false,
-                dynamicPauses:true,
-                dynamicMistakes:true,
-                minWait:1.0,
-                maxWait:3.2,
-                mistakePause:0.100,
-                miniPause: 0.330,
-                minWpm:70,
-                maxWpm:120,
-                spamWpm:1000,
-                burstChance:0.50,
-                minMistakeChance:0.01,
-                maxMistakeChance:0.15,
-                spamChance:0.10,
-                jitterPercent: 0.50
-            };
+            setUiState({ running: false, busy: true });
 
-            try {
-                const response = await fetch('/api/launch', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(payload)
-                });
+            const result = await callApi('/api/launch');
 
-                const result = await response.json();
-                if (result.success) {
-                    // Update layout to state running configurations
-                    launchBtn.style.display = 'none';
-                    stopBtn.style.display = 'inline-block';
-                } else {
-                    alert("Error: " + result.error);
-                    launchBtn.style.display = 'inline-block';
-                    stopBtn.style.display = 'none';
-                }
-            } catch (err) {
-                alert("Failed to connect to the backend server.");
-                launchBtn.style.display = 'inline-block';
-                stopBtn.style.display = 'none';
-            } finally {
-                // UNBLOCK UI: Release form interactions regardless of success state
-                overlay.style.display = 'none';
+            if (result.success) {
+                setUiState({ running: true, busy: false });
+            } else {
+                alert('Error: ' + result.error);
+                setUiState({ running: false, busy: false });
             }
         });
 
-        document.getElementById('stopBtn').addEventListener('click', async function() {
-            stopBtn.style.display = 'none';
-            overlay.style.display = 'flex';
-            try {
-                const response = await fetch('/api/stop', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' }
-                });
+        //Stop
 
-                const result = await response.json();
-                if (result.success) {
-                    // Update layout to state stopped configurations
-                    launchBtn.style.display = 'inline-block';
-                    stopBtn.style.display = 'none';
-                } else {
-                    alert("Error: " + result.error);
-                    launchBtn.style.display = 'none';
-                    stopBtn.style.display = 'inline-block';
-                }
-            } catch (err) {
-                alert("Failed to connect to the backend server.");
-                launchBtn.style.display = 'inline-block';
-                stopBtn.style.display = 'none';
-            } finally {
-                // UNBLOCK UI: Release form interactions regardless of success state
-                overlay.style.display = 'none';
+        stopBtn.addEventListener('click', async function () {
+            setUiState({ running: true, busy: true });
+
+            const result = await callApi('/api/stop');
+
+            if (result.success) {
+                setUiState({ running: false, busy: false });
+            } else {
+                alert('Error: ' + result.error);
+                setUiState({ running: true, busy: false });
             }
         });
     </script>
-
 </body>
 </html>
