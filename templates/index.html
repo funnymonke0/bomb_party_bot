@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Simple Test Panel</title>
+</head>
+<body>
+
+    <h1>Bot Test Panel</h1>
+
+    <form id="testForm">
+        <label>Username: <input type="text" id="username" value="TestBot"></label><br><br>
+        <label>Room Code: <input type="text" id="roomcode" required placeholder="Enter your room code (e.g., ABCD)"></label><br><br>
+
+        <!-- A quick sample of one of your 25 settings keys to verify it maps -->
+        <label>Select Mode:
+            <select id="selectMode">
+                <option value="long">Long</option>
+                <option value="short">Short</option>
+                <option value="sneaky">Sneaky</option>
+                <option value="regen">Regen</option>
+                <option value="average">Average</option>
+                <option value="common">Common</option>
+            </select>
+        </label><br><br>
+
+        <button type="submit">Launch Bot</button>
+    </form>
+
+    <script>
+        // 1. Fetch current settings from the backend when the page loads
+        window.addEventListener('DOMContentLoaded', async () => {
+            try {
+                const response = await fetch('/api/settings');
+                const settings = await response.json();
+
+                // If settings exist, auto-fill our basic inputs
+                if (settings) {
+                    if (settings.selectMode) document.getElementById('selectMode').value = settings.selectMode;
+                }
+                console.log("Settings successfully loaded into page.");
+            } catch (err) {
+                console.error("Could not load current settings:", err);
+            }
+        });
+
+        // 2. Intercept form submission and send to your Flask server
+        document.getElementById('testForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+
+            // Simple payload mapping exactly to your streamlined route expectations
+            const payload = {
+                username: document.getElementById('username').value,
+                roomcode: document.getElementById('roomcode').value,
+                invalid:[],
+                dictionaries:[],
+                proxies:[],
+                selectMode: document.getElementById('selectMode').value,
+                regenIfNeeded:true,
+                sneakyRegen:true,
+                stockpile:false,
+                greedLong:false,
+                timeConstraint:true,
+                cyberbullying:false,
+                mistakes:true,
+                burstType:true,
+                spamType:true,
+                dynamicRate:false,
+                dynamicPauses:true,
+                dynamicMistakes:true,
+                minWait:1.0,
+                maxWait:3.2,
+                mistakePause:0.100,
+                miniPause: 0.330,
+                minWpm:70,
+                maxWpm:120,
+                spamWpm:1000,
+                burstChance:0.50,
+                minMistakeChance:0.01,
+                maxMistakeChance:0.15,
+                spamChance:0.10,
+                jitterPercent: 0.50
+            };
+
+            try {
+                const response = await fetch('/api/launch', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+
+                const result = await response.json();
+                alert(result.message || "Error: " + result.error);
+            } catch (err) {
+                alert("Failed to connect to the backend server.");
+            }
+        });
+    </script>
+
+</body>
+</html>

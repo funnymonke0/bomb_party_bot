@@ -355,9 +355,10 @@ class Client:
                 except:
                     pass
                 self.driver.refresh()
-                self.console.info(f'refreshing to see if disconnect is temporary')
                 sleep(MAX_WAIT)
-                self.disconnect_check()
+                if self.driver.find_element(By.XPATH, LOCATORS["disconnect_page"]).is_displayed():
+                    self.console.info(f'Bot disconnected due to ban or error. Reason: unknown')
+                    return True
         except: pass
         return False
 

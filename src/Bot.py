@@ -208,6 +208,7 @@ class Bot:
                     #change flags and update used words
                     self.is_correct = False
                     if typed:
+                        self.console.info(f'typed {ans}')
                         self.used.add(ans)
                     if not self.client.get_self_turn():
                         self.is_correct = True #only reset stopwatch when no longer our turn
