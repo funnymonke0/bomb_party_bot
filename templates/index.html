@@ -26,6 +26,9 @@
 
         <button type="submit" id="launchBtn">Launch Bot</button>
         <button type="button" id="stopBtn" style="display: none; background-color: red; color: white; padding: 10px; margin-left: 10px;">Stop Bot</button>
+    </form>
+
+
     <script>
         const overlay = document.getElementById('blockingOverlay');
         const launchBtn = document.getElementById('launchBtn');
@@ -55,10 +58,9 @@
         //Intercept form submission and send to your Flask server
         document.getElementById('testForm').addEventListener('submit', async function(e) {
             e.preventDefault();
-            e.stopImmediatePropagation()
-
             launchBtn.style.display = 'none';
             overlay.style.display = 'flex';
+            e.stopImmediatePropagation();
             const payload = {
                 username: document.getElementById('username').value,
                 roomcode: document.getElementById('roomcode').value,
