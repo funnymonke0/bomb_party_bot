@@ -9,12 +9,12 @@ Handles auto-reconnects, proxy rotation, human-like typing, and bonus-letter str
 ## Features
 
 - **Bot Manager**  
-  Handles bot persistence, auto-reconnect, and proxy rotation. Tracks lives and adjusts behavior dynamically.
+  Handles bot persistence, auto-reconnect, and proxy rotation. Tracks lives and has multiple strategies.
 
-- **Custom & Multi-Source Dictionaries**  
-  Load your own wordlists via plaintext or URLs. Supports multiple sources simultaneously.
+- **Custom Dictionaries**  
+  Load your own wordlists via plaintext and/or URLs. Default english only.
 
-- **Proxy Support**  
+- **Proxy**  
   Supports static and authenticated proxies.
 
    **Human-Like Typing**  
@@ -28,16 +28,16 @@ Handles auto-reconnects, proxy rotation, human-like typing, and bonus-letter str
   - Special strategies like `sneakyRegen`, `regenIfNeeded`, and stockpiling bonus letters  
 
 - **Configurable Mistakes**  
-  Simulates typos with `mistakeChance` and adjacent-key selection via `MISTAKE_MAP`.
+  Simulates typos with `mistakeChance` and adjacent-key selection.
 
 ---
 
-## Tech Stack
+## Dependencies
 
 - Python  
-- Selenium WebDriver  
-- Selenium Wire (for proxy)  
-- wordfreq (for frequency-based typing)
+- Selenium  
+- mitmproxy (for proxy)  
+- wordfreq (for common word selection and realistic typing)
 
 ---
 
@@ -149,8 +149,7 @@ The Bot Manager will:
 
 - Load your settings, proxies, and dictionaries  
 - Spawn and manage the bot  
-- Reconnect automatically if disconnected  
-- Handle bonus letters, typing, mistakes, and spam automatically  
+- Reconnect automatically if disconnected
 
 ---
 
@@ -179,7 +178,7 @@ python3 bomb_party_bot.py
 
 6. Enter your room code and username (leave username blank for random).
 
-The bot will automatically handle typing, mistakes, bursts, spam, bonus letters, and reconnections.  
+The bot will automatically connect to the room and start playing.
 
 ---
 
