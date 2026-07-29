@@ -12,62 +12,7 @@ from time import sleep, time
 from selenium.webdriver.common.keys import Keys
 
 
-LOCATORS = {
-    "nickname_input": '//input[@class = "styled nickname"]',
-    "submit_button": "//button[@class = 'styled']",
-    "bombparty_iframe": "//iframe[contains(@src, 'bombparty')]",
-    "disconnect_page": '//div[@class = "disconnected page"]',
-    "neterror_page": "//body[@class = 'neterror']",
-    "bonus_alphabet": '//div[@class="bonusAlphabetField"]//div[@class="letterField"]//input',
-    "min_turn_duration": '//div[@class = "setting rule minTurnDuration"]//div[@class = "field range"]//input[@type="number" and @min = "1" and @max = "10"]',
-    "start_lives": "//input[@class = 'starting']",
-    "max_lives": '//input[@class="max" and @type="number" and @min="1" and @max="10"]',
-    "join_round_button": "//button[@class = 'styled joinRound']",
-    "self_turn": '//div[@class = "selfTurn"]',
-    "syllable": "//div[@class = 'syllable']",
-    "textbox": '//form//input[@maxlength = "30"]',
-    "stats_table_rows": "//table[@class='statsTable']//tr",
-    "self_lives": "//table[@class='statsTable']//tr[contains(@class, 'self')]//td[@class='lives']"
-}
-
-MAX_WAIT = 5
-
-UPDATE_INTERVALS = {
-        'disconnect' : 30,
-        'join' : 10
-    }
-
-MISTAKE_MAP = {
-    'q': ['w', 'a'],
-    'w': ['q', 'e', 'a', 's'],
-    'e': ['w', 'r', 's', 'd'],
-    'r': ['e', 't', 'd', 'f'],
-    't': ['r', 'y', 'f', 'g'],
-    'y': ['t', 'u', 'g', 'h'],
-    'u': ['y', 'i', 'h', 'j'],
-    'i': ['u', 'o', 'j', 'k'],
-    'o': ['i', 'p', 'k', 'l'],
-    'p': ['o', 'l'],
-
-    'a': ['q', 'w', 's', 'z'],
-    's': ['a', 'w', 'e', 'd', 'z', 'x'],
-    'd': ['s', 'e', 'r', 'f', 'x', 'c'],
-    'f': ['d', 'r', 't', 'g', 'c', 'v'],
-    'g': ['f', 't', 'y', 'h', 'v', 'b'],
-    'h': ['g', 'y', 'u', 'j', 'b', 'n'],
-    'j': ['h', 'u', 'i', 'k', 'n', 'm'],
-    'k': ['j', 'i', 'o', 'l', 'm'],
-    'l': ['k', 'o', 'p'],
-
-    'z': ['a', 's', 'x'],
-    'x': ['z', 's', 'd', 'c'],
-    'c': ['x', 'd', 'f', 'v'],
-    'v': ['c', 'f', 'g', 'b'],
-    'b': ['v', 'g', 'h', 'n'],
-    'n': ['b', 'h', 'j', 'm'],
-    'm': ['n', 'j', 'k']
-}
-
+from src.constants import MISTAKE_MAP
 
 
 class Bot:
@@ -94,7 +39,6 @@ class Bot:
         ## list unpacking. do this for convenient use cuz we don't want to have to get the variables from the settings list in each method
         [# type: ignore
             self.select_mode,
-
             self.regen_if_needed,
             self.sneaky_regen,
             self.stockpile,

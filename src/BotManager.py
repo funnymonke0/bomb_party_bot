@@ -1,5 +1,3 @@
-from logging import fatal
-
 import requests
 from bs4 import BeautifulSoup
 
@@ -16,11 +14,7 @@ import json
 from src.Bot import Bot
 
 
-PLAINTEXT_REGEX = r"\b'?([A-Za-z]+(?:[-'][A-Za-z]+)*)'?\b"
-URL_REGEX = r"https?:\/\/[A-Za-z0-9.-]+(?:\/[A-Za-z0-9._~\-\/]+)*"
-PROXY_REGEX = r"^((\d{1,3}\.){3}(\d{1,3})|\w+\.\w+(\.\w+)?):(\d{1,5})(:.+:.+)?"
-ROTATE_RETRY_THRESH = 5
-MODES = ['long','short',"average",'regen',"common","sneaky"]
+from constants import MODES, PROXY_REGEX, PLAINTEXT_REGEX, URL_REGEX, ROTATE_RETRY_THRESH
 
 
 

@@ -19,33 +19,7 @@ from re import findall
 from time import sleep
 
 
-LOCATORS: dict[str, str] = {
-    "nickname_input": '//input[@class = "styled nickname"]',
-    "submit_button": "//button[@class = 'styled']",
-    "bombparty_iframe": "//iframe[contains(@src, 'bombparty')]",
-    "disconnect_page": '//div[@class = "disconnected page"]',
-    "neterror_page": "//body[@class = 'neterror']",
-    "bonus_alphabet": '//div[@class="bonusAlphabetField"]//div[@class="letterField"]//input',
-    "min_turn_duration": '//div[@class = "setting rule minTurnDuration"]//div[@class = "field range"]//input[@type="number" and @min = "1" and @max = "10"]',
-    "start_lives": "//input[@class = 'starting']",
-    "max_lives": '//input[@class="max" and @type="number" and @min="1" and @max="10"]',
-    "join_round_button": "//button[@class = 'styled joinRound']",
-    "self_turn": '//div[@class = "selfTurn"]',
-    "syllable": "//div[@class = 'syllable']",
-    "textbox": '//form//input[@maxlength = "30"]',
-    "stats_table_rows": "//table[@class='statsTable']//tr",
-    "self_lives": "//table[@class='statsTable']//tr[contains(@class, 'self')]//td[@class='lives']",
-    "reason": './/div[@class="reason"]'
-}
-
-MAX_WAIT = 5
-
-UPDATE_INTERVALS: dict[str, float] = {
-        'turn' : 0.1,
-        'disconnect' : 30,
-        'join' : 10
-    }
-
+from constants import LOCATORS, MAX_WAIT
 
 def _get_int_val(elem:WebElement) -> int:
     try:
@@ -357,21 +331,22 @@ class Client:
                         return True
                 except:
                     pass
-            counter = 0
-            failed = True
-            while counter < 3 and failed:
-                self.driver.refresh()
-                try:
-                    WebDriverWait(self.driver, MAX_WAIT).until(EC.visibility_of_element_located((By.XPATH, LOCATORS["disconnect_page"])))
-                except TimeoutException:
-                    failed = False
-                    break
-                time.sleep(0.2)
-                counter += 1
+                #follow up to check since no reason detected
+                counter = 0
+                failed = True
+                while counter < 3 and failed:
+                    self.driver.refresh()
+                    try:
+                        WebDriverWait(self.driver, MAX_WAIT).until(EC.visibility_of_element_located((By.XPATH, LOCATORS["disconnect_page"])))
+                    except TimeoutException:
+                        failed = False
+                        break
+                    time.sleep(0.2)
+                    counter += 1
 
-            if failed:
-                self.console.info(f'Bot disconnected due to ban or error. Reason: unknown')
-                return True
+                if failed:
+                    self.console.info(f'Bot disconnected due to ban or error. Reason: unknown')
+                    return True
         except: pass
         return False
 
