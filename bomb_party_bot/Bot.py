@@ -1,7 +1,7 @@
 
 from collections.abc import Callable
 
-from src.Client import Client
+from .Client import Client
 from logging import getLogger, DEBUG
 from wordfreq import word_frequency, zipf_frequency
 from collections import Counter
@@ -12,7 +12,7 @@ from time import sleep, time
 from selenium.webdriver.common.keys import Keys
 
 
-from src.constants import MISTAKE_MAP
+from .constants import MISTAKE_MAP
 
 
 class Bot:
@@ -93,14 +93,14 @@ class Bot:
 
 
     def main_loop(self) -> bool: #main loop. returns if it was graceful or not
-
+        last_time = time()
         try:
             while not self.self_destruct: #main loop
                 if self.client.disconnect_check() or self.client.neterr_check():
                     break
 
 
-                if self.client.try_join_round(): #needs to be constant trying to click join because otherwise it will not have another indicator as to when to reset initial conditions
+                if self.client.try_join_round() or time() - last_time > 5: #needs to be constant trying to click join because otherwise it will not have another indicator as to when to reset initial conditions
                     self.original_alphabet = self.client.get_bonus_alphabet()
                     self.prompt_time = self.client.get_prompt_time()
                     self.start_lives = self.client.get_start_lives()
@@ -112,6 +112,7 @@ class Bot:
                     self.used.update(self.invalid) #reset used
 
                     self.is_correct = True
+                    last_time = time()
 
 
 

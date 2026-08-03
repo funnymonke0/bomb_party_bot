@@ -1,25 +1,24 @@
+import os
 import time
+from contextlib import contextmanager
+from logging import getLogger, DEBUG
+from re import findall
+from string import ascii_lowercase
+from time import sleep
 
 from selenium import webdriver
 from selenium.common import TimeoutException
-from selenium.webdriver.chrome.service import Service as ChromeService
 from selenium.webdriver.chrome.options import Options as ChromeOptions
-from selenium.webdriver.common.keys import Keys
+from selenium.webdriver.chrome.service import Service as ChromeService
 from selenium.webdriver.common.by import By
-from selenium.webdriver.support.wait import WebDriverWait
-from selenium.webdriver.support import expected_conditions as EC
+from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.remote.webelement import WebElement
-from contextlib import contextmanager
-from logging import getLogger, DEBUG
-import os
-import socket
-import subprocess
-from string import ascii_lowercase
-from re import findall
-from time import sleep
+from selenium.webdriver.support import expected_conditions as EC
+from selenium.webdriver.support.wait import WebDriverWait
 
+from .constants import LOCATORS, MAX_WAIT
+from .ProxyServer import ProxyServer
 
-from constants import LOCATORS, MAX_WAIT
 
 def _get_int_val(elem:WebElement) -> int:
     try:
@@ -39,46 +38,12 @@ def _get_str_val(elem:WebElement) -> str:
     return ''
 
 
-def _free_port() -> int: #we host a local proxy to intercept traffic, so we need a free port to bind to
-    with socket.socket() as s:
-        s.bind(('127.0.0.1', 0)) #autopick
-        return s.getsockname()[1] #port on local machine
-
-
-def _start_mitm(upstream_proxy: str, local_port: int) -> subprocess.Popen: # type: ignore | we listen on the local proxy port and then send from the upstream actual proxy
-    stripped = upstream_proxy.removeprefix('https://')
-    userpswd, hostnameport = stripped.split('@') #fine to leave like this incase we need full https string later
-    user, pswd = userpswd.split(':')
-    hostname, port = hostnameport.split(':')
-    cmd = [ #this is basically just a console command
-        'mitmdump',
-        '--mode', f'upstream:{hostname}',#this is our actual proxy
-        '--upstream-auth', f'{user}:{pswd}',
-        '--listen-port', str(local_port), #this is what the webdriver thinks is the proxy (so we can intercept)
-        '--ssl-insecure',
-        '--quiet',
-    ]
-    return subprocess.Popen(cmd, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL) #make the process with no verbose
-
-
-def _wait_for_port(port: int, timeout: float = 0.5, retries: float = 10) -> bool: #attempts to connect to localhost
-    for i in range(int(retries)):
-        try:
-            with socket.create_connection(('127.0.0.1', port), timeout=timeout):
-                return True
-        except OSError:
-            sleep(0.2)
-    return False
-
-
-
 
 class Client:
     def __init__(self, proxy: str = ''):
 
         self.prev_lw = 0 #internal for tracking life changes
         self.prev_ll = 0 #internal for tracking life changes
-        self._mitm_proc: subprocess.Popen | None = None # type: ignore
 
         self.console = getLogger('MANAGER-CONSOLE.BOT-CONSOLE.CLIENT-CONSOLE')
         self.console.setLevel(DEBUG)
@@ -126,19 +91,24 @@ class Client:
 
         service = ChromeService()
 
+        self.server = None
         if len(proxy) > 0:
-            local_port = _free_port()
-            self._mitm_proc = _start_mitm(proxy, local_port)
-            if _wait_for_port(local_port):
-                chrome_options.add_argument(f'--proxy-server=http://127.0.0.1:{local_port}')
-                self.console.info(f'mitmdump ready on port {local_port}, upstream: {proxy}')
-            else:
-                self.console.warning('mitmdump did not become ready in time; proceeding without proxy')
-                self._mitm_proc.kill()
-                self._mitm_proc = None
+            self.server = ProxyServer(proxy)
+            self.server.start()
+            start_time = time.time()
+            success = False
+            timeout = 10
+            while time.time() - start_time < timeout:
+                local_port = self.server.info()[1]
+                if local_port > 0:
+                    chrome_options.add_argument(f'--proxy-server=http://127.0.0.1:{local_port}')
+                    self.console.info(f'mitmdump ready on port {local_port}, upstream: {proxy}')
+                    success = True
+                    break
+                time.sleep(0.02)
+            if not success:
+                self.console.info(f'mitmdump initialization failed. defaulting to localhost')
                 proxy = 'localhost'
-        else:
-            proxy = 'localhost'
 
         self.driver = webdriver.Chrome(service=service, options=chrome_options)
         self.console.info(f'initialized BombParty Client running @ {proxy}')
@@ -367,13 +337,8 @@ class Client:
         self.console.info('closing client')
         try:
             self.driver.quit()
-            if self._mitm_proc is not None:
-                self._mitm_proc.terminate()
-                try:
-                    self._mitm_proc.wait(timeout=3)
-                except subprocess.TimeoutExpired:
-                    self._mitm_proc.kill()
-                self._mitm_proc = None
+            if self.server:
+                self.server.close()
         except Exception as e:
             self.console.warning(f"Error during client close: {e}")
 

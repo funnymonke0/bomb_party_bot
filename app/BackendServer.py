@@ -1,11 +1,16 @@
+import json
+import logging
+import os
+import threading
 import time
 
 from flask import Flask, render_template, request, jsonify
-from BotManager import BotManager
-import os
-import json
-import threading
-import logging
+from flask_limiter import Limiter
+from flask_limiter.util import get_remote_address
+from flask_wtf import CSRFProtect
+from flask_talisman import Talisman
+from bomb_party_bot.BotManager import BotManager
+
 logger = logging.getLogger(__name__)
 config = "config"
 proxies_file = os.path.join(config, 'proxies.config') ##adjust to autorecognize?
@@ -13,14 +18,22 @@ settings_file = os.path.join(config,'settings.json')
 dictionaries_file = os.path.join(config,'dictionaries.config')
 invalid_file = os.path.join(config,'invalid.config')
 
+
+
+
+
 class BackendServer:
     def __init__(self, port = 5000, debug=False):
         self.app = Flask(__name__)
+        Talisman(self.app)
         self.manager = None
         self.bot_thread = None
         self.lock = threading.RLock()
         self.port = port
         self.debug = debug
+
+        self.csrf = CSRFProtect(self.app)
+        self.limiter = Limiter(app=self.app, key_func=get_remote_address, default_limits=["60 per minute"])
 
         self.last_heartbeat = 0
         self.heartbeat_active = False
@@ -30,12 +43,19 @@ class BackendServer:
         self.app.run(debug=self.debug, port=self.port, use_reloader=False)
 
     def _register_routes(self):
+        #rate limiter wrapping. would be a decorator if not inside class
+        home_wrapped = self.limiter.limit("60 per minute")(self.home)
+        settings_wrapped = self.limiter.limit("30 per minute")(self.get_settings)
+        launch_wrapped = self.limiter.limit("3 per minute")(self.launch_bot)
+        stop_wrapped = self.limiter.limit("10 per minute")(self.stop_bot)
+        heartbeat_wrapped = self.limiter.limit("120 per minute")(self.heartbeat)
         # Maps endpoints directly to internal class methods.
-        self.app.add_url_rule('/', 'home', self.home)
-        self.app.add_url_rule('/api/settings', 'get_settings', self.get_settings, methods=['GET'])
-        self.app.add_url_rule('/api/launch', 'launch_bot', self.launch_bot, methods=['POST'])
-        self.app.add_url_rule('/api/stop', 'stop_bot', self.stop_bot, methods=['POST'])
-        self.app.add_url_rule('/api/heartbeat', 'heartbeat', self.heartbeat, methods=['POST'])
+        self.app.add_url_rule('/', 'home', home_wrapped)
+        self.app.add_url_rule('/api/settings', 'get_settings', settings_wrapped, methods=['GET'])
+        self.app.add_url_rule('/api/launch', 'launch_bot', launch_wrapped, methods=['POST'])
+        self.app.add_url_rule('/api/stop', 'stop_bot', stop_wrapped, methods=['POST'])
+        self.app.add_url_rule('/api/heartbeat', 'heartbeat', heartbeat_wrapped, methods=['POST'])
+
 
     def home(self):
         return render_template('index.html')
@@ -133,8 +153,8 @@ class BackendServer:
                 dictionaries = data["dictionaries"]
                 proxies = data["proxies"]
 
-                def get_val(key):
-                    return data.get(key) if data.get(key) is not None else settings.get(key)
+                def get_val(setting:str):
+                    return data.get(setting) if data.get(setting) is not None else settings.get(setting)
                 settings = {
                     "selectMode": get_val("selectMode"),
                     "regenIfNeeded": get_val("regenIfNeeded"),
@@ -208,7 +228,7 @@ class BackendServer:
             return jsonify({"success": False, "error":"internal error occurred"}), 500 #server side error
 
     def heartbeat(self):
-        """Endpoint hit by the frontend every 2 seconds."""
+        # Endpoint hit by the frontend every 2 seconds.
         self.last_heartbeat = time.time()
         return jsonify({"status": "alive"})
 

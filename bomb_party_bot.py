@@ -1,6 +1,6 @@
 import re
 from os.path import exists, join
-from src.BotManager import BotManager
+from bomb_party_bot.BotManager import BotManager
 if __name__ == "__main__" :
 
     config = "config"
@@ -13,7 +13,7 @@ if __name__ == "__main__" :
         link = str(input("paste code: ")).upper()
         name = str(input("username: "))
 
-        if re.match(link, r'^[a-zA-Z]{4}$'):
+        if not link or len(link) != 4 or not re.match(r'^[a-zA-Z]{4}$', link):
             print('ERROR: Must input valid room code !')
         else:
             manager = BotManager(dict_file=dictionaries, room_code=link, proxy_file=proxies, username=name, settings_file=settings, invalid_file=invalid)

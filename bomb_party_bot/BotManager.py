@@ -11,10 +11,10 @@ from datetime import datetime
 import json
 
 
-from src.Bot import Bot
+from .Bot import Bot
 
 
-from constants import MODES, PROXY_REGEX, PLAINTEXT_REGEX, URL_REGEX, ROTATE_RETRY_THRESH
+from .constants import MODES, PROXY_REGEX, PLAINTEXT_REGEX, URL_REGEX, ROTATE_RETRY_THRESH
 
 
 
