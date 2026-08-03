@@ -1,15 +1,17 @@
 import re
 from os.path import exists, join
+from pathlib import Path
 from bomb_party_bot.BotManager import BotManager
 
 
 def run() -> None:
-    config = "config"
-    proxies = join(config, 'proxies.config') ##adjust to autorecognize?
-    settings = join(config,'settings.json')
-    dictionaries = join(config,'dictionaries.config')
-    invalid = join(config,'invalid.config')
-    if exists(config) and exists(proxies) and exists(settings) and exists(dictionaries) and exists(invalid):
+    root_dir = Path(__file__).resolve().parent
+    config_dir = root_dir / "config"
+    proxies = str(config_dir / 'proxies.config') ##adjust to autorecognize?
+    settings = str(config_dir / 'settings.json')
+    dictionaries = str(config_dir / 'dictionaries.config')
+    invalid = str(config_dir / 'invalid.config')
+    if exists(config_dir) and exists(proxies) and exists(settings) and exists(dictionaries) and exists(invalid):
 
         link = str(input("paste code: ")).upper()
         name = str(input("username: "))
