@@ -1,7 +1,7 @@
 [project]
 name = "bomb-party-bot"
-version = "0.1.0"
-description = "Add your description here"
+version = "1.0.0"
+description = "A bot for the game Bomb Party"
 readme = "README.md"
 authors = [
     { name = "Eric Chen", email = "aivectorec@gmail.com" }

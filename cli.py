@@ -1,8 +1,9 @@
 import re
 from os.path import exists, join
 from bomb_party_bot.BotManager import BotManager
-if __name__ == "__main__" :
 
+
+def run() -> None:
     config = "config"
     proxies = join(config, 'proxies.config') ##adjust to autorecognize?
     settings = join(config,'settings.json')
@@ -27,3 +28,6 @@ if __name__ == "__main__" :
     
     print("Cleaning up")  # Graceful exit message
     quit()  # Ensure the script exits cleanly
+
+if __name__ == "__main__" :
+    run()

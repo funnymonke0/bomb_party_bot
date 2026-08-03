@@ -43,16 +43,17 @@ Handles auto-reconnects, proxy rotation, human-like typing, and bonus-letter str
 
 ## Installation
 
-```bash
-# Clone the repo
-git clone https://github.com/funnymonke0/bomb_party_bot.git
+1. **Clone the repository:**
+   ```bash
+   git clone https://github.com/funnymonke0/bomb_party_bot.git
+   cd bomb_party_bot
+   ```
 
-# Navigate to project folder
-cd bomb_party_bot
-
-# Install dependencies
-pip install -r requirements.txt
-```
+2. **Install dependencies:**
+   Make sure you have [uv](https://astral.sh) installed. Then run:
+   ```bash
+   uv sync
+   ```
 
 ---
 
@@ -136,8 +137,11 @@ xylophone
 ## Usage
 
 ```bash
-cd src
-python3 bomb_party_bot.py
+python3 cli.py
+```
+**OR**
+```bash
+uv run cli.py
 ```
 
 You’ll be prompted for:
@@ -153,14 +157,14 @@ The Bot Manager will:
 
 ---
 
-## Quickstart (Simplified)
+## Quickstart
 
-1. Clone repo and install dependencies:
+1. Clone repo and install dependencies (see above):
 
 ```bash
 git clone https://github.com/funnymonke0/bomb_party_bot.git
 cd bomb_party_bot
-pip install -r requirements.txt
+uv sync
 ```
 
 2. Configure your proxies (optional) in `proxies.config`.
@@ -172,8 +176,11 @@ pip install -r requirements.txt
 5. Run the bot:
 
 ```bash
-cd src
-python3 bomb_party_bot.py
+python3 cli.py
+```
+**OR**
+```
+uv run cli.py
 ```
 
 6. Enter your room code and username (leave username blank for random).
@@ -183,5 +190,5 @@ The bot will automatically connect to the room and start playing.
 ---
 
 ## Improvements
-- Turn it into an actual app with something like Flask
-- track room codes
+- Turn it into an actual app with something like Flask (in progress)
+- track room codes when rooms change
