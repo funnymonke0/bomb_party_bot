@@ -6,3 +6,5 @@ testscripts/
 backup.py
 .idea/
 config/proxies.config
+/.env
+/frontend/.env

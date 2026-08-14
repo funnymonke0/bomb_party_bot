@@ -1,164 +1,141 @@
-
 :root {
-    /* Colors */
-    --color-bg: #efe9f3;
-    --color-surface: #f8f4fa;
-    --color-border: #ddd0e5;
-    --color-text: #5c4f66;
-    --color-text-muted: #a597ad;
-    --color-accent: #c3a8e0;
-    --color-accent-hover: #b391d6;
-    --color-danger: #e0aed0;
-    --color-danger-hover: #d494bf;
-
-    /* Layout */
-    --max-width: 640px;
-    --radius: 18px;
-    --spacing: 16px;
-
-    /* Typography */
-    --font-family: "SF Mono", "JetBrains Mono", "Fira Code", Consolas;
-    --font-size-base: 15px;
+  --bg: #161320;
+  --surface: #221d31;
+  --text: #e7e1f4;
+  --accent: #a78bfa;
+  --accent-soft: #c4b5fd;
+  --danger: #d08aa6;
+  --font-size: 16px;
 }
 
 * {
-    box-sizing: border-box;
+  box-sizing: border-box;
 }
 
 body {
-    margin: 0;
-    padding: calc(var(--spacing) * 2) var(--spacing);
-    background: var(--color-bg);
-    color: var(--color-text);
-    font-family: var(--font-family), monospace;
-    font-size: var(--font-size-base);
-    line-height: 1.5;
+  margin: 0;
+  font-family: 'JetBrains Mono', Consolas, Monaco, monospace;
+  background: var(--bg);
+  color: var(--text);
+  font-size: var(--font-size);
+}
+
+.container {
+  max-width: 980px;
+  margin: 1.5rem auto 3rem;
+  padding: 0 1rem;
 }
 
 h1 {
-    max-width: var(--max-width);
-    margin: 0 auto calc(var(--spacing) * 1.5);
-    font-size: 1.4rem;
-    font-weight: 600;
+  margin: 0;
+  font-family: 'JetBrains Mono', Consolas, Monaco, monospace;
+  letter-spacing: 0.04em;
 }
 
-form {
-    max-width: var(--max-width);
-    margin: 0 auto;
-    display: flex;
-    flex-direction: column;
-    gap: var(--spacing);
+h2 {
+  font-family: 'JetBrains Mono', Consolas, Monaco, monospace;
+  letter-spacing: 0.03em;
 }
 
-fieldset {
-    border: 1px solid var(--color-border);
-    border-radius: var(--radius);
-    background: var(--color-surface);
-    padding: var(--spacing);
-    margin: 0;
+.sub {
+  margin: 0.5rem 0 1.5rem;
+  opacity: 0.8;
 }
 
-legend {
-    padding: 0 8px;
-    color: var(--color-accent);
-    font-weight: 600;
-    font-size: 0.9rem;
-    text-transform: uppercase;
-    letter-spacing: 0.04em;
+.card {
+  background: var(--surface);
+  border: 1px solid color-mix(in srgb, var(--accent) 28%, transparent);
+  border-radius: 10px;
+  padding: 1rem;
+  margin-bottom: 1rem;
+}
+
+h2 {
+  margin-top: 0;
+  font-size: 1.05rem;
+}
+
+.grid {
+  display: grid;
+  gap: 0.75rem;
+}
+
+.grid.one {
+  grid-template-columns: 1fr;
+}
+
+.grid.two {
+  grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+}
+
+.grid.three {
+  grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
 }
 
 label {
-    display: block;
-    margin-bottom: 10px;
-    color: var(--color-text-muted);
-    font-size: 0.9rem;
+  display: grid;
+  gap: 0.35rem;
 }
 
-label:last-child {
-    margin-bottom: 0;
-}
-
-/* Checkbox labels sit inline with their input instead of stacking */
-fieldset label:has(input[type="checkbox"]) {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    color: var(--color-text);
-}
-
-input[type="text"],
-input[type="number"],
+input,
 select,
+textarea,
+button {
+  border-radius: 8px;
+  border: 1px solid color-mix(in srgb, var(--accent) 26%, transparent);
+  background: color-mix(in srgb, var(--surface) 88%, #f4efff);
+  color: var(--text);
+  padding: 0.55rem 0.65rem;
+  font: inherit;
+}
+
 textarea {
-    width: 100%;
-    margin-top: 6px;
-    padding: 10px 14px;
-    background: var(--color-bg);
-    border: 1px solid var(--color-border);
-    border-radius: 12px;
-    color: var(--color-text);
-    font-family: inherit;
-    font-size: 0.9rem;
+  resize: vertical;
+}
+
+details summary {
+  cursor: pointer;
+  color: var(--accent);
+  margin-top: 0.6rem;
+}
+
+.checks label {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
 }
 
 input[type="checkbox"] {
-    width: 16px;
-    height: 16px;
-    accent-color: var(--color-accent);
-}
-
-input[type="text"]:focus,
-input[type="number"]:focus,
-select:focus,
-textarea:focus {
-    outline: none;
-    border-color: var(--color-accent);
-}
-
-textarea {
-    font-family: "SF Mono", Consolas, monospace;
-    font-size: 0.85rem;
+  width: 1rem;
+  height: 1rem;
 }
 
 button {
-    padding: 10px 22px;
-    border: none;
-    border-radius: 999px;
-    font-size: 0.95rem;
-    font-weight: 600;
-    cursor: pointer;
-    transition: background 0.15s ease;
+  cursor: pointer;
+  background: var(--accent);
+  color: #1e1730;
+  border-color: transparent;
 }
 
-#launchBtn {
-    background: var(--color-accent);
-    color: #fff;
+button.danger {
+  background: var(--danger);
+  color: #2b1723;
 }
 
-#launchBtn:hover {
-    background: var(--color-accent-hover);
+.actions {
+  display: flex;
+  gap: 0.75rem;
+  margin-bottom: 1rem;
 }
 
-#stopBtn {
-    background: var(--color-danger) !important;
-    color: #fff !important;
-    padding: 10px 22px !important;
-    margin-left: 0 !important;
-    border-radius: 999px !important;
+#status {
+  white-space: pre-wrap;
+  background: color-mix(in srgb, var(--surface) 82%, #0f0b18);
+  border-radius: 10px;
+  padding: 0.8rem;
+  border: 1px solid color-mix(in srgb, var(--accent-soft) 30%, transparent);
 }
 
-#stopBtn:hover {
-    background: var(--color-danger-hover) !important;
-}
-
-#blockingOverlay {
-    position: fixed;
-    inset: 0;
-    background: rgba(85, 82, 77, 0.35);
-    color: var(--color-text);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 1.1rem;
-    z-index: 100;
+.mt {
+  margin-top: 0.75rem;
 }

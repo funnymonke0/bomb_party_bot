@@ -1,45 +1,96 @@
 import json
 import logging
 import os
+import re
+import shutil
 import threading
 import time
 
+from pathlib import Path
+from dataclasses import dataclass
 from flask import Flask, render_template, request, jsonify
+from flask_cors import CORS
 from flask_limiter import Limiter
 from flask_limiter.util import get_remote_address
 from flask_wtf import CSRFProtect
+from flask_wtf.csrf import generate_csrf
 from flask_talisman import Talisman
 from bomb_party_bot.BotManager import BotManager
+from flask import session
+from dotenv import load_dotenv
+import secrets
+
+load_dotenv()
+
+
 
 logger = logging.getLogger(__name__)
-config = "config"
-proxies_file = os.path.join(config, 'proxies.config') ##adjust to autorecognize?
-settings_file = os.path.join(config,'settings.json')
-dictionaries_file = os.path.join(config,'dictionaries.config')
-invalid_file = os.path.join(config,'invalid.config')
+#!!!!! use same format as cli.py
+root_dir = Path(__file__).resolve().parent
+runtime_root = root_dir / "runtime"
+config_root = root_dir.parent / "config"
 
 
+BOT_TIMEOUT = 60*60 #60 min
+HEARTBEAT_TIMEOUT = 10 #10s
 
+
+@dataclass
+class ClientSession:
+    manager: BotManager | None = None
+    bot_thread: threading.Thread | None = None
+    last_heartbeat: float = 0.0
+    heartbeat_active: bool = False
+    start_time: float = 0.0
+    runtime_dir: Path = runtime_root / "sid"
+
+    @property
+    def proxies(self):
+        return str(self.runtime_dir / 'proxies.config')
+    
+    @property
+    def settings(self):
+        return str(self.runtime_dir / 'settings.json')
+
+    @property
+    def dictionaries(self):
+        return str(self.runtime_dir / 'dictionaries.config')
+
+    @property
+    def invalid(self):
+        return str(self.runtime_dir / 'invalid.config')
 
 
 class BackendServer:
-    def __init__(self, port = 5000, debug=False):
+    def __init__(self, port = 5000, debug=False, force_https=True):
         self.app = Flask(__name__)
-        Talisman(self.app)
-        self.manager = None
-        self.bot_thread = None
+        frontend_origins = [origin.strip() for origin in os.getenv( #????
+            "FRONTEND_ORIGINS",
+            "http://127.0.0.1:5173,http://localhost:5173"
+        ).split(",") if origin.strip()]
+        self.app.config.update(
+            SECRET_KEY=os.environ["SECRET_KEY"],
+            SESSION_COOKIE_HTTPONLY=True,
+            SESSION_COOKIE_SECURE=force_https,  # HTTPS only when enabled
+            SESSION_COOKIE_SAMESITE="Lax",
+        )
+        Talisman(self.app, force_https=force_https)
+        CORS(self.app, resources={r"/api/*": {"origins": frontend_origins}}, supports_credentials=True)
         self.lock = threading.RLock()
         self.port = port
         self.debug = debug
+        self.sessions: dict[str, ClientSession] = {}
+        runtime_root.mkdir(parents=True, exist_ok=True)
 
         self.csrf = CSRFProtect(self.app)
         self.limiter = Limiter(app=self.app, key_func=get_remote_address, default_limits=["60 per minute"])
 
-        self.last_heartbeat = 0
-        self.heartbeat_active = False
+
 
     def run(self):
         self._register_routes()
+        global_monitor_thread = threading.Thread(target=self._check_heartbeat, daemon=True)
+        global_monitor_thread.start()
         self.app.run(debug=self.debug, port=self.port, use_reloader=False)
 
     def _register_routes(self):
@@ -49,100 +100,160 @@ class BackendServer:
         launch_wrapped = self.limiter.limit("3 per minute")(self.launch_bot)
         stop_wrapped = self.limiter.limit("10 per minute")(self.stop_bot)
         heartbeat_wrapped = self.limiter.limit("120 per minute")(self.heartbeat)
+        csrf_wrapped = self.limiter.limit("60 per minute")(self.get_csrf_token)
         # Maps endpoints directly to internal class methods.
         self.app.add_url_rule('/', 'home', home_wrapped)
+        self.app.add_url_rule('/api/csrf', 'get_csrf_token', csrf_wrapped, methods=['GET'])
         self.app.add_url_rule('/api/settings', 'get_settings', settings_wrapped, methods=['GET'])
         self.app.add_url_rule('/api/launch', 'launch_bot', launch_wrapped, methods=['POST'])
         self.app.add_url_rule('/api/stop', 'stop_bot', stop_wrapped, methods=['POST'])
         self.app.add_url_rule('/api/heartbeat', 'heartbeat', heartbeat_wrapped, methods=['POST'])
 
-
-    def home(self):
+    # endpoint
+    def home(self) -> str:
+        if "session_id" not in session:
+            session["session_id"] = secrets.token_urlsafe(32)
         return render_template('index.html')
 
+    def get_csrf_token(self):
+        if "session_id" not in session:
+            session["session_id"] = secrets.token_urlsafe(32)
+        return jsonify({"csrfToken": generate_csrf()})
 
-    def stop_bot(self):
+    def _get_or_create_client_locked(self, sid: str) -> ClientSession:
+        if sid not in self.sessions:
+            client_runtime_dir = runtime_root / sid
+            client_runtime_dir.mkdir(parents=True, exist_ok=True)
+            self.sessions[sid] = ClientSession(runtime_dir=client_runtime_dir)
+            self._ensure_client_runtime_files(self.sessions[sid])
+        return self.sessions[sid]
+
+    def _ensure_client_runtime_files(self, client: ClientSession):
+        file_pairs = (
+            (Path(client.settings), config_root / "settings.json"),
+            (Path(client.dictionaries), config_root / "dictionaries.config"),
+            (Path(client.invalid), config_root / "invalid.config"),
+            (Path(client.proxies), config_root / "proxies.config"),
+        )
+        for target, source in file_pairs:
+            if target.exists():
+                continue
+            target.parent.mkdir(parents=True, exist_ok=True)
+            if source.exists():
+                shutil.copy2(source, target)
+            elif target.suffix == ".json":
+                target.write_text("{}", encoding="utf-8")
+            else:
+                target.write_text("", encoding="utf-8")
+
+    def get_client(self) -> ClientSession:#creates a new client session for each unique user session. This allows multiple users to run bots independently.
+        sid = session.get("session_id")
+        if sid is None:
+            sid = secrets.token_urlsafe(32)
+            session["session_id"] = sid
         with self.lock:
-            if self.manager:
+            return self._get_or_create_client_locked(sid)
+
+    def _stop_client(self, client: ClientSession) -> str | None:
+        with self.lock:
+            if client.manager:
                 try:
-                    self.manager.close()  # Gracefully stop the existing bot manager (maybe closed already)
+                    client.manager.close()  # Gracefully stop the existing bot manager (maybe closed already)
                 except Exception as e:
                     logger.warning(f"Error while closing bot manager: {e}")
-            if self.bot_thread and self.bot_thread.is_alive():
-                self.bot_thread.join(timeout=5)  # Wait for the thread to finish, with a timeout
-            if self.bot_thread and self.bot_thread.is_alive():
+            if client.bot_thread and client.bot_thread.is_alive():
+                client.bot_thread.join(timeout=5)  # Wait for the thread to finish, with a timeout
+            if client.bot_thread and client.bot_thread.is_alive():
                 logger.warning("Error stopping bot: Thread did not terminate")
-                return jsonify({"success": False, "error": "Error stopping bot. Bot did not terminate"}), 500
+                return "Error stopping bot. Bot did not terminate"
 
-            self.manager = None
-            self.bot_thread = None
-            import gc
-            gc.collect()
-            time.sleep(0.1)  # Give a moment for resources to be released
-            return jsonify({"success": True, "message": "Bot stopped."})
+            client.manager = None
+            client.bot_thread = None
 
+        import gc
+        gc.collect()
+        time.sleep(0.1)  # Give a moment for resources to be released
+        return None
 
+    # endpoint
+    def stop_bot(self): #verbose
+        client = self.get_client()
+        error = self._stop_client(client)
+        if error:
+            return jsonify({"success": False, "error": error}), 500
+        return jsonify({"success": True, "message": "Bot stopped."})
+
+    # endpoint
     def get_settings(self):
+        client = self.get_client()
+        self._ensure_client_runtime_files(client)
         settings = {}
-        with open(settings_file, 'r') as f:
+        with open(client.settings, 'r') as f:
             settings = json.load(f)
         return jsonify(settings)
 
 
+    # endpoint
     def launch_bot(self):
         try:
             # 1. Grab incoming data from the HTML form
-            data = request.json or {}
             with self.lock:
-                if self.manager:
+                data = request.json or {}
+                client = self.get_client()
+                self._ensure_client_runtime_files(client)
+                if client.manager:
                     self.stop_bot()
 
-                if self.bot_thread and self.bot_thread.is_alive():
+                if client.bot_thread and client.bot_thread.is_alive():
                     return jsonify({"success": False, "error": "Error launching bot: Previous bot is still running"}), 500
 
 
                 req_format = {
-                    "username": str,
-                    "roomcode": str,
-                    "invalid": list,
-                    "dictionaries": list,
-                    "proxies": list,
-                    "selectMode": str,
-                    "regenIfNeeded": bool,
-                    "sneakyRegen": bool,
-                    "stockpile": bool,
-                    "greedLong": bool,
-                    "timeConstraint": bool,
-                    "cyberbullying": bool,
-                    "mistakes": bool,
-                    "burstType": bool,
-                    "spamType": bool,
-                    "dynamicRate": bool,
-                    "dynamicPauses": bool,
-                    "dynamicMistakes": bool,
-                    "minWait": int|float,
-                    "maxWait": int|float,
-                    "mistakePause": int|float,
-                    "miniPause": int|float,
-                    "minWpm": int|float,
-                    "maxWpm": int|float,
-                    "spamWpm": int|float,
-                    "burstChance": int|float,
-                    "minMistakeChance": int|float,
-                    "maxMistakeChance": int|float,
-                    "spamChance": int|float,
-                    "jitterPercent": int|float
+                    "username": (str, lambda x: True),
+                    "roomcode": (str, lambda x: re.match(r"^[a-zA-Z]{4}$", x.strip())),
+                    "invalid": (list, lambda x: (len(x) <= 100) and all(isinstance(i, str) and len(i) <= 100 for i in x)),
+                    "dictionaries": (list, lambda x: (len(x) <= 200000) and all(isinstance(i, str) and len(i) <= 100 for i in x)),
+                    "proxies": (list, lambda x: (len(x) <= 100) and all(isinstance(i, str) and len(i) <= 100 for i in x)),
+                    "selectMode": (str,None),
+                    "regenIfNeeded": (bool,None),
+                    "sneakyRegen": (bool,None),
+                    "stockpile": (bool,None),
+                    "greedLong": (bool,None),
+                    "timeConstraint": (bool,None),
+                    "cyberbullying": (bool,None),
+                    "mistakes": (bool,None),
+                    "burstType": (bool,None),
+                    "spamType": (bool,None),
+                    "dynamicRate": (bool,None),
+                    "dynamicPauses": (bool,None),
+                    "dynamicMistakes": (bool,None),
+                    "minWait": (int|float,None),
+                    "maxWait": (int|float,None),
+                    "mistakePause": (int|float,None),
+                    "miniPause": (int|float,None),
+                    "minWpm": (int|float,lambda x: x>0),
+                    "maxWpm": (int|float,lambda x: x>0),
+                    "spamWpm": (int|float,lambda x: x>0),
+                    "burstChance": (int|float,None),
+                    "minMistakeChance": (int|float,None),
+                    "maxMistakeChance": (int|float,None),
+                    "spamChance": (int|float,None),
+                    "jitterPercent": (int|float,None)
                 }
 
-                for key, expected_type in req_format.items():
+                for key, (expected_type, req_func) in req_format.items():
                     if key not in data:
                         return jsonify({"success": False, "error": f"Missing key in data: {key}"}), 400
                     if not isinstance(data[key], expected_type):
+                        expected_name = getattr(expected_type, "__name__", str(expected_type))
                         return jsonify({"success": False,
-                            "error": f"Incorrect type for key in data: {key}. Expected {expected_type.__name__}"}), 400
+                            "error": f"Incorrect type for key in data: {key}. Expected {expected_name}"}), 400
+                    if req_func and not req_func(data[key]):
+                        return jsonify({"success": False,
+                            "error": f"Invalid value for key in data: {key}"}), 400
 
                 settings = {}
-                with open(settings_file, 'r') as f:
+                with open(client.settings, 'r') as f:
                     settings = json.load(f)
 
 
@@ -184,26 +295,26 @@ class BackendServer:
                 }
 
                 # 3. Overwrite the local config.json file
-                with open(settings_file, 'w', encoding='utf-8') as f:
+                with open(client.settings, 'w', encoding='utf-8') as f:
                     json.dump(settings, f, indent=4)
                 logger.info(f"--> [SUCCESS] settings.json updated")
 
                 if dictionaries and len(dictionaries) > 0:
-                    with open(dictionaries_file, 'w', encoding='utf-8') as f:
+                    with open(client.dictionaries, 'w', encoding='utf-8') as f:
                         f.write('\n'.join(dictionaries)+'\n')
                     logger.info(f"--> [SUCCESS] dictionaries.config updated")
                 else:
                     logger.warning(f"--> [WARNING] No dictionaries provided, skipping update and using defaults.")
 
                 if invalid and len(invalid) > 0:
-                    with open(invalid_file, 'w', encoding='utf-8') as f:
+                    with open(client.invalid, 'w', encoding='utf-8') as f:
                         f.write('\n'.join(invalid)+'\n')
                     logger.info(f"--> [SUCCESS] invalid.config updated")
                 else:
                     logger.warning(f"--> [WARNING] No invalid words provided, skipping update and using defaults.")
 
                 if proxies and len(proxies) > 0:
-                    with open(proxies_file, 'w', encoding='utf-8') as f:
+                    with open(client.proxies, 'w', encoding='utf-8') as f:
                             f.write('\n'.join(proxies)+'\n')
                     logger.info(f"--> [SUCCESS] proxies.config updated")
                 else:
@@ -211,15 +322,20 @@ class BackendServer:
 
 
                 # 4. Launch the bot in a separate thread to avoid blocking the Flask server
-                self.manager = BotManager(dict_file=dictionaries_file, room_code=room_code, proxy_file=proxies_file, username=username, settings_file=settings_file, invalid_file=invalid_file)
-                self.bot_thread = threading.Thread(target=self.manager.persist_loop, daemon=True)
-                self.bot_thread.start()
+                client = self.get_client()
+                client.manager = BotManager(
+                    dict_file=client.dictionaries,
+                    room_code=room_code,
+                    proxy_file=client.proxies,
+                    username=username,
+                    settings_file=client.settings,
+                    invalid_file=client.invalid,
+                )
+                client.bot_thread = threading.Thread(target=client.manager.persist_loop, daemon=True)
+                client.bot_thread.start()
+                client.start_time = time.time()
 
-                self.last_heartbeat = time.time()
-                if not self.heartbeat_active:
-                    self.heartbeat_active = True
-                    monitor_thread = threading.Thread(target=self._check_heartbeat, daemon=True)
-                    monitor_thread.start()
+                client.last_heartbeat = time.time()
 
                 return jsonify({"success": True, "message": "Configuration saved! Bot running."})
 
@@ -227,22 +343,30 @@ class BackendServer:
             logger.error(f"--> [ERROR] {e}")
             return jsonify({"success": False, "error":"internal error occurred"}), 500 #server side error
 
+    # endpoint
     def heartbeat(self):
         # Endpoint hit by the frontend every 2 seconds.
-        self.last_heartbeat = time.time()
+        with self.lock:
+            client = self.get_client()
+            client.last_heartbeat = time.time()
         return jsonify({"status": "alive"})
 
     def _check_heartbeat(self):
-        while self.heartbeat_active:
-            time.sleep(5)
-            if time.time() - self.last_heartbeat > 10:  # If no heartbeat for 10 seconds
-                self.stop_bot()
-                self.heartbeat_active = False
-                break
 
+        while True:
+            time.sleep(10)
+            with self.lock:
+                sessions = list(self.sessions.items())
 
-
-if __name__ == '__main__':
-    # Runs web server locally on http://127.0.0.1:5000
-    server = BackendServer(5000)
-    server.run()
+            now = time.time()
+            for sid, client in sessions:
+                if now - client.last_heartbeat > HEARTBEAT_TIMEOUT:  # If no heartbeat for 10 seconds
+                    self._stop_client(client)
+                    with self.lock:
+                        client.heartbeat_active = False
+                        self.sessions.pop(sid, None)
+                    continue
+                if now - client.start_time > BOT_TIMEOUT:  # If bot has been running for too long
+                    with self.lock:
+                        client.start_time = now
+                    self._stop_client(client)

@@ -1,243 +1,101 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <title>Bomb Party Bot Control Panel</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='styles/style.css') }}">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Bomb Party Bot</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700&family=Rajdhani:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{{ url_for('static', filename='styles/style.css') }}">
 </head>
 <body>
-    <div id="blockingOverlay" style="display: none;">Executing Action... Please Wait...</div>
-    <h1>Bomb Party Bot Control Panel</h1>
+  <main class="container">
+    <h1>Bomb Party Bot</h1>
+    <p class="sub">Web launcher with settings.</p>
 
-    <form id="testForm">
-        <fieldset>
-            <legend>Basics</legend>
-            <label>Username:
-                <input type="text" id="username" placeholder="Enter your username (or leave blank for random)">
-            </label><br><br>
+    <section class="card">
+      <h2>Connection</h2>
+      <div class="grid two">
+        <label>Username
+          <input id="username" type="text" maxlength="50" placeholder="bot name (optional)">
+        </label>
+        <label>Room code
+          <input id="roomcode" type="text" maxlength="4" placeholder="ABCD" required>
+        </label>
+      </div>
+    </section>
 
-            <label>Room Code (required):
-                <input type="text" id="roomcode" required placeholder="Enter your room code (e.g., ABCD)">
-            </label><br><br>
+    <section class="card">
+      <h2>Word Sources</h2>
+      <div class="grid one">
+        <label>Dictionaries (optional, one per line: URL or word)
+          <textarea id="dictionaries" rows="6" placeholder="https://example.com/words.txt"></textarea>
+        </label>
+        <label>Invalid words (optional, one per line)
+          <textarea id="invalid" rows="4" placeholder="outdatedword"></textarea>
+        </label>
+        <label>Proxies (optional, one per line)
+          <textarea id="proxies" rows="3" placeholder="ip:port[:user:pass]"></textarea>
+        </label>
+      </div>
+    </section>
 
-            <label>Select Mode:
-                <select id="selectMode">
-                    <option value="long">Long</option>
-                    <option value="short">Short</option>
-                    <option value="sneaky">Sneaky</option>
-                    <option value="regen">Regen</option>
-                    <option value="average">Average</option>
-                    <option value="common">Common</option>
-                </select>
-            </label>
-        </fieldset>
-        <br>
+    <section class="card">
+      <h2>Behavior Settings</h2>
+      <div class="grid two">
+        <label>selectMode
+          <select id="selectMode">
+            <option value="common">common</option>
+            <option value="sneaky">sneaky</option>
+            <option value="regen">regen</option>
+            <option value="long">long</option>
+            <option value="average">average</option>
+            <option value="short">short</option>
+          </select>
+        </label>
+      </div>
+      <div class="grid three checks">
+        <label><input id="regenIfNeeded" type="checkbox"> regenIfNeeded</label>
+        <label><input id="sneakyRegen" type="checkbox"> sneakyRegen</label>
+        <label><input id="stockpile" type="checkbox"> stockpile</label>
+        <label><input id="greedLong" type="checkbox"> greedLong</label>
+        <label><input id="timeConstraint" type="checkbox"> timeConstraint</label>
+        <label><input id="cyberbullying" type="checkbox"> cyberbullying</label>
+        <label><input id="mistakes" type="checkbox"> mistakes</label>
+        <label><input id="burstType" type="checkbox"> burstType</label>
+        <label><input id="spamType" type="checkbox"> spamType</label>
+        <label><input id="dynamicRate" type="checkbox"> dynamicRate</label>
+        <label><input id="dynamicPauses" type="checkbox"> dynamicPauses</label>
+        <label><input id="dynamicMistakes" type="checkbox"> dynamicMistakes</label>
+      </div>
+      <details>
+        <summary>Timing and chance values</summary>
+        <div class="grid two mt">
+          <label>minWait <input id="minWait" type="number" step="0.01"></label>
+          <label>maxWait <input id="maxWait" type="number" step="0.01"></label>
+          <label>mistakePause <input id="mistakePause" type="number" step="0.01"></label>
+          <label>miniPause <input id="miniPause" type="number" step="0.01"></label>
+          <label>minWpm <input id="minWpm" type="number" step="1"></label>
+          <label>maxWpm <input id="maxWpm" type="number" step="1"></label>
+          <label>spamWpm <input id="spamWpm" type="number" step="1"></label>
+          <label>burstChance <input id="burstChance" type="number" step="0.01"></label>
+          <label>minMistakeChance <input id="minMistakeChance" type="number" step="0.01"></label>
+          <label>maxMistakeChance <input id="maxMistakeChance" type="number" step="0.01"></label>
+          <label>spamChance <input id="spamChance" type="number" step="0.01"></label>
+          <label>jitterPercent <input id="jitterPercent" type="number" step="0.01"></label>
+        </div>
+      </details>
+    </section>
 
-        <fieldset>
-            <legend>Lists</legend>
-            <label>Invalid (one entry per line, optional, use internal defaults):<br>
-                <textarea id="invalid" rows="6" cols="50" style="resize: vertical; overflow-y: scroll;" placeholder="word1&#10;word2&#10;word3"></textarea>
-            </label><br><br>
+    <section class="actions">
+      <button id="launchBtn" type="button">Launch Bot</button>
+      <button id="stopBtn" type="button" class="danger">Stop Bot</button>
+    </section>
 
-            <label>Dictionaries (one entry per line, optional, use internal defaults):<br>
-                <textarea id="dictionaries" rows="6" cols="50" style="resize: vertical; overflow-y: scroll;" placeholder="word1&#10;word2&#10;https://norvig.com/ngrams/sowpods.txt&#10;https://norvig.com/ngrams/enable1.txt"></textarea>
-            </label><br><br>
+    <pre id="status" aria-live="polite">Loading settings...</pre>
+  </main>
 
-            <label>Proxies (one entry per line, optional, defaults to None):<br>
-                <textarea id="proxies" rows="6" cols="50" style="resize: vertical; overflow-y: scroll;" placeholder="ip:port&#10;ip:port:username:password"></textarea>
-            </label>
-        </fieldset>
-        <br>
-
-        <fieldset>
-            <legend>Behavior Toggles</legend>
-            <label><input type="checkbox" id="regenIfNeeded" checked> Regen If Needed</label><br>
-            <label><input type="checkbox" id="sneakyRegen" checked> Sneaky Regen</label><br>
-            <label><input type="checkbox" id="stockpile"> Stockpile</label><br>
-            <label><input type="checkbox" id="greedLong"> Greed Long</label><br>
-            <label><input type="checkbox" id="timeConstraint" checked> Time Constraint</label><br>
-            <label><input type="checkbox" id="cyberbullying"> Cyberbullying</label><br>
-            <label><input type="checkbox" id="mistakes" checked> Mistakes</label><br>
-            <label><input type="checkbox" id="burstType" checked> Burst Type</label><br>
-            <label><input type="checkbox" id="spamType" checked> Spam Type</label><br>
-            <label><input type="checkbox" id="dynamicRate"> Dynamic Rate</label><br>
-            <label><input type="checkbox" id="dynamicPauses" checked> Dynamic Pauses</label><br>
-            <label><input type="checkbox" id="dynamicMistakes" checked> Dynamic Mistakes</label>
-        </fieldset>
-        <br>
-
-        <fieldset>
-            <legend>Timing</legend>
-            <label>Min Wait (s): <input type="number" id="minWait" step="0.1" value="1.0"></label><br><br>
-            <label>Max Wait (s): <input type="number" id="maxWait" step="0.1" value="3.2"></label><br><br>
-            <label>Mistake Pause (s): <input type="number" id="mistakePause" step="0.001" value="0.100"></label><br><br>
-            <label>Mini Pause (s): <input type="number" id="miniPause" step="0.001" value="0.330"></label><br><br>
-            <label>Min WPM: <input type="number" id="minWpm" step="1" value="70"></label><br><br>
-            <label>Max WPM: <input type="number" id="maxWpm" step="1" value="120"></label><br><br>
-            <label>Spam WPM: <input type="number" id="spamWpm" step="1" value="1000"></label>
-        </fieldset>
-        <br>
-
-        <fieldset>
-            <legend>Chances (0.0 - 1.0)</legend>
-            <label>Burst Chance: <input type="number" id="burstChance" step="0.01" min="0" max="1" value="0.50"></label><br><br>
-            <label>Min Mistake Chance: <input type="number" id="minMistakeChance" step="0.01" min="0" max="1" value="0.01"></label><br><br>
-            <label>Max Mistake Chance: <input type="number" id="maxMistakeChance" step="0.01" min="0" max="1" value="0.15"></label><br><br>
-            <label>Spam Chance: <input type="number" id="spamChance" step="0.01" min="0" max="1" value="0.10"></label><br><br>
-            <label>Jitter Percent: <input type="number" id="jitterPercent" step="0.01" min="0" max="1" value="0.50"></label>
-        </fieldset>
-        <br>
-
-        <button type="submit" id="launchBtn">Launch Bot</button>
-        <button type="button" id="stopBtn" style="display: none; background-color: red; color: white; padding: 10px; margin-left: 10px;">Stop Bot</button>
-    </form>
-
-    <script>
-        const overlay = document.getElementById('blockingOverlay');
-        const launchBtn = document.getElementById('launchBtn');
-        const stopBtn = document.getElementById('stopBtn');
-        const form = document.getElementById('testForm');
-
-        // IDs of settings fields, grouped by how they should be read from the DOM.
-        const LIST_FIELDS = ['invalid', 'dictionaries', 'proxies'];
-        const CHECKBOX_FIELDS = [
-            'regenIfNeeded', 'sneakyRegen', 'stockpile', 'greedLong',
-            'timeConstraint', 'cyberbullying', 'mistakes', 'burstType',
-            'spamType', 'dynamicRate', 'dynamicPauses', 'dynamicMistakes'
-        ];
-        const NUMBER_FIELDS = [
-            'minWait', 'maxWait', 'mistakePause', 'miniPause',
-            'minWpm', 'maxWpm', 'spamWpm',
-            'burstChance', 'minMistakeChance', 'maxMistakeChance',
-            'spamChance', 'jitterPercent'
-        ];
-
-        //  UI state helpers
-
-        function setUiState({ running, busy }) {
-            overlay.style.display = busy ? 'flex' : 'none';
-            launchBtn.style.display = running ? 'none' : 'inline-block';
-            stopBtn.style.display = running ? 'inline-block' : 'none';
-        }
-
-        //  Payload building
-
-        function textareaToList(id) {
-            return document.getElementById(id).value
-                .split('\n')
-                .map(line => line.trim())
-                .filter(line => line.length > 0);
-        }
-
-        function buildPayload() {
-            const payload = {
-                username: document.getElementById('username').value,
-                roomcode: document.getElementById('roomcode').value,
-                selectMode: document.getElementById('selectMode').value
-            };
-
-            for (const id of LIST_FIELDS) {
-                payload[id] = textareaToList(id);
-            }
-            for (const id of CHECKBOX_FIELDS) {
-                payload[id] = document.getElementById(id).checked;
-            }
-            for (const id of NUMBER_FIELDS) {
-                payload[id] = parseFloat(document.getElementById(id).value);
-            }
-
-            return payload;
-        }
-
-        // Populate the form from a settings object (used on load).
-        function applySettings(settings) {
-            if (!settings) return;
-
-            if (settings.selectMode) document.getElementById('selectMode').value = settings.selectMode;
-            if (settings.username) document.getElementById('username').value = settings.username;
-            if (settings.roomcode) document.getElementById('roomcode').value = settings.roomcode;
-
-            for (const id of LIST_FIELDS) {
-                if (Array.isArray(settings[id])) {
-                    document.getElementById(id).value = settings[id].join('\n');
-                }
-            }
-            for (const id of CHECKBOX_FIELDS) {
-                if (typeof settings[id] === 'boolean') {
-                    document.getElementById(id).checked = settings[id];
-                }
-            }
-            for (const id of NUMBER_FIELDS) {
-                if (typeof settings[id] === 'number') {
-                    document.getElementById(id).value = settings[id];
-                }
-            }
-        }
-
-        //  Networking helper shared by launch/stop
-
-        async function callApi(endpoint) {
-            try {
-                const response = await fetch(endpoint, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: endpoint === '/api/launch' ? JSON.stringify(buildPayload()) : undefined
-                });
-                return await response.json();
-            } catch (err) {
-                return { success: false, error: 'Failed to connect to the backend server.' };
-            }
-        }
-
-        //  Heartbeat: lets the backend know the page is still open
-
-        setInterval(() => {
-            fetch('/api/heartbeat', { method: 'POST' }).catch(() => {});
-        }, 2000);
-
-        //  Load saved settings on page load
-
-        window.addEventListener('DOMContentLoaded', async () => {
-            try {
-                const response = await fetch('/api/settings');
-                const settings = await response.json();
-                applySettings(settings);
-            } catch (err) {
-                console.error('Could not load current settings:', err);
-            }
-        });
-
-        //Launch
-
-        form.addEventListener('submit', async function (e) {
-            e.preventDefault();
-            e.stopImmediatePropagation();
-            setUiState({ running: false, busy: true });
-
-            const result = await callApi('/api/launch');
-
-            if (result.success) {
-                setUiState({ running: true, busy: false });
-            } else {
-                alert('Error: ' + result.error);
-                setUiState({ running: false, busy: false });
-            }
-        });
-
-        //Stop
-
-        stopBtn.addEventListener('click', async function () {
-            setUiState({ running: true, busy: true });
-
-            const result = await callApi('/api/stop');
-
-            if (result.success) {
-                setUiState({ running: false, busy: false });
-            } else {
-                alert('Error: ' + result.error);
-                setUiState({ running: true, busy: false });
-            }
-        });
-    </script>
+  <script src="{{ url_for('static', filename='app.js') }}" defer></script>
 </body>
 </html>
