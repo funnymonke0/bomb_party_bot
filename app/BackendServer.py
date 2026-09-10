@@ -8,6 +8,7 @@ import time
 
 from pathlib import Path
 from dataclasses import dataclass
+
 from flask import Flask, render_template, request, jsonify
 from flask_cors import CORS
 from flask_limiter import Limiter
@@ -64,7 +65,7 @@ class ClientSession:
 class BackendServer:
     def __init__(self, port = 5000, debug=False, force_https=True):
         self.app = Flask(__name__)
-        frontend_origins = [origin.strip() for origin in os.getenv( #????
+        frontend_origins = [origin.strip() for origin in os.getenv( #frontend in test is port 5173
             "FRONTEND_ORIGINS",
             "http://127.0.0.1:5173,http://localhost:5173"
         ).split(",") if origin.strip()]
@@ -73,6 +74,7 @@ class BackendServer:
             SESSION_COOKIE_HTTPONLY=True,
             SESSION_COOKIE_SECURE=force_https,  # HTTPS only when enabled
             SESSION_COOKIE_SAMESITE="Lax",
+            MAX_CONTENT_LENGTH=16 * 1024 * 1024  # 16 MB
         )
         Talisman(self.app, force_https=force_https)
         CORS(self.app, resources={r"/api/*": {"origins": frontend_origins}}, supports_credentials=True)
@@ -83,7 +85,12 @@ class BackendServer:
         runtime_root.mkdir(parents=True, exist_ok=True)
 
         self.csrf = CSRFProtect(self.app)
-        self.limiter = Limiter(app=self.app, key_func=get_remote_address, default_limits=["60 per minute"])
+        self.limiter = Limiter(
+            app=self.app,
+            key_func=get_remote_address,
+            default_limits=["60 per minute"],
+            storage_uri=os.getenv("RATELIMIT_STORAGE_URI", "memory://")
+        )
 
 
 
@@ -169,6 +176,10 @@ class BackendServer:
 
             client.manager = None
             client.bot_thread = None
+            try:
+                shutil.rmtree(client.runtime_dir)
+            except Exception as e:
+                logger.warning(f"Error while removing runtime directory: {e}")
 
         import gc
         gc.collect()
@@ -209,10 +220,10 @@ class BackendServer:
 
 
                 req_format = {
-                    "username": (str, lambda x: True),
+                    "username": (str, lambda x: len(x) <= 30 and re.match(r"^[A-Za-z0-9_-]+$", x.strip())),
                     "roomcode": (str, lambda x: re.match(r"^[a-zA-Z]{4}$", x.strip())),
                     "invalid": (list, lambda x: (len(x) <= 100) and all(isinstance(i, str) and len(i) <= 100 for i in x)),
-                    "dictionaries": (list, lambda x: (len(x) <= 200000) and all(isinstance(i, str) and len(i) <= 100 for i in x)),
+                    "dictionaries": (list, lambda x: (len(x) <= 2000) and all(isinstance(i, str) and len(i) <= 100 for i in x)),
                     "proxies": (list, lambda x: (len(x) <= 100) and all(isinstance(i, str) and len(i) <= 100 for i in x)),
                     "selectMode": (str,None),
                     "regenIfNeeded": (bool,None),
@@ -227,18 +238,18 @@ class BackendServer:
                     "dynamicRate": (bool,None),
                     "dynamicPauses": (bool,None),
                     "dynamicMistakes": (bool,None),
-                    "minWait": (int|float,None),
-                    "maxWait": (int|float,None),
-                    "mistakePause": (int|float,None),
-                    "miniPause": (int|float,None),
-                    "minWpm": (int|float,lambda x: x>0),
-                    "maxWpm": (int|float,lambda x: x>0),
-                    "spamWpm": (int|float,lambda x: x>0),
-                    "burstChance": (int|float,None),
-                    "minMistakeChance": (int|float,None),
-                    "maxMistakeChance": (int|float,None),
-                    "spamChance": (int|float,None),
-                    "jitterPercent": (int|float,None)
+                    "minWait": (int|float,lambda x: x>=0 and x<=30),
+                    "maxWait": (int|float,lambda x: x>=0 and x<=30),
+                    "mistakePause": (int|float,lambda x: x>=0 and x<=30),
+                    "miniPause": (int|float,lambda x: x>=0 and x<=30),
+                    "minWpm": (int|float,lambda x: x>0 and x<1000),
+                    "maxWpm": (int|float,lambda x: x>0 and x<1000),
+                    "spamWpm": (int|float,lambda x: x>0 and x<2000),
+                    "burstChance": (int|float,lambda x: x>=0 and x<=1),
+                    "minMistakeChance": (int|float,lambda x: x>=0 and x<=1),
+                    "maxMistakeChance": (int|float,lambda x: x>=0 and x<=1),
+                    "spamChance": (int|float,lambda x: x>=0 and x<=1),
+                    "jitterPercent": (int|float,lambda x: x>=0 and x<=1)
                 }
 
                 for key, (expected_type, req_func) in req_format.items():

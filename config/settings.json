@@ -18,7 +18,7 @@
     "miniPause": 0.33,
     "minWpm": 70,
     "maxWpm": 120,
-    "spamWpm": 1000,
+    "spamWpm": 350,
     "burstChance": 0.5,
     "minMistakeChance": 0.01,
     "maxMistakeChance": 0.15,

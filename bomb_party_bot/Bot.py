@@ -3,7 +3,7 @@ from collections.abc import Callable
 
 from .Client import Client
 from logging import getLogger, DEBUG
-from wordfreq import word_frequency, zipf_frequency
+from wordfreq import zipf_frequency
 from collections import Counter
 
 import random
@@ -205,10 +205,10 @@ class Bot:
         short: Callable[[set[str]], str] = lambda aset: min(aset, key=len)
 
         avg: Callable[[set[str]], str] = lambda aset: min(aset, key = lambda w: abs(len(w) - round((len(short(ans_set)) + len(long(ans_set))) / 2)))# type: ignore | minimize difference from the averageLen
-        common: Callable[[set[str]], str] = lambda aset: max(aset, key=lambda w: word_frequency(w, "en"))
+        common: Callable[[set[str]], str] = lambda aset: max(aset, key=lambda w: zipf_frequency(w, "en"))
 
         regen: Callable[[set[str]], str] = lambda aset: max(aset, key= lambda w: shared_letters[w]) #maximum shared letters
-        sneaky: Callable[[set[str]], str] = lambda aset: max(aset, key= lambda w: zipf_frequency(w,"en")+shared_letters[w]) #maximum shared letters while also accounting for regen
+        sneaky: Callable[[set[str]], str] = lambda aset: max(aset, key= lambda w: (zipf_frequency(w,"en")/8)+(shared_letters[w]/5)) #maximum shared letters while also accounting for regen
 
         shared_letters = {w: len(set(w) & set(alph)) for w in ans_set}
         specific_wrapper: Callable[[Callable[[set[str]], str], set[str], int], str] = lambda func, aset, num: func({w for w in aset if shared_letters[w]<=num} or aset) # passes a pruned list where the shared words do not exceed num
@@ -231,7 +231,7 @@ class Bot:
             else:
                 ans_set = {w for w in ans_set if alph[0] not in w} or ans_set
 
-        if ans and len(ans) > 0: pass# type: ignore
+        if not(ans and len(ans) > 0): pass# type: ignore
         elif mode == 'long':
             ans =  long(ans_set)
 
@@ -240,17 +240,17 @@ class Bot:
 
         elif mode == "average":
             ans =  avg(ans_set)
-        
+
         elif mode == 'regen':
             ans =  regen(ans_set)
-        
+
         elif mode == "common":
             ans =  common(ans_set)
-        
+
         elif mode == "sneaky":
             ans =  sneaky(ans_set)
         else:
-            ans =  random.choice(list(ans_set))
+            ans = common(ans_set)
         
         return str(ans)
 
