@@ -11,4 +11,5 @@ COPY . .
 RUN pip install --no-cache-dir uv && uv sync --frozen
 
 ENV PYTHONUNBUFFERED=1
-CMD ["gunicorn","--workers","1","--threads","8","--bind","0.0.0.0:$PORT","wsgi:app"]
+CMD gunicorn --workers 1 --threads 8 --bind 0.0.0.0:$PORT wsgi:app
+
