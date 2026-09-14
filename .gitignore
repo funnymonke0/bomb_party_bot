@@ -8,3 +8,6 @@ backup.py
 config/proxies.config
 /.env
 /frontend/.env
+/dump.rdb
+/app/runtime/
+/TODO.md
