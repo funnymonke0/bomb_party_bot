@@ -1,0 +1,51 @@
+:root {
+  --bg: #242133;
+  --surface: #494667;
+  --text: #f0f0f0;
+  --accent: #c3c3c3;
+  --font-size: 16px;
+}
+
+body {
+  margin: 0;
+  font-family: 'JetBrains Mono', Consolas, Monaco, monospace;
+  background: var(--bg);
+  color: var(--text);
+  font-size: var(--font-size);
+}
+
+input,
+select,
+textarea,
+pre,
+button {
+  border-radius: 2px;
+  border: 1px solid color-mix(in srgb, var(--accent) 26%, transparent);
+  background: color-mix(in srgb, var(--surface) 88%, #f4efff);
+  color: var(--text);
+  padding: 0.55rem 0.65rem;
+  font: inherit;
+}
+
+.action-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: color-mix(in srgb, #000 40%, transparent);
+  cursor: wait;
+}
+
+.action-overlay[hidden] {
+  display: none;
+}
+
+.action-overlay__text {
+  padding: 0.8rem 1rem;
+  border-radius: 6px;
+  border: 1px solid color-mix(in srgb, var(--accent) 40%, transparent);
+  background: color-mix(in srgb, var(--surface) 92%, #000);
+  color: var(--text);
+}

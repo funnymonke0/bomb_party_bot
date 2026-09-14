@@ -18,7 +18,7 @@ LOCATORS: dict[str, str] = {
     "reason": './/div[@class="reason"]'
 }
 
-MAX_WAIT = 5
+MAX_WAIT = 2
 
 MISTAKE_MAP: dict[str, list[str]] = {
     'q': ['w', 'a'],
@@ -63,3 +63,5 @@ UPDATE_INTERVALS: dict[str, float] = {
         'disconnect' : 30,
         'join' : 10
     }
+
+MAX_KEY_DELAY = 0.5

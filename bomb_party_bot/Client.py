@@ -18,6 +18,7 @@ from selenium.webdriver.support.wait import WebDriverWait
 
 from .constants import LOCATORS, MAX_WAIT
 from .ProxyServer import ProxyServer
+from fake_useragent import UserAgent
 
 
 def _get_int_val(elem:WebElement) -> int:
@@ -71,13 +72,9 @@ class Client:
         chrome_options.add_argument('--no-default-browser-check')
         chrome_options.add_argument('--ignore-certificate-errors')
         chrome_options.add_argument('--guest')
-        chrome_options.add_argument("--ignore-certificate-errors")
-        chrome_options.add_argument("--allow-insecure-localhost")
 
         chrome_options.add_argument(
-            'user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64)'
-            'AppleWebKit/537.36 (KHTML, like Gecko)'
-            'Chrome/142.0.0.0 Safari/537.36'
+            f'user-agent={UserAgent(browsers=["Google", "Chrome", "Firefox", "Edge"], os = ["Windows", "Linux", "Ubuntu", "Chrome OS", "Mac OS X"], platforms=["desktop"], fallback="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36").random}'
         )
 
         chrome_options.add_argument("--headless=new")
@@ -337,10 +334,14 @@ class Client:
         self.console.info('closing client')
         try:
             self.driver.quit()
+        except Exception as e:
+            self.console.warning(f"Error during client close: {e}")
+
+        try:
             if self.server:
                 self.server.close()
         except Exception as e:
-            self.console.warning(f"Error during client close: {e}")
+            self.console.warning(f"Error during proxy server close: {e}")
 
 
     def __del__(self):

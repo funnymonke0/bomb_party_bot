@@ -58,6 +58,25 @@ const defaultSettings = {
 
 let csrfToken = "";
 let heartbeatTimer = null;
+let actionInFlight = false;
+
+function setUiBlocking(isBlocking, message = "Processing...") {
+  const overlay = document.getElementById("actionOverlay");
+  const overlayText = overlay?.querySelector(".action-overlay__text");
+  const launchBtn = document.getElementById("launchBtn");
+  const stopBtn = document.getElementById("stopBtn");
+
+  actionInFlight = isBlocking;
+  if (overlay) {
+    overlay.hidden = !isBlocking;
+    overlay.setAttribute("aria-hidden", String(!isBlocking));
+  }
+  if (overlayText) {
+    overlayText.textContent = message;
+  }
+  launchBtn.disabled = isBlocking;
+  stopBtn.disabled = isBlocking;
+}
 
 function setStatus(message, isError = false) {
   const status = document.getElementById("status");
@@ -83,17 +102,11 @@ function applySettings(settings) {
 }
 
 function getPayload() {
-  const roomcode = document.getElementById("roomcode").value.trim().toUpperCase();
-  if (!/^[A-Z]{4}$/.test(roomcode)) {
-    throw new Error("Room code must be exactly 4 letters.");
-  }
-
   const payload = {
-    username: document.getElementById("username").value.trim(),
-    roomcode,
+    username: document.getElementById("username").value.trim() ?? "",
+    roomcode: document.getElementById("roomcode").value.trim().toUpperCase() ?? "",
     dictionaries: parseLines(document.getElementById("dictionaries").value),
     invalid: parseLines(document.getElementById("invalid").value),
-    proxies: parseLines(document.getElementById("proxies").value),
     selectMode: document.getElementById("selectMode").value,
   };
 
@@ -115,9 +128,25 @@ async function fetchJson(url, options = {}) {
     credentials: "same-origin",
     ...options,
   });
-  const data = await response.json();
+  const raw = await response.text();
+  const isJson = (response.headers.get("content-type") || "").includes("application/json");
+  let data = null;
+
+  if (raw.length > 0 && isJson) {
+    try {
+      data = JSON.parse(raw);
+    } catch {
+      throw new Error("Server returned invalid JSON");
+    }
+  }
+
   if (!response.ok) {
-    throw new Error(data.error || data.message || "Request failed");
+    const message = data?.error || data?.message || raw || `Request failed (${response.status})`;
+    throw new Error(message);
+  }
+
+  if (!data) {
+    throw new Error("Server returned empty response");
   }
   return data;
 }
@@ -157,7 +186,9 @@ function stopHeartbeat() {
 }
 
 async function launchBot() {
+  if (actionInFlight) return;
   try {
+    setUiBlocking(true, "Starting bot...");
     const payload = getPayload();
     setStatus("Launching bot...");
     const result = await fetchJson("/api/launch", {
@@ -172,11 +203,15 @@ async function launchBot() {
     startHeartbeat();
   } catch (error) {
     setStatus(error.message, true);
+  } finally {
+    setUiBlocking(false);
   }
 }
 
 async function stopBot() {
+  if (actionInFlight) return;
   try {
+    setUiBlocking(true, "Stopping bot...");
     const result = await fetchJson("/api/stop", {
       method: "POST",
       headers: {
@@ -189,6 +224,8 @@ async function stopBot() {
     setStatus(result.message || "Bot stopped.");
   } catch (error) {
     setStatus(error.message, true);
+  } finally {
+    setUiBlocking(false);
   }
 }
 

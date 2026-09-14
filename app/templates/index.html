@@ -6,13 +6,14 @@
   <title>Bomb Party Bot</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700&family=Rajdhani:wght@400;500;600&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="{{ url_for('static', filename='styles/style.css') }}">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sakura.css/css/sakura.css" type="text/css">
+  <link rel="stylesheet" href="https://unpkg.com/sakura.css/css/sakura-dark.css" media="screen and (prefers-color-scheme: dark)" />
+  <link rel="stylesheet" href="{{ url_for('static', filename='styles/scheme.css') }}">
 </head>
 <body>
   <main class="container">
     <h1>Bomb Party Bot</h1>
-    <p class="sub">Web launcher with settings.</p>
+    <p class="sub">Web launcher for BombParty practice bot</p>
 
     <section class="card">
       <h2>Connection</h2>
@@ -23,20 +24,20 @@
         <label>Room code
           <input id="roomcode" type="text" maxlength="4" placeholder="ABCD" required>
         </label>
+<!--        <label>Proxies (optional, one per line)-->
+<!--          <textarea id="proxies" rows="3" placeholder="ip:port[:user:pass]"></textarea>-->
+<!--        </label>-->
       </div>
     </section>
 
     <section class="card">
-      <h2>Word Sources</h2>
+      <h2>Source editing (ie. dictionaries for different languages)</h2>
       <div class="grid one">
-        <label>Dictionaries (optional, one per line: URL or word)
-          <textarea id="dictionaries" rows="6" placeholder="https://example.com/words.txt"></textarea>
+        <label>Dictionaries (optional, one per line: word)
+          <textarea id="dictionaries" rows="6" placeholder="word"></textarea>
         </label>
         <label>Invalid words (optional, one per line)
           <textarea id="invalid" rows="4" placeholder="outdatedword"></textarea>
-        </label>
-        <label>Proxies (optional, one per line)
-          <textarea id="proxies" rows="3" placeholder="ip:port[:user:pass]"></textarea>
         </label>
       </div>
     </section>
@@ -95,6 +96,10 @@
 
     <pre id="status" aria-live="polite">Loading settings...</pre>
   </main>
+
+  <div id="actionOverlay" class="action-overlay" hidden aria-hidden="true">
+    <div class="action-overlay__text">Processing...</div>
+  </div>
 
   <script src="{{ url_for('static', filename='app.js') }}" defer></script>
 </body>

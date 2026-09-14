@@ -63,9 +63,9 @@ def _format_proxy(proxy:str) -> str: ##Tool
 class BotManager:
     
     #manage bot persistence, proxies and other settings, etc.
-    def __init__(self, dict_file : str, settings_file : str, proxy_file : str, invalid_file : str, room_code : str, username : str = ''):
+    def __init__(self, dict_file : str, settings_file : str, proxy_file : str, invalid_file : str, room_code : str, username : str = '', secure: bool = False):
         
-        
+        self.secure = secure
         self.dict_map = None
         self.proxy_list = None
         self.settings = None
@@ -151,17 +151,17 @@ class BotManager:
 
 
     def _load_proxies(self, proxy_file:str) -> None:#init proc
-
-        proxy_list_raw = self.find_in_file(proxy_file, PROXY_REGEX)
-        #must be len > 0, element must be len > 0, format element must be len > 0
-        if len(proxy_list_raw) > 0 and any(proxy_list_raw): #checks if list is not empty and if any elements are not empty
-            proxy_list_raw = [_format_proxy(proxy) for proxy in proxy_list_raw if len(proxy) > 0] # formats all non-empty proxies
-            if len(proxy_list_raw) > 0 and any(proxy_list_raw):
-                proxy_list_raw = [f_proxy for f_proxy in proxy_list_raw if len(f_proxy) > 0] #removes any empty after format
+        if not self.secure:
+            proxy_list_raw = self.find_in_file(proxy_file, PROXY_REGEX)
+            #must be len > 0, element must be len > 0, format element must be len > 0
+            if len(proxy_list_raw) > 0 and any(proxy_list_raw): #checks if list is not empty and if any elements are not empty
+                proxy_list_raw = [_format_proxy(proxy) for proxy in proxy_list_raw if len(proxy) > 0] # formats all non-empty proxies
                 if len(proxy_list_raw) > 0 and any(proxy_list_raw):
-                    self.proxy_list = proxy_list_raw
-                    self.console.info(f"loaded {len(self.proxy_list)} proxies from {proxy_file}")
-                    return
+                    proxy_list_raw = [f_proxy for f_proxy in proxy_list_raw if len(f_proxy) > 0] #removes any empty after format
+                    if len(proxy_list_raw) > 0 and any(proxy_list_raw):
+                        self.proxy_list = proxy_list_raw
+                        self.console.info(f"loaded {len(self.proxy_list)} proxies from {proxy_file}")
+                        return
         self.proxy_list = ['']  # use local IP
         self.console.info("No proxies provided. Using local machine IP")  # not critical
 
@@ -179,10 +179,10 @@ class BotManager:
         console = self.console
 
         dicts = set[str]()
-
-        dict_urls = self.find_in_file(dict_file, URL_REGEX)
-        console.info(f"loading {len(dict_urls)} dictionaries from urls in {dict_file}")
-        dicts.update(self.parse_from_urls(dict_urls))
+        if not self.secure:
+            dict_urls = self.find_in_file(dict_file, URL_REGEX)
+            console.info(f"loading {len(dict_urls)} dictionaries from urls in {dict_file}")
+            dicts.update(self.parse_from_urls(dict_urls))
         dict_plain_text = {x.lower() for x in self.find_in_file(dict_file, PLAINTEXT_REGEX)}
         console.info(f"loading {len(dict_plain_text)} entries from plaintext in {dict_file}")
         dicts.update(dict_plain_text)
@@ -214,9 +214,13 @@ class BotManager:
         else:
             if expected:
                 self.console.warning(f'Bot session with proxy {proxy} was banned from the room')
+                self.bot.close()
+                self.bot = None
                 return True
             else:
                 self.console.warning(f'Bot session with proxy {proxy} could not join room')
+                self.bot.close()
+                self.bot = None
                 return False
 
 
@@ -225,7 +229,7 @@ class BotManager:
         self.self_destruct = True
         if self.bot:
             self.bot.close()
-        self.bot = None
+
 
 
 #mainloop

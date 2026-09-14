@@ -12,7 +12,7 @@ from time import sleep, time
 from selenium.webdriver.common.keys import Keys
 
 
-from .constants import MISTAKE_MAP
+from .constants import MISTAKE_MAP, MAX_KEY_DELAY
 
 
 class Bot:
@@ -89,7 +89,6 @@ class Bot:
         self.console.info('closing bot')
         self.self_destruct = True
         self.client.close()
-        self.client=None
 
 
     def main_loop(self) -> bool: #main loop. returns if it was graceful or not
@@ -129,6 +128,17 @@ class Bot:
                     ans = '/suicide'
                     if ans_set and len(ans_set) > 0:
                         ans = self.eval(ans_set)
+                        start_prune = time()
+                        while len(ans) * MAX_KEY_DELAY >= 10:
+                            # if not feasible, pretend you already tried
+                            self.used.add(ans)
+                            ans_set = self.dicts[self.syllable]
+                            ans_set -= self.used
+                            ans = self.eval(ans_set)
+                            if time() - start_prune >= 10:
+                                #give up with aura
+                                ans = '/suicide'
+                                break
 
                     self.console.info(f"found answer {ans} for syllable {self.syllable}" if ans != "/suicide" else f"could not find answer for syllable: {self.syllable}")
 
@@ -288,7 +298,7 @@ class Bot:
             else:
                 current_rate = float(self.min_rate)# type: ignore
 
-            rates_list.append(self.apply_jitter(current_rate))
+            rates_list.append(min(self.apply_jitter(current_rate), MAX_KEY_DELAY))
 
             mistake_chance = float(self.min_mistake_chance)# type: ignore
             if bool(self.dynamic_mistakes):# type: ignore
@@ -301,7 +311,7 @@ class Bot:
 
                 for i in range(mistake_len):# type: ignore
                     txt_list.append(random.choice(mistakechars))
-                    rates_list.append(self.apply_jitter(current_rate))
+                    rates_list.append(min(self.apply_jitter(current_rate), MAX_KEY_DELAY))
 
                 txt_list.append('')
                 rates_list.append(self.apply_jitter(float(self.mistake_pause)))# type: ignore
