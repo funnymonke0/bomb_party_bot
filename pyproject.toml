@@ -22,6 +22,7 @@ dependencies = [
     "fake-useragent>=2.2.0",
     "redis>=8.1.0",
     "flask-limiter>=4.1.1",
+    "gunicorn>=26.2.0",
 ]
 
 [tool.uv]
