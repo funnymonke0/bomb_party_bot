@@ -407,6 +407,8 @@ class BackendServer:
             client.last_heartbeat = time.time()
             return jsonify({"status": "alive"})
 
+    def check_heartbeat(self) -> None:
+        self._check_heartbeat()  # Call the internal method to start the heartbeat check loop
 
     def _check_heartbeat(self) -> None:
         while True:
