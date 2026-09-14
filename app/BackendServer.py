@@ -120,6 +120,9 @@ class BackendServer:
         global_monitor_thread.start()
         self.app.run(debug=self.debug, port=self.port, use_reloader=False)
 
+    def register_routes(self) -> None:
+        self._register_routes()
+
     def _register_routes(self) -> None:
         #rate limiter wrapping. would be a decorator if not inside class
         home_wrapped = self.limiter.limit("60 per minute")(self.home)
