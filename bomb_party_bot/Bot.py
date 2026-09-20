@@ -7,6 +7,7 @@ from wordfreq import zipf_frequency
 from collections import Counter
 
 import random
+import re
 from string import ascii_lowercase
 from time import sleep, time
 from selenium.webdriver.common.keys import Keys
@@ -16,7 +17,8 @@ from .constants import MISTAKE_MAP, MAX_KEY_DELAY
 
 
 class Bot:
-    def __init__(self, dicts: dict[str, set[str]], settings : dict[str, object], invalid=None, proxy : str = ''):
+    #dicts are now a flat string
+    def __init__(self, dicts: str, settings : dict[str, object], invalid=None, proxy : str = ''):
 
         if invalid is None:
             invalid = set()
@@ -122,7 +124,7 @@ class Bot:
                         self.start = time()
 
 
-                    ans_set = self.dicts.get(self.syllable, set()) - self.used
+                    ans_set = self.find_words(self.syllable) - self.used
 
                     ans = '/suicide'
                     if ans_set and len(ans_set) > 0:
@@ -131,7 +133,7 @@ class Bot:
                         while len(ans) * MAX_KEY_DELAY >= 10:
                             # if not feasible, pretend you already tried
                             self.used.add(ans)
-                            ans_set = self.dicts.get(self.syllable, set()) - self.used
+                            ans_set = self.find_words(self.syllable) - self.used
                             ans = self.eval(ans_set)
                             if time() - start_prune >= 10:
                                 #give up with aura
@@ -319,6 +321,11 @@ class Bot:
                     rates_list.append(self.apply_jitter(float(self.max_rate))) # type: ignore | spam backspace
 
         return list(zip(txt_list, rates_list))
+
+    def find_words(self, substring) -> set[str]:
+        # This pattern captures the whole word surrounding the substring
+        pattern = rf"[^\s]*{re.escape(substring)}[^\s]*"
+        return set(re.findall(pattern, self.dicts))
 
     def __del__(self):
         self.console.info("Bot is deleted")

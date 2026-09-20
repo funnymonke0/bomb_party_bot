@@ -26,23 +26,26 @@ class SettingsException(Exception):
     def __init__(self, message:str = "Settings load failed. Please provide settings"):
         super().__init__(message)
 
-def _format_dict(dicts:set[str]) -> dict[str, set[str]]: ##tool
-    hsmp: dict[str, set[str]] = {}
+def _format_dict(dicts:set[str]) -> str: ##tool
+    # hsmp: dict[str, set[str]] = {}
+    #
+    #Inverted index takes up too much space
+    #
+    # for wrd in dicts:
+    #     seen_keys = set[str]()
+    #     word_len = len(wrd)
+    #     for size in (1, 2, 3):
+    #         if word_len < size:
+    #             break
+    #         for i in range(0, word_len - size + 1):
+    #             key = wrd[i:i + size]
+    #             if key in seen_keys:
+    #                 continue
+    #             seen_keys.add(key)
+    #             hsmp.setdefault(key, set()).add(wrd)
+    flat_str = " ".join(dicts)
 
-    for wrd in dicts:
-        seen_keys = set[str]()
-        word_len = len(wrd)
-        for size in (1, 2, 3):
-            if word_len < size:
-                break
-            for i in range(0, word_len - size + 1):
-                key = wrd[i:i + size]
-                if key in seen_keys:
-                    continue
-                seen_keys.add(key)
-                hsmp.setdefault(key, set()).add(wrd)
-
-    return hsmp
+    return flat_str
 
 
 def _format_proxy(proxy:str) -> str: ##Tool
@@ -192,8 +195,8 @@ class BotManager:
 
         console.info(f"loaded {len(dicts)} words from {dict_file}")
         self.dict_map = _format_dict(dicts)
-        console.info(f"finished mapping all {len(self.dict_map)} (key,value) pairs")
-
+        # console.info(f"finished mapping all {len(self.dict_map)} (key,value) pairs")
+        console.info("flattened dictionary to a single string for regex search")
         # for k, v in self.dict_map.items():
         #     if len(v) == 0:
         #         with open("unknowns.txt", "a") as file:
