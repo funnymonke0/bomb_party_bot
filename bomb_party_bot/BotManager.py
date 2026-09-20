@@ -27,20 +27,21 @@ class SettingsException(Exception):
         super().__init__(message)
 
 def _format_dict(dicts:set[str]) -> dict[str, set[str]]: ##tool
-    hsmp = dict[str, set[str]]()
-    dicts = {wrd for wrd in dicts if 0<len(wrd)<21}
-    for letter1 in ascii_lowercase:
-        k1 = letter1
-        value = {wrd for wrd in dicts if k1 in wrd}
-        hsmp[k1] = value
-        for letter2 in ascii_lowercase:
-            k2 = k1 + letter2
-            value = {wrd for wrd in hsmp[k1] if k2 in wrd}
-            hsmp[k2] = value
-            for letter3 in ascii_lowercase:
-                k3 = k2+letter3
-                value = {wrd for wrd in hsmp[k2] if k3 in wrd}
-                hsmp[k3] = value
+    hsmp: dict[str, set[str]] = {}
+
+    for wrd in dicts:
+        seen_keys = set[str]()
+        word_len = len(wrd)
+        for size in (1, 2, 3):
+            if word_len < size:
+                break
+            for i in range(0, word_len - size + 1):
+                key = wrd[i:i + size]
+                if key in seen_keys:
+                    continue
+                seen_keys.add(key)
+                hsmp.setdefault(key, set()).add(wrd)
+
     return hsmp
 
 
@@ -78,22 +79,21 @@ class BotManager:
 
         self.console = logging.getLogger('MANAGER-CONSOLE')
         self.console.setLevel(logging.DEBUG)
-        ch = logging.StreamHandler()
-        ch.setLevel(logging.DEBUG)
+        if not self.console.handlers:
+            ch = logging.StreamHandler()
+            ch.setLevel(logging.DEBUG)
 
-        logdir = "log"
-        makedirs(logdir, exist_ok=True)
-        logpath = join(logdir, f'BotManager {datetime.date(datetime.now())}.log')
-        with open(logpath, 'w'):
-            pass
+            logdir = "log"
+            makedirs(logdir, exist_ok=True)
+            logpath = join(logdir, f'BotManager {datetime.date(datetime.now())}.log')
 
-        fh = logging.FileHandler(logpath,"w")
-        fh.setLevel(logging.DEBUG)
-        formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
-        ch.setFormatter(formatter)
-        fh.setFormatter(formatter)
-        self.console.addHandler(ch)
-        self.console.addHandler(fh)#botconsole inherits all this
+            fh = logging.FileHandler(logpath, "a")
+            fh.setLevel(logging.DEBUG)
+            formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+            ch.setFormatter(formatter)
+            fh.setFormatter(formatter)
+            self.console.addHandler(ch)
+            self.console.addHandler(fh)#botconsole inherits all this
 
         self._load_settings(settings_file)
         self._load_proxies(proxy_file)

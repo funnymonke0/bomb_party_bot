@@ -122,8 +122,7 @@ class Bot:
                         self.start = time()
 
 
-                    ans_set = self.dicts[self.syllable]
-                    ans_set -= self.used
+                    ans_set = self.dicts.get(self.syllable, set()) - self.used
 
                     ans = '/suicide'
                     if ans_set and len(ans_set) > 0:
@@ -132,8 +131,7 @@ class Bot:
                         while len(ans) * MAX_KEY_DELAY >= 10:
                             # if not feasible, pretend you already tried
                             self.used.add(ans)
-                            ans_set = self.dicts[self.syllable]
-                            ans_set -= self.used
+                            ans_set = self.dicts.get(self.syllable, set()) - self.used
                             ans = self.eval(ans_set)
                             if time() - start_prune >= 10:
                                 #give up with aura
