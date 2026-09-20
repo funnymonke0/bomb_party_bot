@@ -7,7 +7,7 @@ from wordfreq import zipf_frequency
 from collections import Counter
 
 import random
-import re
+import re2
 from string import ascii_lowercase
 from time import sleep, time
 from selenium.webdriver.common.keys import Keys
@@ -324,8 +324,10 @@ class Bot:
 
     def find_words(self, substring) -> set[str]:
         # This pattern captures the whole word surrounding the substring
-        pattern = rf"[^\s]*{re.escape(substring)}[^\s]*"
-        return set(re.findall(pattern, self.dicts))
+        if substring in self.dicts:
+            pattern = rf"[^\s]*{re2.escape(substring)}[^\s]*"
+            return set(re2.findall(pattern, self.dicts))
+        return set()
 
     def __del__(self):
         self.console.info("Bot is deleted")
