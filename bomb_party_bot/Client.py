@@ -4,7 +4,7 @@ from contextlib import contextmanager
 from logging import getLogger, DEBUG
 from re import findall
 from string import ascii_lowercase
-from time import sleep
+import threading
 
 from selenium import webdriver
 from selenium.common import TimeoutException
@@ -41,12 +41,13 @@ def _get_str_val(elem:WebElement) -> str:
 
 
 class Client:
-    def __init__(self, proxy: str = ''):
+    def __init__(self,shutdown_event: threading.Event, proxy: str = ''):
 
         self.prev_lw = 0 #internal for tracking life changes
         self.prev_ll = 0 #internal for tracking life changes
 
         self.console = getLogger('MANAGER-CONSOLE.BOT-CONSOLE.CLIENT-CONSOLE')
+        self.shutdown_event = shutdown_event
         self.console.setLevel(DEBUG)
 
         chrome_options = ChromeOptions()
@@ -107,7 +108,8 @@ class Client:
                     self.console.info(f'mitmdump ready on port {local_port}, upstream: {proxy}')
                     success = True
                     break
-                time.sleep(0.02)
+                self.shutdown_event.wait(0.2)
+
             if not success:
                 self.console.info(f'mitmdump initialization failed. defaulting to localhost')
                 proxy = 'localhost'
@@ -161,7 +163,8 @@ class Client:
                 else:
                     for letter, delay in input_value:
                         textbox.send_keys(letter)
-                        sleep(delay)
+
+                        self.shutdown_event.wait(delay)
 
                 textbox.send_keys(Keys.ENTER)
                 return True
@@ -313,7 +316,9 @@ class Client:
                     except TimeoutException:
                         failed = False
                         break
-                    time.sleep(0.2)
+
+                    self.shutdown_event.wait(0.2)
+
                     counter += 1
 
                 if failed:

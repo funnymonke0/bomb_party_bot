@@ -1,13 +1,15 @@
+import sys
+
 import requests
 from bs4 import BeautifulSoup
 
 from string import ascii_lowercase
-from re import sub, match
+from re import sub, match, findall
 import logging
 from os.path import join
 from os import makedirs
-from time import sleep
 from datetime import datetime
+import threading
 import json
 
 
@@ -68,7 +70,8 @@ class BotManager:
     
     #manage bot persistence, proxies and other settings, etc.
     def __init__(self, dict_file : str, settings_file : str, proxy_file : str, invalid_file : str, room_code : str, username : str = '', secure: bool = False):
-        
+        self.shutdown_event = threading.Event()
+        self.bot_thread = None
         self.secure = secure
         self.dict_map = None
         self.proxy_list = None
@@ -77,7 +80,6 @@ class BotManager:
         self.username = username
         self.invalid = set[str]()
         self.invalid_file = invalid_file
-        self.self_destruct = False
         self.bot = None
 
         self.console = logging.getLogger('MANAGER-CONSOLE')
@@ -204,34 +206,17 @@ class BotManager:
         # for mapping unknown syllables
 
 
-    def do_bot(self, proxy) -> bool | None:
-        self.bot = Bot(dicts=self.dict_map, proxy=proxy, settings=self.settings, invalid=self.invalid)
-        expected, continue_action = self.bot.join_room(room_code=self.room_code, username=self.username)
-        if continue_action:
-            if self.bot.main_loop() and not self.self_destruct:
-                self.console.info(f'Bot session with proxy {proxy} ended gracefully')
-                return True
-            else:
-                self.console.warning(f'Bot session with proxy {proxy} ended unexpectedly')
-                return False
-        else:
-            if expected:
-                self.console.warning(f'Bot session with proxy {proxy} was banned from the room')
-                self.bot.close()
-                self.bot = None
-                return True
-            else:
-                self.console.warning(f'Bot session with proxy {proxy} could not join room')
-                self.bot.close()
-                self.bot = None
-                return False
+    def start_bot(self, proxy) -> None:
+        self.bot = Bot(dicts=self.dict_map, proxy=proxy, settings=self.settings, invalid=self.invalid, shutdown_event=self.shutdown_event)
+        self.bot_thread = threading.Thread(target=self.bot.main_loop, args=(self.room_code, self.username))
+        self.bot_thread.start()
 
 
     def close(self):
         self.console.info('closing botmanager')
-        self.self_destruct = True
-        if self.bot:
-            self.bot.close()
+        self.shutdown_event.set()
+        if self.bot_thread and self.bot_thread.is_alive():
+            self.bot_thread.join()
 
 
 
@@ -239,29 +224,31 @@ class BotManager:
     def persist_loop(self) -> None:
         try:
             for proxy in self.proxy_list:
-                if 'rotate' in proxy.lower():
+                if 'rotate' in proxy.lower(): #this way so you can use both rotate and normal proxy and no proxy (probably will need some changes later on for different types of rotating proxy)
                     rotate_retries = 0
                     while rotate_retries < ROTATE_RETRY_THRESH: #this should only end when there are too many unexpected issues
-                        graceful = self.do_bot(proxy)
-                        if graceful: #expected end or ban vs unexpected join-room error or bot exception
+                        self.start_bot(proxy)
+                        while self.bot_thread.is_alive():
+                            self.bot_thread.join(timeout=1)
+                            if self.shutdown_event and self.shutdown_event.is_set():
+                                return
+                        if self.bot.exit_code: #expected end or ban vs unexpected join-room error or bot exception
                             rotate_retries = 0
                         else:
-                            if self.self_destruct:
-                                return
                             rotate_retries +=1
-                        sleep(2)
                         self.console.info(f"reloading bot using rotating proxy {proxy}")
 
                 else:
-                    if not self.do_bot(proxy) and self.self_destruct:
-                        return
-
-                sleep(2)
+                    self.start_bot(proxy)
+                    while self.bot_thread.is_alive():
+                        self.bot_thread.join(timeout=1)
+                        if self.shutdown_event and self.shutdown_event.is_set():
+                            return
+                    self.shutdown_event.wait(0.2)
                 self.console.info(f"using next proxy in the list")
-        except (KeyboardInterrupt, SystemExit):
-            self.console.info(f'Manager session ended gracefully')
         except Exception as e:
             self.console.error(f"Unexpected exception occurred, ending manager session: {e}")
+            self.close()
 
         finally:
             self.console.info('Session ended. Goodbye!') #kills self. I wish
@@ -285,11 +272,16 @@ class BotManager:
         if len(dict_urls) > 0:
             for url in dict_urls:
                 try:
-                    response = requests.get(url)
+                    response = requests.get(url, timeout=10)
+                    response.raise_for_status()
                     soup = BeautifulSoup(response.text, 'html.parser')
-                    content = str(soup.get_text(separator='\n', strip=True).lower().split('\n')) #shouldnt have any whitespaces inside of words if from source so we dont need sub
-                    dicts.update(content)
-                except Exception as e:
+                    content = soup.get_text(separator='\n', strip=True).lower()
+
+                    words = set[str]()
+                    for line in content.splitlines():
+                        words.update(findall(PLAINTEXT_REGEX, line))
+                    dicts.update(words)
+                except requests.RequestException as e:
                     self.console.warning(f'Cannot get url {url} because of Exception {e}')
 
         return dicts

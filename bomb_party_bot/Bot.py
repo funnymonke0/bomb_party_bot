@@ -5,11 +5,12 @@ from .Client import Client
 from logging import getLogger, DEBUG
 from wordfreq import zipf_frequency
 from collections import Counter
+import threading
 
 import random
 import re2
 from string import ascii_lowercase
-from time import sleep, time
+from time import time
 from selenium.webdriver.common.keys import Keys
 
 
@@ -18,17 +19,19 @@ from .constants import MISTAKE_MAP, MAX_KEY_DELAY
 
 class Bot:
     #dicts are now a flat string
-    def __init__(self, dicts: str, settings : dict[str, object], invalid=None, proxy : str = ''):
+    def __init__(self, dicts: str, settings : dict[str, object], shutdown_event: threading.Event, invalid=None, proxy : str = '', ):
 
         if invalid is None:
             invalid = set()
         self.console = getLogger('MANAGER-CONSOLE.BOT-CONSOLE')
         self.console.setLevel(DEBUG)
-        self.self_destruct = False
+        self.shutdown_event = shutdown_event
 
 
+        self.proxy = proxy
         self.dicts = dicts 
-        self.invalid = invalid 
+        self.invalid = invalid
+        self.exit_code = True #graceful or no
 
         self.bonus_alphabet = [] #temp bonus self.bonus_alphabet
         
@@ -82,21 +85,29 @@ class Bot:
         self.used = set[str]() #used words this session
         self.used.update(self.invalid) #add invalid words to used so they are not used again
 
-        self.client = Client(proxy=proxy)
+        self.client = Client(shutdown_event=self.shutdown_event, proxy=proxy)
 
 
-    def join_room(self, room_code: str, username: str = '') -> tuple[bool,bool]: return self.client.join_room(room_code=room_code, username=username)
-
-    def close(self):
-        self.console.info('closing bot')
-        self.self_destruct = True
-        self.client.close()
 
 
-    def main_loop(self) -> bool: #main loop. returns if it was graceful or not
+
+
+    def main_loop(self, room_code: str, username: str = '') -> None: #main loop. returns if it was graceful or not
+
+        expected, continue_action = self.client.join_room(room_code=room_code, username=username)
+        if not continue_action:
+            if expected:
+                self.console.warning(f'Bot session with proxy {self.proxy} was banned from the room')
+                self.exit_code = False
+                return
+            else:
+                self.console.warning(f'Bot session with proxy {self.proxy} could not join room')
+                self.exit_code = False
+                return
+
         last_time = time()
         try:
-            while not self.self_destruct: #main loop
+            while not (self.shutdown_event and self.shutdown_event.is_set()): #main loop
                 if self.client.disconnect_check() or self.client.neterr_check():
                     break
 
@@ -148,22 +159,23 @@ class Bot:
                             typed = True
 
                     else:
-                        wait = float(self.mini_pause)# type: ignore
+                        time_wait = float(self.mini_pause)# type: ignore
 
                         if self.is_correct: #do normal wait if we were correct on our prev answer
                             rt: Callable[[str], float] = lambda w: float(581.39 + 467.81 / (1 + (2.718281828 ** (1.022 * (zipf_frequency(w, 'en') - 2.946))))) # type: ignore | tuff goony blud sigmoid regression function based on ELP data
                             base_min, base_max = 581.39, 581.39 + 467.81
                             func: Callable[[str], float] = lambda w: float(self.min_wait + (rt(w) - base_min) * (self.max_wait - self.min_wait) / (base_max - base_min)) # type: ignore | linear interpolation of wait time based on word freq
 
-                            wait = func(ans) if bool(self.dynamic_pauses) else float(self.min_wait)# type: ignore
+                            time_wait = func(ans) if bool(self.dynamic_pauses) else float(self.min_wait)# type: ignore
                         elif bool(self.spam_type) and (len(ans) >= 20 or random.random()<=float(self.spam_chance)): # type: ignore | wait minipause with a potential spam if was not correct
                             spam = self.format_spam()
                             self.client.safe_typer(spam)
 
                         if self.client.get_self_turn():
-                            sleep(wait)
-                        if self.client.get_self_turn() and self.client.safe_typer(self.format_sim_type(ans)):
-                            typed = True
+                            self.shutdown_event.wait(timeout=time_wait)
+
+                            if self.client.safe_typer(self.format_sim_type(ans)):
+                                typed = True
 
                     #change flags and update used words
                     self.is_correct = False
@@ -184,19 +196,23 @@ class Bot:
                         if len(self.bonus_alphabet) < 1: #no need to add to current_lives, since that updates automatically
                             self.bonus_alphabet = self.original_alphabet.copy()
                             self.console.info(f"{self.bonus_alphabet} after regen reset")
-
-        except Exception as e:
+        except Exception as e: #not graceful
             self.console.warning(f"unexpected exception: {e}")
-            self.close()
-            return False
+            self.exit_code = False
+            return
+        finally:
+            self.client.close()
 
-        if self.self_destruct:#this means close has already been called
+        if self.shutdown_event and self.shutdown_event.is_set():#this means close has already been called; graceful
             self.console.info("stop signal received, exiting main loop")
-            return True
-        else: #this means no exception, just disconnect
+            self.exit_code = True
+            return
+        else: #this means no exception, just disconnect, not graceful
             self.console.info("disconnect or neterror detected, exiting main loop")
-            self.close()
-            return False
+            self.exit_code = False
+            return
+
+
 
 
 
