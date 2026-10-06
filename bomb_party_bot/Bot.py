@@ -196,10 +196,12 @@ class Bot:
                         if len(self.bonus_alphabet) < 1: #no need to add to current_lives, since that updates automatically
                             self.bonus_alphabet = self.original_alphabet.copy()
                             self.console.info(f"{self.bonus_alphabet} after regen reset")
+
+                elif self.shutdown_event:
+                    self.shutdown_event.wait(timeout=0.2)
         except Exception as e: #not graceful
             self.console.warning(f"unexpected exception: {e}")
             self.exit_code = False
-            return
         finally:
             self.client.close()
 
@@ -207,7 +209,7 @@ class Bot:
             self.console.info("stop signal received, exiting main loop")
             self.exit_code = True
             return
-        else: #this means no exception, just disconnect, not graceful
+        else: #this means exception or disconnect, not graceful
             self.console.info("disconnect or neterror detected, exiting main loop")
             self.exit_code = False
             return

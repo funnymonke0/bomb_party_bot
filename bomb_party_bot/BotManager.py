@@ -1,4 +1,5 @@
 import sys
+from logging import shutdown
 
 import requests
 from bs4 import BeautifulSoup
@@ -69,8 +70,8 @@ def _format_proxy(proxy:str) -> str: ##Tool
 class BotManager:
     
     #manage bot persistence, proxies and other settings, etc.
-    def __init__(self, dict_file : str, settings_file : str, proxy_file : str, invalid_file : str, room_code : str, username : str = '', secure: bool = False):
-        self.shutdown_event = threading.Event()
+    def __init__(self, dict_file : str, settings_file : str, proxy_file : str, invalid_file : str, room_code : str, username : str = '', secure: bool = False, shutdown_event: threading.Event = None):
+        self.shutdown_event = shutdown_event or threading.Event()
         self.bot_thread = None
         self.secure = secure
         self.dict_map = None
@@ -248,10 +249,10 @@ class BotManager:
                 self.console.info(f"using next proxy in the list")
         except Exception as e:
             self.console.error(f"Unexpected exception occurred, ending manager session: {e}")
-            self.close()
 
         finally:
-            self.console.info('Session ended. Goodbye!') #kills self. I wish
+            self.close()
+            self.console.info('Session ended. Goodbye!') #kills self ;)
         
 #tool
     def find_in_file(self, filename:str, ex:str) -> list[str]: # returns a list of strings matching ex from filename ##tool

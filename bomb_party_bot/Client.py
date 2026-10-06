@@ -344,12 +344,14 @@ class Client:
         self.console.info('closing client')
         try:
             self.driver.quit()
+            self.driver = None
         except Exception as e:
             self.console.warning(f"Error during client close: {e}")
 
         try:
             if self.server:
                 self.server.close()
+                self.server = None
         except Exception as e:
             self.console.warning(f"Error during proxy server close: {e}")
 
