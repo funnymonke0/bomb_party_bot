@@ -19,7 +19,7 @@ from .constants import MISTAKE_MAP, MAX_KEY_DELAY
 
 class Bot:
     #dicts are now a flat string
-    def __init__(self, dicts: str, settings : dict[str, object], shutdown_event: threading.Event, invalid=None, proxy : str = '', ):
+    def __init__(self, dicts: str, settings : dict[str, object], shutdown_event: threading.Event, invalid=None, proxy : str = '', secure = False):
 
         if invalid is None:
             invalid = set()
@@ -85,7 +85,7 @@ class Bot:
         self.used = set[str]() #used words this session
         self.used.update(self.invalid) #add invalid words to used so they are not used again
 
-        self.client = Client(shutdown_event=self.shutdown_event, proxy=proxy)
+        self.client = Client(shutdown_event=self.shutdown_event, proxy=proxy, secure=secure)
 
 
 

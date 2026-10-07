@@ -41,7 +41,7 @@ def _get_str_val(elem:WebElement) -> str:
 
 
 class Client:
-    def __init__(self,shutdown_event: threading.Event, proxy: str = ''):
+    def __init__(self,shutdown_event: threading.Event, proxy: str = '', secure = False):
 
         self.prev_lw = 0 #internal for tracking life changes
         self.prev_ll = 0 #internal for tracking life changes
@@ -51,6 +51,9 @@ class Client:
         self.console.setLevel(DEBUG)
 
         chrome_options = ChromeOptions()
+
+        if secure:
+            chrome_options.binary_location = "/usr/bin/chromium"
 
         chrome_options.add_argument('--no-sandbox')
         chrome_options.add_argument('--disable-dev-shm-usage')

@@ -6,10 +6,13 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     && rm -rf /var/lib/apt/lists/*
 
 WORKDIR /app
+ENV CHROME_BIN=/usr/bin/chromium
+ENV CHROMEDRIVER_PATH=/usr/bin/chromium-driver
+
 COPY . .
 
 RUN pip install --no-cache-dir uv && uv sync --frozen
 
 ENV PYTHONUNBUFFERED=1
+ENV PYTHONDONTWRITEBYTECODE=1
 
-CMD ["sh", "-c", "uv run celery -A app.BotWorker:worker_app worker --loglevel=info --pool=prefork & exec uv run python -m gunicorn --workers 1 --threads 8 --bind 0.0.0.0:${PORT:-5000} wsgi:app"]

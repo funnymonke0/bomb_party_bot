@@ -200,6 +200,7 @@ dependencies = [
     { name = "redis" },
     { name = "requests" },
     { name = "selenium" },
+    { name = "werkzeug" },
     { name = "wordfreq" },
 ]
 
@@ -222,6 +223,7 @@ requires-dist = [
     { name = "redis", specifier = ">=8.1.0" },
     { name = "requests", specifier = ">=2.34.2" },
     { name = "selenium", specifier = ">=4.46.0" },
+    { name = "werkzeug", specifier = ">=3.1.8" },
     { name = "wordfreq", specifier = ">=3.1.1" },
 ]
 

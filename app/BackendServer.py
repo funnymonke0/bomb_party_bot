@@ -21,7 +21,7 @@ from flask import session
 from dotenv import load_dotenv
 import secrets
 from .BotWorker import start_bot, worker_app
-
+from werkzeug.middleware.proxy_fix import ProxyFix
 
 load_dotenv()
 
@@ -97,12 +97,12 @@ def handle_endpoint_errors(func):
 
 class BackendServer:
 
-    def __init__(self, port = 5000, debug=False, force_https=True) -> None:
+    def __init__(self, port = 8000, debug=False, force_https=True) -> None:
         frontend_origins = [origin.strip() for origin in os.getenv(
             "FRONTEND_ORIGINS",
-            "http://127.0.0.1:5173,http://localhost:5173" # default for default purposes :)
+            "http://127.0.0.1:5173,http://localhost:5173" # default for local dev
         ).split(",") if origin.strip()]
-        redis = os.getenv("RATELIMIT_STORAGE_URI", "redis://localhost:6379/0")
+        redis = os.getenv("RATELIMIT_STORAGE_URI", "redis://redis:6379/0")
         self.app = Flask(__name__)
         self.app.config.update(
             SECRET_KEY=os.environ["SECRET_KEY"],
@@ -126,6 +126,7 @@ class BackendServer:
             storage_uri= redis
         )
         self.app.register_error_handler(429, self._handle_rate_limit)
+        self.app.wsgi_app = ProxyFix(self.app.wsgi_app, x_proto=1, x_host=1) #should only have 1 forwarded host
         self.bots_alive = 0
 
 
@@ -372,7 +373,15 @@ class BackendServer:
 
         # 4. Launch the bot in a separate background process to avoid blocking the Flask server
         client = self.get_client()
-        task = start_bot.delay(dict_file = client.dictionaries, room_code = room_code, username = username, settings_file = client.settings, invalid_file = client.invalid)
+        task = start_bot.apply_async(
+            args=(
+                client.dictionaries,
+                client.settings,
+                client.invalid,
+                room_code,
+                username,
+            )
+        )
         client.task_id = task.id
         client.start_time = time.time()
         client.last_launch_at = time.time()

@@ -7,14 +7,14 @@ import threading
 import signal
 
 load_dotenv()
-redis = os.getenv("RATELIMIT_STORAGE_URI", "redis://localhost:6379/0")
+redis = os.getenv("RATELIMIT_STORAGE_URI", "redis://redis:6379/0")
 worker_app = Celery(
     "runner",
     broker=redis,
     backend=redis
 )
 worker_app.conf.worker_max_tasks_per_child = 1 #wipe worker after every bot
-@worker_app.task(bind=True)
+@worker_app.task
 def start_bot(dict_file : str, settings_file : str, invalid_file : str, room_code : str, username : str = '') -> None:
     bot_manager = None
     shutdown_event = threading.Event()
