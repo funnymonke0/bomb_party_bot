@@ -53,6 +53,7 @@ class Client:
         chrome_options = ChromeOptions()
         service = ChromeService()
         if secure:
+            self.console.info("Using secure Chrome binary and chromedriver")
             chrome_options.binary_location = "/usr/bin/chromium"
 
             chrome_options.add_argument("--disable-setuid-sandbox")
