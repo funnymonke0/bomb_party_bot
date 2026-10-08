@@ -56,8 +56,6 @@ class Client:
             chrome_options.binary_location = "/usr/bin/chromium"
 
             chrome_options.add_argument("--disable-setuid-sandbox")
-            chrome_options.add_argument("--remote-debugging-port=9222")
-            chrome_options.add_argument("--user-data-dir=/tmp/chrome-data")
             chrome_options.add_argument("--no-zygote")
 
             service = ChromeService(executable_path="/usr/bin/chromedriver")
