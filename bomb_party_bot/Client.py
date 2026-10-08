@@ -118,12 +118,15 @@ class Client:
                 proxy = 'localhost'
 
         self.driver = webdriver.Chrome(service=service, options=chrome_options)
+        self.driver.set_page_load_timeout(20)
+        self.driver.set_script_timeout(20)
         self.console.info(f'initialized BombParty Client running @ {proxy}')
 
     def join_room(self, room_code: str, username: str) -> tuple[bool,bool]: #this has 3 possible modes: bot is banned and cannot join (expected, don't continue), bot is not banned and cannot join (unexpected, don't continue), bot is not banned and can join (expected, continue)
         try:
             self.console.info('joining room: ' + room_code)
             self.driver.get("https://jklm.fun/" + room_code)
+            self.console.info("finished get")
             self.driver.switch_to.default_content()
 
             if len(username) > 0:
