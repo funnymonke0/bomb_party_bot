@@ -51,9 +51,16 @@ class Client:
         self.console.setLevel(DEBUG)
 
         chrome_options = ChromeOptions()
-
+        service = ChromeService()
         if secure:
             chrome_options.binary_location = "/usr/bin/chromium"
+
+            chrome_options.add_argument("--disable-setuid-sandbox")
+            chrome_options.add_argument("--remote-debugging-port=9222")
+            chrome_options.add_argument("--user-data-dir=/tmp/chrome-data")
+            chrome_options.add_argument("--no-zygote")
+
+            service = ChromeService(executable_path="/usr/bin/chromedriver")
 
         chrome_options.add_argument('--no-sandbox')
         chrome_options.add_argument('--disable-dev-shm-usage')
@@ -71,16 +78,9 @@ class Client:
         chrome_options.add_argument('--disable-backgrounding-occluded-windows')
         chrome_options.add_argument('--disable-component-update')
         chrome_options.add_argument('--disable-default-apps')
-        chrome_options.add_argument('--disable-gpu')
-        chrome_options.add_argument('--disable-software-rasterizer')
-        chrome_options.add_argument('--renderer-process-limit=1')
-        chrome_options.add_argument('--disk-cache-size=1')
-        chrome_options.add_argument('--media-cache-size=1')
 
         chrome_options.add_argument('--no-first-run')
         chrome_options.add_argument('--no-default-browser-check')
-        chrome_options.add_argument('--ignore-certificate-errors')
-        chrome_options.add_argument('--guest')
 
         chrome_options.add_argument(
             f'user-agent={UserAgent(browsers=["Google", "Chrome", "Firefox", "Edge"], os = ["Windows", "Linux", "Ubuntu", "Chrome OS", "Mac OS X"], platforms=["desktop"], fallback="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36").random}'
@@ -95,7 +95,7 @@ class Client:
         os.environ["NO_PROXY"] = "*"
         os.environ["no_proxy"] = "*"
 
-        service = ChromeService()
+
 
         self.server = None
         if len(proxy) > 0:
