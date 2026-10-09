@@ -193,3 +193,4 @@ The bot will automatically connect to the room and start playing.
 - Turn it into an actual app with something like Flask (in progress)
 - track room codes when rooms change
 - no backup files so if you delete a config file, you will have to copy again
+- migrate to playwright because selenium is evil and needs webdrivers
