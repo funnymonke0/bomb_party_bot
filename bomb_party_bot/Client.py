@@ -62,6 +62,13 @@ class Client:
             chrome_options.add_argument('--disable-dev-shm-usage')
             chrome_options.add_argument('--no-first-run')
             chrome_options.add_argument('--no-default-browser-check')
+
+            chrome_options.add_argument('--disable-gpu')
+            chrome_options.add_argument('--disable-software-rasterizer')
+            chrome_options.add_argument('--renderer-process-limit=1')
+            chrome_options.add_argument('--disk-cache-size=1')
+            chrome_options.add_argument('--media-cache-size=1')
+
             chrome_options.add_argument(
                 f'user-agent={UserAgent(browsers=["Google", "Chrome", "Firefox", "Edge"], os=["Windows", "Linux", "Ubuntu", "Chrome OS", "Mac OS X"], platforms=["desktop"], fallback="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36").random}'
             )
@@ -85,6 +92,11 @@ class Client:
             chrome_options.add_argument('--disable-backgrounding-occluded-windows')
             chrome_options.add_argument('--disable-component-update')
             chrome_options.add_argument('--disable-default-apps')
+            chrome_options.add_argument('--disable-gpu')
+            chrome_options.add_argument('--disable-software-rasterizer')
+            chrome_options.add_argument('--renderer-process-limit=1')
+            chrome_options.add_argument('--disk-cache-size=1')
+            chrome_options.add_argument('--media-cache-size=1')
 
             chrome_options.add_argument('--no-first-run')
             chrome_options.add_argument('--no-default-browser-check')
