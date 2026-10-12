@@ -197,3 +197,10 @@ The bot will automatically connect to the room and start playing.
 - track room codes when rooms change
 - no backup files so if you delete a config file, you will have to copy again
 - migrate to playwright because selenium is evil and needs webdrivers
+
+## License
+
+This project is licensed under the Apache License 2.0 - see the [LICENSE](LICENSE) file for details.
+
+### Attribution
+If you modify or use this code, please preserve the original copyright notice and link back to this repository.
