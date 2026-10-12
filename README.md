@@ -9,7 +9,7 @@ Handles auto-reconnects, proxy rotation, human-like typing, and bonus-letter str
 - https://bombpartybot.duckdns.org/
 - currently limited to one person at a time due to resource intensive nature of selenium.
 - will be migrated to a more efficient framework in the future (playwright or puppeteer)
-- 
+
 ## Features
 
 - **Bot Manager**  
@@ -35,6 +35,7 @@ Handles auto-reconnects, proxy rotation, human-like typing, and bonus-letter str
   Simulates typos with `mistakeChance` and adjacent-key selection.
 
 ---
+**The following instructions are for CLI**
 
 ## Dependencies
 
