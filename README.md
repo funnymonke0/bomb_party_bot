@@ -5,7 +5,10 @@ A (kinda) advanced Bomb Party training bot and Bot Manager built in Python with 
 Handles auto-reconnects, proxy rotation, human-like typing, and bonus-letter strategy.
 
 ---
-
+## Web App
+- https://bombpartybot.duckdns.org/
+- currently limited to one person at a time due to resource intensive nature of selenium.
+- will be migrated to a more efficient framework in the future (playwright or puppeteer)
 ## Features
 
 - **Bot Manager**  
@@ -190,7 +193,6 @@ The bot will automatically connect to the room and start playing.
 ---
 
 ## Improvements
-- Turn it into an actual app with something like Flask (in progress)
 - track room codes when rooms change
 - no backup files so if you delete a config file, you will have to copy again
 - migrate to playwright because selenium is evil and needs webdrivers
