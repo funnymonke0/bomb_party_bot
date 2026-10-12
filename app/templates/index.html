@@ -9,6 +9,8 @@
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sakura.css/css/sakura.css" type="text/css">
   <link rel="stylesheet" href="https://unpkg.com/sakura.css/css/sakura-dark.css" media="screen and (prefers-color-scheme: dark)" />
   <link rel="stylesheet" href="{{ url_for('static', filename='styles/scheme.css') }}">
+  <link rel="icon" type="image/x-icon" href="{{ url_for('static', filename='favicon.ico') }}">
+  <link rel="icon" type="image/png" href="{{ url_for('static', filename='favicon.png') }}" sizes="32x32">
 </head>
 <body>
   <main class="container">
@@ -102,5 +104,17 @@
   </div>
 
   <script src="{{ url_for('static', filename='app.js') }}" defer></script>
+
+  <footer class="site-footer">
+    <div class="footer-content">
+      <p>&copy; 2026 Eric Chen. Licensed under Apache 2.0.</p>
+      <div class="footer-links">
+        <a href="https://github.com/funnymonke0" target="_blank" rel="noopener noreferrer">
+          funnymonke0 on GitHub
+        </a>
+      </div>
+    </div>
+  </footer>
+
 </body>
 </html>
