@@ -40,7 +40,7 @@ class Bot:
         self.console.setLevel(DEBUG)
         self.shutdown_event = shutdown_event
 
-
+        self.secure = secure
         self.proxy = proxy
         self.dicts = dicts 
         self.invalid = invalid
@@ -185,7 +185,8 @@ class Bot:
                             self.client.safe_typer(spam)
 
                         if self.client.get_self_turn():
-                            self.shutdown_event.wait(timeout=time_wait)
+                            if not self.secure: #server has latency so dont wait
+                                self.shutdown_event.wait(timeout=time_wait)
 
                             if self.client.safe_typer(self.format_sim_type(ans)):
                                 typed = True
