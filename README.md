@@ -35,7 +35,6 @@ Handles auto-reconnects, proxy rotation, human-like typing, and bonus-letter str
   Simulates typos with `mistakeChance` and adjacent-key selection.
 
 ---
-#**The following instructions are for CLI**
 
 ## Dependencies
 
