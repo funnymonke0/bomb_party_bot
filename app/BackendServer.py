@@ -32,7 +32,7 @@ root_dir = Path(__file__).resolve().parent
 runtime_root = root_dir / "runtime"
 config_root = root_dir.parent / "config"
 
-BOT_LIMIT = 20  #defines the concurrency
+BOT_LIMIT = 1  #defines the concurrency
 
 BOT_TIMEOUT = 30*60 #30 min
 LAUNCH_COOLDOWN = 30 #seconds, may need to be increased
