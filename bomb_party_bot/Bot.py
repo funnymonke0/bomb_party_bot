@@ -1,5 +1,4 @@
 
-from collections.abc import Callable
 # Copyright [yyyy] [name of copyright owner]
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -14,6 +13,7 @@ from collections.abc import Callable
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+from collections.abc import Callable
 from .Client import Client
 from logging import getLogger, DEBUG
 from wordfreq import zipf_frequency
