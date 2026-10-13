@@ -117,20 +117,28 @@ class Bot:
                 self.console.warning(f'Bot session with proxy {self.proxy} could not join room')
                 self.exit_code = False
                 return
+        else:
+            self.console.info("joined room successfully")
 
         last_time = time()
         try:
             while not (self.shutdown_event and self.shutdown_event.is_set()): #main loop
-                if self.client.disconnect_check() or self.client.neterr_check():
+                err = self.client.disconnect_check() or self.client.neterr_check()
+                if err and len(err) > 0:
+                    self.console.warning(f"disconnect or neterror detected, exiting main loop: {err}")
                     break
 
 
                 if self.client.try_join_round() or time() - last_time > 5: #needs to be constant trying to click join because otherwise it will not have another indicator as to when to reset initial conditions
                     self.original_alphabet = self.client.get_bonus_alphabet()
+                    self.console.info(f'bonus alphabet updated. {self.original_alphabet}')
                     self.prompt_time = self.client.get_prompt_time()
+                    self.console.info(f'prompt_time updated. {self.prompt_time}')
                     self.start_lives = self.client.get_start_lives()
+                    self.console.info(f'start_lives updated. {self.start_lives}')
                     self.current_lives = self.start_lives
                     self.max_lives = self.client.get_max_lives()
+                    self.console.info(f'max_lives updated. {self.max_lives}')
                     self.client.clear_life_trackers()
 
                     self.used = set[str]()
@@ -145,24 +153,20 @@ class Bot:
                     self.syllable = self.client.get_syllable()
                     typed = False
                     if self.is_correct:
+                        self.console.info("time reset")
                         self.start = time()
 
-
+                    self.console.info("pruning used")
                     ans_set = self.find_words(self.syllable) - self.used
 
                     ans = '/suicide'
                     if ans_set and len(ans_set) > 0:
                         ans = self.eval(ans_set)
-                        start_prune = time()
-                        while len(ans) * MAX_KEY_DELAY >= 10:
-                            # if not feasible, pretend you already tried
-                            self.used.add(ans)
-                            ans_set = self.find_words(self.syllable) - self.used
-                            ans = self.eval(ans_set)
-                            if time() - start_prune >= 10:
-                                #give up with aura
-                                ans = '/suicide'
-                                break
+                        #dont continuously look for another answer and prune unecessarily
+                        if len(ans) * MAX_KEY_DELAY >= self.prompt_time - (time()-self.start): #prompt time is how much time we have to answer conservatively. that - time passed = time left.
+                            self.console.info("low time. emergency mode")
+                            self.eval(ans_set, emergency = True)
+
 
                     self.console.info(f"found answer {ans} for syllable {self.syllable}" if ans != "/suicide" else f"could not find answer for syllable: {self.syllable}")
 
@@ -185,9 +189,10 @@ class Bot:
                             self.client.safe_typer(spam)
 
                         if self.client.get_self_turn():
-                            if not self.secure: #server has latency so dont wait
+                            if not self.secure:
+                                self.console.info(f"waiting for {time_wait}s")
                                 self.shutdown_event.wait(timeout=time_wait)
-
+                            # server has latency so dont wait
                             if self.client.safe_typer(self.format_sim_type(ans)):
                                 typed = True
 
@@ -201,7 +206,7 @@ class Bot:
 
                         life_change = self.client.get_life_change()
                         self.current_lives += life_change
-
+                        self.console.info(f"Life change updated. {life_change}")
 
                         #if correct, prune bonus alphabet for letters in used answer
                         self.bonus_alphabet = list((Counter(self.bonus_alphabet) - Counter(ans)).elements())
@@ -211,8 +216,7 @@ class Bot:
                             self.bonus_alphabet = self.original_alphabet.copy()
                             self.console.info(f"{self.bonus_alphabet} after regen reset")
 
-                elif self.shutdown_event:
-                    self.shutdown_event.wait(timeout=0.2)
+                self.shutdown_event.wait(timeout=0.2) #check shutdown no matter what after every loop
         except Exception as e: #not graceful
             self.console.warning(f"unexpected exception: {e}")
             self.exit_code = False
@@ -238,10 +242,11 @@ class Bot:
             
 
 
-    def eval(self, ans_set:set[str]) -> str: #eval
+    def eval(self, ans_set:set[str], emergency: bool = False) -> str: #eval
         alph = self.bonus_alphabet
         mode = str(self.select_mode)# type: ignore
         ans = ''
+
 
         long: Callable[[set[str]], str] = lambda aset: max(aset, key=len)
         short: Callable[[set[str]], str] = lambda aset: min(aset, key=len)
@@ -254,6 +259,10 @@ class Bot:
 
         shared_letters = {w: len(set(w) & set(alph)) for w in ans_set}
         specific_wrapper: Callable[[Callable[[set[str]], str], set[str], int], str] = lambda func, aset, num: func({w for w in aset if shared_letters[w]<=num} or aset) # passes a pruned list where the shared words do not exceed num
+
+        if emergency: #default to short
+            ans = short(ans_set)
+            return ans
 
         if (bool(self.time_constraint) and self.time_used()>=self.prompt_time) or not self.is_correct:# type: ignore
             ans = short(ans_set)

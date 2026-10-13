@@ -33,7 +33,7 @@ def run() -> None:
         if not link or len(link) != 4 or not re.match(r'^[a-zA-Z]{4}$', link):
             print('ERROR: Must input valid room code !')
         else:
-            manager = BotManager(dict_file=dictionaries, room_code=link, proxy_file=proxies, username=name, settings_file=settings, invalid_file=invalid)
+            manager = BotManager(dict_file=dictionaries, room_code=link, proxy_file=proxies, username=name, settings_file=settings, invalid_file=invalid, secure=False)
 
             manager.persist_loop()
 

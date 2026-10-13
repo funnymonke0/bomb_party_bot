@@ -148,9 +148,7 @@ class Client:
             submit.click()
 
             if self.disconnect_check() or self.neterr_check():
-                self.console.warning('banned')
                 return (True, False)
-            self.console.info('joined room')
             return (True, True)
         except Exception as e:
             self.console.warning(f"some join_room elements not found or interactable: {e}")
@@ -194,7 +192,6 @@ class Client:
                 button = self.driver.find_element(By.XPATH, LOCATORS["join_round_button"])
                 if button.is_displayed() and button.is_enabled():
                     button.click()
-                    self.console.info('joined round')
                     return True
         except: pass
         return False
@@ -213,10 +210,9 @@ class Client:
                             alphabet_string += ascii_lowercase[index] * num_val
 
                 if len(alphabet_string) > 0:
-                    self.console.info(f'bonus alphabet updated. {alphabet_string}')
                     return list(alphabet_string)
-                else:
-                    self.console.info("defaulting")
+                #otherwise defaults
+                self.console.warning('bonus alphabet not found. defaulting')
             except: self.console.warning('bonus alphabet not found. defaulting')
             return list('abcdefghijklmnopqrstuvwy')
 
@@ -237,7 +233,6 @@ class Client:
                 elem = self.driver.find_element(By.XPATH, LOCATORS["min_turn_duration"])
                 num_val = _get_int_val(elem)
                 if num_val > 0:
-                    self.console.info(f'prompt_time updated. {num_val}')
                     return num_val
         except: self.console.warning('prompt_time not found; defaulting')
         return 5
@@ -249,7 +244,6 @@ class Client:
                 elem = self.driver.find_element(By.XPATH, LOCATORS["start_lives"])
                 num_val = _get_int_val(elem)
                 if num_val > 0:
-                    self.console.info(f'start_lives updated. {num_val}')
                     return num_val
         except: self.console.warning('start_lives not found; defaulting')
         return 2
@@ -261,7 +255,6 @@ class Client:
                 elem = self.driver.find_element(By.XPATH, LOCATORS["max_lives"])
                 num_val = _get_int_val(elem)
                 if num_val > 0:
-                    self.console.info(f'max_lives updated. {num_val}')
                     return num_val
         except: self.console.warning('max_lives not found; defaulting')
         return 3
@@ -278,7 +271,6 @@ class Client:
                 entries = self.driver.find_elements(By.XPATH, LOCATORS["stats_table_rows"])
                 if entries and len(entries) > 1:
                     player_ct = len([player for player in entries if str(player.get_property('class')) != 'isDead']) - 1  # type: ignore | -1 for header
-                    self.console.info(f'updated. {player_ct} players alive')
                     return player_ct
             except: self.console.warning('player count not found; defaulting')
             return 3
@@ -294,7 +286,6 @@ class Client:
                 if len(nums) == 2:
                     life_change = (nums[0] - self.prev_lw) + (nums[1] - self.prev_ll)
                     self.prev_lw, self.prev_ll = nums
-                    self.console.info(f"Life change updated. {life_change}")
                     return life_change
         except: self.console.warning("Life changes not found; defaulting")
         return 0
@@ -311,16 +302,16 @@ class Client:
 
 # page checks
 
-    def disconnect_check(self) -> bool:
+    def disconnect_check(self) -> str:
         try:
             if self.driver.find_element(By.XPATH, LOCATORS["disconnect_page"]).is_displayed():
                 try:
                     reason = self.driver.find_element(By.XPATH, LOCATORS["reason"])
                     message = _get_str_val(reason).lower()
                     if "banned" in message:
-                        self.console.info(f'Bot disconnected due to ban or error. Reason: {message}')
-                        return True
-                except:
+                        err = f'Bot disconnected due to ban or error. Reason: {message}'
+                        return err
+                except: #should be not found error but im too lazy
                     pass
                 #follow up to check since no reason detected
                 counter = 0
@@ -338,23 +329,23 @@ class Client:
                     counter += 1
 
                 if failed:
-                    self.console.info(f'Bot disconnected due to ban or error. Reason: unknown')
-                    return True
+                    err = f'Bot disconnected due to ban or error. Reason: unknown'
+                    return err
         except: pass
-        return False
+        return ''
 
 
-    def neterr_check(self) -> bool:
+    def neterr_check(self) -> str:
         try:
             if self.driver.find_element(By.XPATH, LOCATORS["neterror_page"]).is_displayed():
                 self.driver.refresh()
                 try:
                     WebDriverWait(self.driver, MAX_WAIT).until(EC.visibility_of_element_located((By.XPATH, LOCATORS["neterror_page"])))
-                    return True
+                    return "net_err"
                 except TimeoutException:
                     pass
         except: pass
-        return False
+        return ''
 
     def close(self):
         self.console.info('closing client')

@@ -222,7 +222,7 @@ class BotManager:
 
 
     def start_bot(self, proxy) -> None:
-        self.bot = Bot(dicts=self.dict_map, proxy=proxy, settings=self.settings, invalid=self.invalid, shutdown_event=self.shutdown_event, secure = True)
+        self.bot = Bot(dicts=self.dict_map, proxy=proxy, settings=self.settings, invalid=self.invalid, shutdown_event=self.shutdown_event, secure = self.secure)
         self.bot_thread = threading.Thread(target=self.bot.main_loop, args=(self.room_code, self.username))
         self.bot_thread.start()
 
